@@ -17,7 +17,7 @@
 网站可以查看别人公开收藏的内容，了解同行业内的大拿都在学习什么，方便学习、整理、检索，根据共同的收藏内容我们可以帮您找到**最熟悉的陌生人** :)。
 
 
-[官方主页](http://favorites.ren) | [github地址](https://github.com/cloudfavorites/favorites-web) | [码云地址](https://gitee.com/ityouknow/favorites-web) | [中文说明](http://www.ityouknow.com/springboot/2016/09/26/springboot%E5%AE%9E%E6%88%98-%E6%88%91%E4%BB%AC%E7%9A%84%E7%AC%AC%E4%B8%80%E6%AC%BE%E5%BC%80%E6%BA%90%E8%BD%AF%E4%BB%B6.html) | [文档手册](https://github.com/cloudfavorites/favorites-web/wiki/%E5%A6%82%E4%BD%95%E6%9E%84%E5%BB%BA%E9%A1%B9%E7%9B%AE).
+[官方主页](http://favorites.ren) | [github地址](https://github.com/cloudfavorites/favorites-web) | [中文说明](http://www.ityouknow.com/springboot/2016/09/26/springboot%E5%AE%9E%E6%88%98-%E6%88%91%E4%BB%AC%E7%9A%84%E7%AC%AC%E4%B8%80%E6%AC%BE%E5%BC%80%E6%BA%90%E8%BD%AF%E4%BB%B6.html) | [文档手册](https://github.com/cloudfavorites/favorites-web/wiki/%E5%A6%82%E4%BD%95%E6%9E%84%E5%BB%BA%E9%A1%B9%E7%9B%AE).
 
 核心功能点：
 
@@ -69,7 +69,7 @@ How to use
 Docker Deploy
 ----------
 
-推荐使用 Docker 部署此项目，需要提前安装 Docker 和 Docker compose 环境，[可以参考这里](http://www.ityouknow.com/docker.html)
+推荐使用 Docker 部署此项目，需要提前安装 Docker 和 Docker compose 环境
 
 下载最新发布版本
 
@@ -112,16 +112,3 @@ Creating favoriteswebfavorites111_app_1   ... done
 ```
 
 启动完成后，浏览器访问上面配置地址：`http://xx.xxx.xx.xx/`，就可以看到云收藏的首页了。
-
-
-Discussing
-----------
-- [submit issue](https://github.com/cloudfavorites/favorites-web/issues/new)
-- email: ityouknow@126.com
-
-
-勾搭下
---------
-关注公众号：纯洁的微笑，回复"springboot"进群交流
-
-![](http://www.ityouknow.com/assets/images/keeppuresmile_430.jpg)
