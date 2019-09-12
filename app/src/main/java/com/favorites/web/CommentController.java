@@ -36,6 +36,8 @@ public class CommentController extends BaseController{
 	
 	
 	/**
+	 * @author neo
+	 * @date 2016年8月26日
 	 * @param comment
 	 * @return
 	 */
@@ -77,6 +79,8 @@ public class CommentController extends BaseController{
 	
 	
 	/**
+	 * @author neo
+	 * @date 2016年8月26日
 	 * @param collectId
 	 * @return
 	 */
@@ -88,6 +92,8 @@ public class CommentController extends BaseController{
 	
 	
 	/**
+	 * @author neo
+	 * @date 2016年8月26日
 	 * @param id
 	 * @return
 	 */
@@ -100,6 +106,8 @@ public class CommentController extends BaseController{
 	
 	/**
 	 * 转化时间和用户名
+	 * @author neo
+	 * @date 2016年8月26日
 	 * @param comments
 	 * @return
 	 */

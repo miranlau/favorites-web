@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: favorites-web-main
+#  main:
+#    allow-bean-definition-overriding: true
+server:
+  port: 9001
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
