@@ -1,12 +1,11 @@
-package com.favorites.domain;
+package io.favorites.bookmark.domain;
 
 import java.io.Serializable;
 
 import javax.persistence.*;
 
-import com.favorites.domain.enums.CollectType;
-import com.favorites.domain.enums.IsDelete;
-import com.favorites.remote.ServiceRegistry;
+import io.favorites.bookmark.domain.enums.CollectType;
+import io.favorites.bookmark.domain.enums.IsDelete;
 
 @Entity
 public class Collect  implements Serializable {
@@ -15,10 +14,6 @@ public class Collect  implements Serializable {
 	@Id
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private Long id;
-	@Column(nullable = false)
-	private Long userId;
-	@Column(nullable = false)
-	private Long favoritesId;
 	@Column(nullable = false, columnDefinition = "varchar(600)")
 	private String url;
 	@Column(nullable = false)
@@ -29,13 +24,13 @@ public class Collect  implements Serializable {
 	private String logoUrl;
 	@Column(nullable = true)
 	private String charset;
-	@Enumerated(EnumType.STRING) 
+    @Enumerated(EnumType.STRING)
 	@Column(nullable = true)
 	private CollectType type;
 	@Column(nullable = true)
 	private String remark;
 	@Column(nullable = false)
-	@Enumerated(EnumType.STRING) 
+    @Enumerated(EnumType.STRING)
 	private IsDelete isDelete;
 	@Column(nullable = false)
 	private Long createTime;
@@ -47,10 +42,14 @@ public class Collect  implements Serializable {
 	private String collectTime;
 	@Transient
 	private String newFavorites;
-	@Transient
-	private String user;
-	@Transient
-	private String favorites;
+
+    @ManyToOne()
+    @JoinColumn(name = "user_id", nullable = false, updatable = false)
+    private User user;
+
+    @ManyToOne()
+    @JoinColumn(name = "favorites_id", nullable = false, updatable = false)
+    private Favorites favorites;
 
 	public Collect() {
 		super();
@@ -62,28 +61,6 @@ public class Collect  implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public long getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Long userId) {
-		this.userId = userId;
-        if (userId != null) {
-            user = ServiceRegistry.getBookmarksServiceAddr() + "/users/" + userId;
-        }
-	}
-
-	public Long getFavoritesId() {
-		return favoritesId;
-	}
-
-	public void setFavoritesId(Long favoritesId) {
-		this.favoritesId = favoritesId;
-        if (favoritesId != null) {
-            favorites = ServiceRegistry.getBookmarksServiceAddr() + "/favorites/" + favoritesId;
-        }
 	}
 
 	public String getUrl() {
@@ -193,14 +170,28 @@ public class Collect  implements Serializable {
     /**
      * @return Returns the user.
      */
-    public String getUser() {
+    public User getUser() {
         return user;
+    }
+
+    /**
+     * @param user The user to set.
+     */
+    public void setUser(User user) {
+        this.user = user;
     }
 
     /**
      * @return Returns the favorites.
      */
-    public String getFavorites() {
+    public Favorites getFavorites() {
         return favorites;
+    }
+
+    /**
+     * @param favorites The favorites to set.
+     */
+    public void setFavorites(Favorites favorites) {
+        this.favorites = favorites;
     }
 }

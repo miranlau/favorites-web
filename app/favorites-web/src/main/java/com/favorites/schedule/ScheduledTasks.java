@@ -7,7 +7,7 @@ import com.favorites.comm.aop.LoggerManage;
 import com.favorites.domain.Collect;
 import com.favorites.domain.UrlLibrary;
 import com.favorites.domain.enums.IsDelete;
-import com.favorites.repository.CollectRepository;
+import com.favorites.remote.BookmarkService;
 import com.favorites.repository.FavoritesRepository;
 import com.favorites.repository.UrlLibraryRepository;
 import com.favorites.utils.DateUtils;
@@ -28,7 +28,7 @@ public class ScheduledTasks {
 	protected Logger logger =  LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
-	private CollectRepository collectRespository;
+    private BookmarkService collectRespository;
 	@Autowired
 	private FavoritesRepository favoritesRespository;
 	@Autowired
@@ -50,7 +50,8 @@ public class ScheduledTasks {
 		ca.add(Calendar.DAY_OF_YEAR,-30);
 		Long date = ca.getTime().getTime();
 		List<Long> favoritesId = favoritesRespository.findIdByName("未读列表");
-		List<Collect> collectList = collectRespository.findByCreateTimeLessThanAndIsDeleteAndFavoritesIdIn(date, IsDelete.NO,favoritesId);
+        List<Collect> collectList = collectRespository.findByCreateTimeLessThanAndIsDeleteAndFavoritesIdIn(date,
+                IsDelete.NO, favoritesId.toArray(new Long[favoritesId.size()]));
 		for(Collect collect : collectList){
 			try {
 				logger.info("文章id:" + collect.getId());

@@ -14,7 +14,7 @@ import com.favorites.domain.Collect;
 import com.favorites.domain.Comment;
 import com.favorites.domain.User;
 import com.favorites.domain.result.Response;
-import com.favorites.repository.CollectRepository;
+import com.favorites.remote.BookmarkService;
 import com.favorites.repository.CommentRepository;
 import com.favorites.repository.UserRepository;
 import com.favorites.service.NoticeService;
@@ -32,7 +32,7 @@ public class CommentController extends BaseController{
 	@Resource
 	private NoticeService noticeService;
 	@Autowired
-	private CollectRepository colloectRepository;
+    private BookmarkService colloectRepository;
 	
 	
 	/**

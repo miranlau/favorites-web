@@ -21,7 +21,7 @@ import com.favorites.domain.enums.CollectType;
 import com.favorites.domain.enums.IsDelete;
 import com.favorites.domain.view.CollectSummary;
 import com.favorites.domain.view.CollectView;
-import com.favorites.repository.CollectRepository;
+import com.favorites.remote.BookmarkService;
 import com.favorites.repository.CommentRepository;
 import com.favorites.repository.FavoritesRepository;
 import com.favorites.repository.FollowRepository;
@@ -39,7 +39,7 @@ public class CollectServiceImpl extends CacheService implements CollectService {
 	protected Logger logger =  LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private CollectRepository collectRepository;
+    private BookmarkService collectRepository;
 	@Autowired
 	private FavoritesRepository favoritesRepository;
 	@Autowired

@@ -11,7 +11,7 @@ import com.favorites.domain.enums.IsDelete;
 import com.favorites.domain.result.ExceptionMsg;
 import com.favorites.domain.result.Response;
 import com.favorites.domain.view.CollectSummary;
-import com.favorites.repository.CollectRepository;
+import com.favorites.remote.BookmarkService;
 import com.favorites.repository.FavoritesRepository;
 import com.favorites.repository.PraiseRepository;
 import com.favorites.service.CollectService;
@@ -43,7 +43,7 @@ import java.util.Map.Entry;
 @RequestMapping("/collect")
 public class CollectController extends BaseController{
 	@Autowired
-	private CollectRepository collectRepository;
+    private BookmarkService collectRepository;
 	@Resource
 	private FavoritesService favoritesService;
 	@Resource

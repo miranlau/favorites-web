@@ -1,15 +1,15 @@
 package com.favorites.service.impl;
 
-import com.favorites.domain.Collect;
-import com.favorites.domain.enums.CollectType;
-import com.favorites.domain.enums.IsDelete;
-import com.favorites.repository.CollectRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.favorites.domain.Collect;
 import com.favorites.domain.Favorites;
+import com.favorites.domain.enums.CollectType;
+import com.favorites.domain.enums.IsDelete;
+import com.favorites.remote.BookmarkService;
 import com.favorites.repository.FavoritesRepository;
 import com.favorites.service.FavoritesService;
 import com.favorites.utils.DateUtils;
@@ -21,7 +21,7 @@ public class FavoritesServiceImpl implements FavoritesService{
 	@Autowired
 	private FavoritesRepository favoritesRepository;
 	@Autowired
-	private CollectRepository collectRepository;
+    private BookmarkService collectRepository;
 
 	@Override
 	public Favorites saveFavorites(Long userId, String name) {

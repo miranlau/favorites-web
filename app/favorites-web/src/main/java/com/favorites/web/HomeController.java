@@ -8,7 +8,7 @@ import com.favorites.domain.enums.FollowStatus;
 import com.favorites.domain.enums.IsDelete;
 import com.favorites.domain.view.CollectSummary;
 import com.favorites.domain.view.LetterSummary;
-import com.favorites.repository.CollectRepository;
+import com.favorites.remote.BookmarkService;
 import com.favorites.repository.FavoritesRepository;
 import com.favorites.repository.FollowRepository;
 import com.favorites.repository.UserRepository;
@@ -41,7 +41,7 @@ public class HomeController extends BaseController {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private CollectRepository collectRepository;
+    private BookmarkService collectRepository;
     @Autowired
     private FollowRepository followRepository;
     @Autowired

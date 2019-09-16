@@ -4,7 +4,7 @@ import com.favorites.domain.Praise;
 import com.favorites.domain.UserIsFollow;
 import com.favorites.domain.view.CollectSummary;
 import com.favorites.domain.view.CollectView;
-import com.favorites.repository.CollectRepository;
+import com.favorites.remote.BookmarkService;
 import com.favorites.repository.CommentRepository;
 import com.favorites.repository.PraiseRepository;
 import com.favorites.service.LookAroundService;
@@ -29,7 +29,7 @@ import java.util.List;
 public class LookAroundServiceImpl implements LookAroundService{
 
     @Autowired
-    private CollectRepository collectRepository;
+    private BookmarkService collectRepository;
 
     @Autowired
     private CommentRepository commentRepository;
