@@ -80,12 +80,12 @@ public class CollectServiceImpl extends CacheService implements CollectService {
 		} else if ("explore".equals(type)) {
 			views = collectRepository.findExploreView(userId,pageable);
 		} else if("others".equals(type)){
-			views = collectRepository.findViewByUserIdAndType(userId, pageable, CollectType.PUBLIC);
+			views = collectRepository.findViewByUserIdAndType(userId, CollectType.PUBLIC, pageable);
 			if(null != specUserId){
 				userId = specUserId;
 			}
 		} else if("otherpublic".equals(type)){
-			views = collectRepository.findViewByUserIdAndTypeAndFavoritesId(userId, pageable, CollectType.PUBLIC, favoritesId);
+			views = collectRepository.findViewByUserIdAndTypeAndFavoritesId(userId, CollectType.PUBLIC, favoritesId, pageable);
 			if(null != specUserId){
 				userId = specUserId;
 			}

@@ -46,10 +46,10 @@ public interface BookmarkService {
 
     Page<CollectView> findViewByUserIdAndIsDelete(Long userId, Pageable pageable);
 
-    Page<CollectView> findViewByUserIdAndType(Long userId, Pageable pageable, CollectType type);
+    Page<CollectView> findViewByUserIdAndType(Long userId, CollectType type, Pageable pageable);
 
-    Page<CollectView> findViewByUserIdAndTypeAndFavoritesId(Long userId, Pageable pageable, CollectType type,
-            Long favoritesId);
+    Page<CollectView> findViewByUserIdAndTypeAndFavoritesId(Long userId, CollectType type, Long favoritesId,
+            Pageable pageable);
 
     Page<CollectView> findViewByFavoritesId(Long favoritesId, Pageable pageable);
 
