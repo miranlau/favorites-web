@@ -5,6 +5,7 @@ import com.favorites.domain.User;
 import com.favorites.domain.view.CollectSummary;
 import com.favorites.domain.view.CollectView;
 import com.favorites.domain.view.CommentView;
+import com.favorites.remote.BookmarkService;
 import com.favorites.repository.CommentRepository;
 import com.favorites.service.NoticeRepo;
 import com.favorites.repository.PraiseRepository;
@@ -31,6 +32,8 @@ public class NoticeServiceImpl implements NoticeService {
     private PraiseRepository praiseRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private BookmarkService bookmarkService;
 
     /**
      * 保存消息通知
@@ -70,8 +73,7 @@ public class NoticeServiceImpl implements NoticeService {
      */
     public List<CollectSummary> getNoticeCollects(String type, Long userId, Pageable pageable) {
         // TODO Auto-generated method stub
-//        Page<CollectView> views = noticeRepo.findViewByUserIdAndType(userId, type, pageable);
-        Page<CollectView> views = null;
+        Page<CollectView> views = bookmarkService.findViewByUserIdAndNoticeType(userId, type, pageable);
         return convertCollect(views, type);
     }
 

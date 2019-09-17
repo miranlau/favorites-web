@@ -77,4 +77,7 @@ public interface BookmarkService {
     Collect findById(long id);
 
     void save(Collect collect);
+
+    // move this function from NoticeRepository.findViewByUserIdAndType
+    Page<CollectView> findViewByUserIdAndNoticeType(Long userId, String noticeType, Pageable pageable);
 }

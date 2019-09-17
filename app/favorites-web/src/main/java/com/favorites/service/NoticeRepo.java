@@ -12,9 +12,6 @@ public interface NoticeRepo {
 	@PostMapping("/search/updateReadedByUserId")
 	int updateReadedByUserId(@RequestParam(value = "readed")String readed, @RequestParam(value = "userId")long userId, @RequestParam(value = "type")String type);
 
-//	@GetMapping("/search/findViewByUserIdAndType")
-//	Page<CollectView> findViewByUserIdAndType(@QueryParam("userId")Long userId, @QueryParam("type")String type, Pageable pageable);
-
 	@GetMapping("/search/countByUserIdAndTypeAndReaded")
 	Long countByUserIdAndTypeAndReaded(@RequestParam("userId")Long userId, @RequestParam("type")String type, @RequestParam("readed")String readed);
 

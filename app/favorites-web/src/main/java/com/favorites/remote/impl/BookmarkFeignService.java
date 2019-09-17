@@ -134,4 +134,9 @@ public interface BookmarkFeignService {
 
     @RequestMapping(value = "/collects", method = { RequestMethod.POST })
     void save(@RequestBody Collect collect);
+
+    @RequestMapping(value = "/notices/search/findByUserIdAndType")
+    PageResult<CollectViewImpl> findViewByUserIdAndNoticeType(@RequestParam("userId") Long userId,
+            @RequestParam("type") String noticeType, @RequestParam("page") Integer page,
+            @RequestParam("size") Integer size, @RequestParam("sort") String sort);
 }
