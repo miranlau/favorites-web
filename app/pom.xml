@@ -17,5 +17,6 @@
 	    <module>common-lib</module>
 	    <module>favorites-parent</module>
 	    <module>favorites-web</module>
+        <module>notice-service</module>
 	</modules>
 </project>
