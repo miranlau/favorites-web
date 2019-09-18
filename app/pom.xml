@@ -14,6 +14,7 @@
 	<packaging>pom</packaging>
 	<modules>
 	    <module>bookmark-service</module>
+		<module>user-service</module>
 	    <module>common-lib</module>
 	    <module>favorites-parent</module>
 	    <module>favorites-web</module>
