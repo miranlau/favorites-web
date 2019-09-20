@@ -14,3 +14,5 @@ favorites:
   services:
     bookmarks:
       address: localhost:8091
+    user:
+      address: localhost:8092

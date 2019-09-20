@@ -13,11 +13,13 @@
 	<description>Project set of favorites-app</description>
 	<packaging>pom</packaging>
 	<modules>
+		<module>favorites-parent</module>
+		<module>common-lib</module>
 	    <module>bookmark-service</module>
 		<module>user-service</module>
-	    <module>common-lib</module>
-	    <module>favorites-parent</module>
-	    <module>favorites-web</module>
         <module>notice-service</module>
+		<module>eureka-server</module>
+		<module>configuration-server</module>
+		<module>favorites-web</module>
 	</modules>
 </project>

@@ -3,6 +3,7 @@
  *----------------------------------------------------------------------------*/
 package com.favorites.remote;
 
+import com.favorites.remote.impl.UserFeignService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -19,7 +20,10 @@ import io.favorites.common.api.ServiceFactory;
 public class ServiceRegistry {
 
     @Autowired
-    BookmarkFeignService service;
+    BookmarkFeignService bookmarkFeignService;
+
+    @Autowired
+    UserFeignService userFeignService;
 
     @Value("${favorites.services.bookmarks.address}")
     private static String bookmarksServiceAddr;
@@ -32,7 +36,12 @@ public class ServiceRegistry {
 
     @Bean
     public BookmarkService bookmarkService() {
-        return ServiceFactory.createService(BookmarkService.class, service);
+        return ServiceFactory.createService(BookmarkService.class, bookmarkFeignService);
+    }
+
+    @Bean
+    public UserService userService() {
+        return ServiceFactory.createService(UserService.class, userFeignService);
     }
 
     /**

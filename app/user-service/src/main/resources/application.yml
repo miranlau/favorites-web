@@ -1,9 +1,9 @@
 server:
-  application:
-    name: user-service
   port: 8092
 
 spring:
+  application:
+    name: user-service
   datasource:
     url: jdbc:mysql://127.0.0.1/favorites?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC&useSSL=true
     username: root
@@ -13,16 +13,37 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-  data:
-    rest:
-      basePath: /api
 
-eureka:
+eureka: #eureka
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka
 
-  logging:
-    level:
-      io.favorites: info
+management: #actuator
+  server:
+    port: 9001
+  endpoints:
+    web:
+      base-path: /
+      exposure:
+        include: "*"
+
+endpoints:
+  enabled: true
+  info:
+    sensitive: false
+  health:
+    sensitive: false
+
+info:
+  app:
+    name: ${spring.application.name}
+    version: @project.version@
+    encoding: @project.build.sourceEncoding@
+    java:
+      version: @java.version@
+
+logging:
+  level:
+    io.favorites: info
 

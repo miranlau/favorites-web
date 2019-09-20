@@ -8,10 +8,10 @@ import com.favorites.domain.User;
 import com.favorites.domain.result.ExceptionMsg;
 import com.favorites.domain.result.Response;
 import com.favorites.domain.result.ResponseData;
+import com.favorites.remote.UserService;
 import com.favorites.repository.ConfigRepository;
 import com.favorites.repository.FavoritesRepository;
 import com.favorites.repository.FollowRepository;
-import com.favorites.repository.UserRepository;
 import com.favorites.service.ConfigService;
 import com.favorites.service.FavoritesService;
 import com.favorites.utils.DateUtils;
@@ -40,7 +40,7 @@ import java.util.UUID;
 @RequestMapping("/user")
 public class UserController extends BaseController {
 	@Autowired
-	private UserRepository userRepository;
+	private UserService userService;
 	@Resource
 	private ConfigService configService;
 	@Resource
@@ -73,7 +73,7 @@ public class UserController extends BaseController {
 	public ResponseData login(User user,HttpServletResponse response) {
 		try {
 			//这里不是bug，前端userName有可能是邮箱也有可能是昵称。
-			User loginUser = userRepository.findByUserNameOrEmail(user.getUserName(), user.getUserName());
+			User loginUser = userService.findByUserNameOrEmail(user.getUserName(), user.getUserName());
 			if (loginUser == null ) {
 				return new ResponseData(ExceptionMsg.LoginNameNotExists);
 			}else if(!loginUser.getPassWord().equals(getPwd(user.getPassWord()))){
@@ -110,11 +110,11 @@ public class UserController extends BaseController {
 	@LoggerManage(description="注册")
 	public Response create(User user) {
 		try {
-			User registUser = userRepository.findByEmail(user.getEmail());
+			User registUser = userService.findByEmail(user.getEmail());
 			if (null != registUser) {
 				return result(ExceptionMsg.EmailUsed);
 			}
-			User userNameUser = userRepository.findByUserName(user.getUserName());
+			User userNameUser = userService.findByUserName(user.getUserName());
 			if (null != userNameUser) {
 				return result(ExceptionMsg.UserNameUsed);
 			}
@@ -122,7 +122,7 @@ public class UserController extends BaseController {
 			user.setCreateTime(DateUtils.getCurrentTime());
 			user.setLastModifyTime(DateUtils.getCurrentTime());
 			user.setProfilePicture("img/favicon.png");
-			userRepository.save(user);
+			userService.save(user);
 			// 添加默认收藏夹
 			Favorites favorites = favoritesService.saveFavorites(user.getId(), "未读列表");
 			// 添加默认属性设置
@@ -200,14 +200,14 @@ public class UserController extends BaseController {
 	@LoggerManage(description="发送忘记密码邮件")
 	public Response sendForgotPasswordEmail(String email) {
 		try {
-			User registUser = userRepository.findByEmail(email);
+			User registUser = userService.findByEmail(email);
 			if (null == registUser) {
 				return result(ExceptionMsg.EmailNotRegister);
 			}	
 			String secretKey = UUID.randomUUID().toString(); // 密钥
             Timestamp outDate = new Timestamp(System.currentTimeMillis() + 30 * 60 * 1000);// 30分钟后过期
             long date = outDate.getTime() / 1000 * 1000;
-            userRepository.setOutDateAndValidataCode(outDate+"", secretKey, email);
+            userService.setOutDateAndValidataCode(outDate+"", secretKey, email);
             String key =email + "$" + date + "$" + secretKey;
             String digitalSignature = MD5Util.encrypt(key);// 数字签名
 //            String basePath = this.getRequest().getScheme() + "://" + this.getRequest().getServerName() + ":" + this.getRequest().getServerPort() + this.getRequest().getContextPath() + "/newPassword";
@@ -240,7 +240,7 @@ public class UserController extends BaseController {
 	@LoggerManage(description="设置新密码")
 	public Response setNewPassword(String newpwd, String email, String sid) {
 		try {
-			User user = userRepository.findByEmail(email);
+			User user = userService.findByEmail(email);
 			Timestamp outDate = Timestamp.valueOf(user.getOutDate());
 			if(outDate.getTime() <= System.currentTimeMillis()){ //表示已经过期
 				return result(ExceptionMsg.LinkOutdated);
@@ -250,7 +250,7 @@ public class UserController extends BaseController {
             if(!digitalSignature.equals(sid)) {
             	 return result(ExceptionMsg.LinkOutdated);
             }
-            userRepository.setNewPassword(getPwd(newpwd), email);
+            userService.setNewPassword(getPwd(newpwd), email);
 		} catch (Exception e) {
 			// TODO: handle exception
 			logger.error("setNewPassword failed, ", e);
@@ -273,7 +273,7 @@ public class UserController extends BaseController {
 			String password = user.getPassWord();
 			String newpwd = getPwd(newPassword);
 			if(password.equals(getPwd(oldPassword))){
-				userRepository.setNewPassword(newpwd, user.getEmail());
+				userService.setNewPassword(newpwd, user.getEmail());
 				user.setPassWord(newpwd);
 				getSession().setAttribute(Const.LOGIN_SESSION_KEY, user);
 			}else{
@@ -297,7 +297,7 @@ public class UserController extends BaseController {
 	public ResponseData updateIntroduction(String introduction) {
 		try {
 			User user = getUser();
-			userRepository.setIntroduction(introduction, user.getEmail());
+			userService.setIntroduction(introduction, user.getEmail());
 			user.setIntroduction(introduction);
 			getSession().setAttribute(Const.LOGIN_SESSION_KEY, user);
 			return new ResponseData(ExceptionMsg.SUCCESS, introduction);
@@ -321,14 +321,14 @@ public class UserController extends BaseController {
 			if(userName.equals(loginUser.getUserName())){
 				return new ResponseData(ExceptionMsg.UserNameSame);
 			}
-			User user = userRepository.findByUserName(userName);
+			User user = userService.findByUserName(userName);
 			if(null != user && user.getUserName().equals(userName)){
 				return new ResponseData(ExceptionMsg.UserNameUsed);
 			}
 			if(userName.length()>12){
 				return new ResponseData(ExceptionMsg.UserNameLengthLimit);
 			}
-			userRepository.setUserName(userName, loginUser.getEmail());
+			userService.setUserName(userName, loginUser.getEmail());
 			loginUser.setUserName(userName);
 			getSession().setAttribute(Const.LOGIN_SESSION_KEY, loginUser);
 			return new ResponseData(ExceptionMsg.SUCCESS, userName);
@@ -360,7 +360,7 @@ public class UserController extends BaseController {
                 byte[] decodedBytes = decoder.decode(image);
                 FileUtil.uploadFile(decodedBytes, filePath, fileName);
                 User user = getUser();
-    			userRepository.setProfilePicture(savePath, user.getId());
+    			userService.setProfilePicture(savePath, user.getId());
     			user.setProfilePicture(savePath);
     			getSession().setAttribute(Const.LOGIN_SESSION_KEY, user); 			
 	        }
@@ -394,7 +394,7 @@ public class UserController extends BaseController {
 				byte[] decodedBytes = decoder.decode(image);
 				FileUtil.uploadFile(decodedBytes, filePath, fileName);
 				User user = getUser();
-				userRepository.setBackgroundPicture(savePath, user.getId());
+				userService.setBackgroundPicture(savePath, user.getId());
 				user.setBackgroundPicture(savePath);
 				getSession().setAttribute(Const.LOGIN_SESSION_KEY, user);
 			}
