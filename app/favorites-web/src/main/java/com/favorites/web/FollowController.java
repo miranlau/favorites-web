@@ -9,6 +9,7 @@ import com.favorites.domain.Follow;
 import com.favorites.domain.enums.FollowStatus;
 import com.favorites.domain.result.ExceptionMsg;
 import com.favorites.domain.result.Response;
+import com.favorites.remote.FollowService;
 import com.favorites.repository.FollowRepository;
 import com.favorites.utils.DateUtils;
 
@@ -17,7 +18,8 @@ import com.favorites.utils.DateUtils;
 public class FollowController extends BaseController{
 	
 	@Autowired
-	private FollowRepository followRepository;
+	private FollowService followRepository;
+//	private FollowRepository followRepository;
 	
 	/**
 	 * 关注&取消关注

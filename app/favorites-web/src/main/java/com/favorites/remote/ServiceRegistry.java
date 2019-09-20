@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.favorites.remote.impl.BookmarkFeignService;
+import com.favorites.remote.impl.FollowFeignService;
 
 import io.favorites.common.api.ServiceFactory;
 
@@ -24,9 +25,17 @@ public class ServiceRegistry {
 
     @Autowired
     UserFeignService userFeignService;
+    
+    BookmarkFeignService service;
+    
+    @Autowired
+    FollowFeignService followFeignService;
 
     @Value("${favorites.services.bookmarks.address}")
     private static String bookmarksServiceAddr;
+    
+    @Value("${favorites.services.follow.address}")
+    private static String followServiceAddr;
 
     /**
      * Creates a new instance of <code>ServiceRegistry</code>.
@@ -49,5 +58,18 @@ public class ServiceRegistry {
      */
     public static String getBookmarksServiceAddr() {
         return bookmarksServiceAddr;
+    }
+    
+    
+    @Bean
+    public FollowService followService() {
+        return ServiceFactory.createService(FollowService.class, followFeignService);
+    }
+
+    /**
+     * @return Returns the bookmarksServiceAddr.
+     */
+    public static String getFollowServiceAddr() {
+        return followServiceAddr;
     }
 }

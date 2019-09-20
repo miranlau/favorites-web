@@ -9,6 +9,7 @@ import com.favorites.domain.enums.IsDelete;
 import com.favorites.domain.view.CollectSummary;
 import com.favorites.domain.view.IndexCollectorView;
 import com.favorites.remote.BookmarkService;
+import com.favorites.remote.FollowService;
 import com.favorites.repository.*;
 import com.favorites.service.CollectService;
 import com.favorites.service.CollectorService;
@@ -37,7 +38,7 @@ public class IndexController extends BaseController{
 	@Autowired
 	private ConfigRepository configRepository;
 	@Autowired
-	private FollowRepository followRepository;
+	private FollowService followRepository;
 	@Autowired
     private BookmarkService collectRepository;
 	@Autowired

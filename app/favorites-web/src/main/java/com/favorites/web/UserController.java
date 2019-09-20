@@ -8,10 +8,11 @@ import com.favorites.domain.User;
 import com.favorites.domain.result.ExceptionMsg;
 import com.favorites.domain.result.Response;
 import com.favorites.domain.result.ResponseData;
+
 import com.favorites.remote.UserService;
+import com.favorites.remote.FollowService;
 import com.favorites.repository.ConfigRepository;
 import com.favorites.repository.FavoritesRepository;
-import com.favorites.repository.FollowRepository;
 import com.favorites.service.ConfigService;
 import com.favorites.service.FavoritesService;
 import com.favorites.utils.DateUtils;
@@ -64,7 +65,7 @@ public class UserController extends BaseController {
 	@Autowired	
 	private ConfigRepository configRepository;
 	@Autowired
-	private FollowRepository followRepository;
+	private FollowService followRepository;
 	@Autowired
 	private FavoritesRepository favoritesRepository;
 	
