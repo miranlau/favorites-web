@@ -35,7 +35,7 @@ public interface BookmarkFeignService {
             @RequestParam("size") Integer size,
             @RequestParam("sort") String sort);
 
-    @RequestMapping(value = "/collectView/search/countByUserIdAndIsDelete")
+    @RequestMapping(value = "/collects/search/countByUserIdAndIsDelete")
     Long countByUserIdAndIsDelete(@RequestParam("userId") Long userId, @RequestParam("isDelete") IsDelete isDelete);
 
     @RequestMapping(value = "/collects/search/countByUserIdAndTypeAndIsDelete")
@@ -111,7 +111,8 @@ public interface BookmarkFeignService {
             @RequestParam("type") CollectType type, @RequestParam("isDelete") IsDelete isDelete);
 
     @RequestMapping(value = "/collects/search/countByFavoritesIdAndIsDelete")
-    Long countByFavoritesIdAndIsDelete(@RequestParam("favoritesId") Long favoritesId, IsDelete isDelete);
+    Long countByFavoritesIdAndIsDelete(@RequestParam("favoritesId") Long favoritesId,
+            @RequestParam("isDelete") IsDelete isDelete);
 
     @RequestMapping(value = "/collects/search/findByCreateTimeLessThanAndIsDeleteAndFavoritesIdIn")
     ListResult<Collect> findByCreateTimeLessThanAndIsDeleteAndFavoritesIdIn(@RequestParam("createTime") Long createTime,
