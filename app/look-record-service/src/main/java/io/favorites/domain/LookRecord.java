@@ -23,10 +23,11 @@ public class LookRecord implements Serializable{
     private Long lastModifyTime;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = true, updatable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "collect_id", nullable = false)
+    @JoinColumn(name = "collect_id", nullable = true, updatable = false)
     private Collect collect;
+
 }

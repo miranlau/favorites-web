@@ -48,5 +48,6 @@ public interface CollectOfLookRecord {
 	@Value("#{target.collect.favorites.name}")
 	String getFavoriteName();
 
-	String getOperId();
+//	@Value("#{target.collect.favorites.name}")
+//	String getOperId();
 }

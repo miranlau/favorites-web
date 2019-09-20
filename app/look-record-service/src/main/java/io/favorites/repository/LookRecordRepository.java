@@ -1,6 +1,6 @@
 package io.favorites.repository;
 
-import io.favorites.domain.LookRecord;
+import io.favorites.domain.LookRecord2;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -11,7 +11,7 @@ import javax.transaction.Transactional;
 
 
 @RepositoryRestResource(path = "lookRecords", collectionResourceRel = "data")
-public interface LookRecordRepository extends CrudRepository<LookRecord, Long> {
+public interface LookRecordRepository extends CrudRepository<LookRecord2, Long> {
 
     /**
      * 查询用户浏览历史记录
@@ -33,11 +33,13 @@ public interface LookRecordRepository extends CrudRepository<LookRecord, Long> {
     void updatelastModifyTime(@Param("userId") Long userId, @Param("collectId") Long collectId, @Param("lastModifyTime") Long lastModifyTime);
 
     @Transactional
-    Long deleteByUserIdAndCollectId(@Param(value = "userId")Long userId, @Param(value = "collectId")Long collectId);
+    @Modifying(clearAutomatically=true)
+    int deleteByUserIdAndCollectId(@Param(value = "userId")Long userId, @Param(value = "collectId")Long collectId);
 
+
+    @Modifying
     @Transactional
-    Long deleteByUserId(@Param(value = "userId")Long userId);
+    @Query("DELETE FROM LookRecord l WHERE l.user.id=?1")
+    int deleteByUserId(@Param(value = "userId")Long userId);
 
-//    @Transactional
-//    LookRecord save(@RequestBody LookRecord lookRecord);
 }

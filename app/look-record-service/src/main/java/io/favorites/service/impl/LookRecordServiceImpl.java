@@ -14,7 +14,7 @@ public class LookRecordServiceImpl implements LookRecordService {
 
     @Override
     public LookRecordBiz saveLookRecord(LookRecordBiz lookRecordBiz) {
-        LookRecord lookRecord = new LookRecord();
+        LookRecord2 lookRecord = new LookRecord2();
         Collect collect = new Collect();
         collect.setId(lookRecordBiz.getCollectId());
         lookRecord.setCollect(collect);
@@ -23,7 +23,7 @@ public class LookRecordServiceImpl implements LookRecordService {
         User user = new User();
         user.setId(lookRecordBiz.getUserId());
         lookRecord.setUser(user);
-        LookRecord result = lookRecordRepository.save(lookRecord);
+        LookRecord2 result = lookRecordRepository.save(lookRecord);
         LookRecordBiz recordBiz = new LookRecordBiz();
         recordBiz.setId(result.getId());
         recordBiz.setCollectId(result.getCollect().getId());
