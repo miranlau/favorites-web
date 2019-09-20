@@ -14,7 +14,7 @@ import com.favorites.repository.*;
 import com.favorites.service.CollectService;
 import com.favorites.service.CollectorService;
 import com.favorites.service.LookAroundService;
-import com.favorites.service.NoticeRepo;
+import com.favorites.remote.NoticeFeignService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -42,7 +42,7 @@ public class IndexController extends BaseController{
 	@Autowired
     private BookmarkService collectRepository;
 	@Autowired
-	private NoticeRepo noticeRepo;
+	private NoticeFeignService noticeFeignService;
 	@Autowired
 	private CollectorService collectorService;
     @Autowired
@@ -83,9 +83,9 @@ public class IndexController extends BaseController{
 		model.addAttribute("size",size);
 		model.addAttribute("followList",followList);
 		model.addAttribute("user",getUser());
-		model.addAttribute("newAtMeCount",noticeRepo.countByUserIdAndTypeAndReaded(getUserId(), "at", "unread"));
-		model.addAttribute("newCommentMeCount",noticeRepo.countByUserIdAndTypeAndReaded(getUserId(), "comment", "unread"));
-		model.addAttribute("newPraiseMeCount",noticeRepo.countPraiseByUserIdAndReaded(getUserId(), "unread"));
+		model.addAttribute("newAtMeCount", noticeFeignService.countByUserIdAndTypeAndReaded(getUserId(), "at", "unread"));
+		model.addAttribute("newCommentMeCount", noticeFeignService.countByUserIdAndTypeAndReaded(getUserId(), "comment", "unread"));
+		model.addAttribute("newPraiseMeCount", noticeFeignService.countPraiseByUserIdAndReaded(getUserId(), "unread"));
 		logger.info("collect size="+size+" userID="+getUserId());
 		return "home";
 	}

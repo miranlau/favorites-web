@@ -10,7 +10,7 @@ import com.favorites.domain.view.CollectSummary;
 import com.favorites.repository.CommentRepository;
 import com.favorites.repository.PraiseRepository;
 import com.favorites.repository.UserRepository;
-import com.favorites.service.NoticeRepo;
+import com.favorites.remote.NoticeFeignService;
 import com.favorites.service.NoticeService;
 import com.favorites.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ import java.util.Map;
 public class NoticeController extends BaseController{
 	
 	@Autowired
-	private NoticeRepo noticeRepo;
+	private NoticeFeignService noticeFeignService;
 
 	@Autowired
 	private NoticeService noticeService;
@@ -61,7 +61,7 @@ public class NoticeController extends BaseController{
 			notice.setReaded("unread");
 			notice.setOperId(saveCommon.getId().toString());
 			notice.setCreateTime(DateUtils.getCurrentTime());
-			noticeRepo.saveNotice(String.valueOf(comment.getCollectId()), "comment", notice.getUserId(), notice.getOperId());
+			noticeFeignService.saveNotice(String.valueOf(comment.getCollectId()), "comment", notice.getUserId(), notice.getOperId());
 		} catch (Exception e) {
 			// TODO: handle exception
 			logger.error("reply failed, ", e);
@@ -74,10 +74,10 @@ public class NoticeController extends BaseController{
 	@LoggerManage(description="获取新消息数量")
 	public ResponseData getNoticeNum(){
 		Map<String,Long> result = new HashMap<String, Long>();
-		Long newAtMeCount = noticeRepo.countByUserIdAndTypeAndReaded(getUserId(), "at", "unread");
-		Long newCommentMeCount = noticeRepo.countByUserIdAndTypeAndReaded(getUserId(), "comment", "unread");
-		Long newPraiseMeCount = noticeRepo.countPraiseByUserIdAndReaded(getUserId(), "unread");
-		Long newLetterNotice = noticeRepo.countByUserIdAndTypeAndReaded(getUserId(),"letter","unread");
+		Long newAtMeCount = noticeFeignService.countByUserIdAndTypeAndReaded(getUserId(), "at", "unread");
+		Long newCommentMeCount = noticeFeignService.countByUserIdAndTypeAndReaded(getUserId(), "comment", "unread");
+		Long newPraiseMeCount = noticeFeignService.countPraiseByUserIdAndReaded(getUserId(), "unread");
+		Long newLetterNotice = noticeFeignService.countByUserIdAndTypeAndReaded(getUserId(),"letter","unread");
 		result.put("newAtMeCount",newAtMeCount);
 		result.put("newCommentMeCount",newCommentMeCount);
 		result.put("newPraiseMeCount",newPraiseMeCount);

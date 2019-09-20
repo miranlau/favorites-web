@@ -4,6 +4,7 @@ import com.favorites.domain.result.Response;
 import com.favorites.service.LookRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,13 +18,7 @@ public class LookRecordController extends BaseController{
     @Autowired
     private LookRecordService lookRecordService;
 
-    /**
-     * @author chenzhimin
-     * @date 2017年1月23日
-     * @param collectId 收藏ID
-     * @return
-     */
-    @RequestMapping(value="/save/{collectId}")
+    @PostMapping(value="/save/{collectId}")
     public Response saveLookRecord(@PathVariable("collectId") long collectId) {
         lookRecordService.saveLookRecord(this.getUserId(),collectId);
         return result();

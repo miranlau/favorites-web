@@ -14,10 +14,10 @@
 	</parent>
 
     <dependencies>
-        <dependency>
-            <groupId>io.favorites</groupId>
-            <artifactId>common-lib</artifactId>
-        </dependency>
+		<dependency>
+			<groupId>io.favorites</groupId>
+			<artifactId>common-lib</artifactId>
+		</dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>

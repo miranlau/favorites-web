@@ -1,5 +1,7 @@
 package com.favorites.domain;
 
+import com.favorites.remote.ServiceRegistry;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -23,6 +25,10 @@ public class LookRecord extends Entitys implements Serializable{
     private Long createTime;
     @Column(nullable = false)
     private Long lastModifyTime;
+    @Transient
+    private String user;
+    @Transient
+    private String collect;
 
     public Long getId() {
         return id;
@@ -38,6 +44,9 @@ public class LookRecord extends Entitys implements Serializable{
 
     public void setUserId(Long userId) {
         this.userId = userId;
+        if (userId != null) {
+            user = ServiceRegistry.getLookRecordServiceAddr() + "/users/" + userId;
+        }
     }
 
     public Long getCollectId() {
@@ -46,6 +55,9 @@ public class LookRecord extends Entitys implements Serializable{
 
     public void setCollectId(Long collectId) {
         this.collectId = collectId;
+        if (collectId != null) {
+            collect = ServiceRegistry.getLookRecordServiceAddr() + "/collects/" + collectId;
+        }
     }
 
     public Long getCreateTime() {
@@ -62,5 +74,21 @@ public class LookRecord extends Entitys implements Serializable{
 
     public void setLastModifyTime(Long lastModifyTime) {
         this.lastModifyTime = lastModifyTime;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public void setCollect(String collect) {
+        this.collect = collect;
     }
 }

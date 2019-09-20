@@ -3,16 +3,15 @@
  *----------------------------------------------------------------------------*/
 package com.favorites.remote;
 
+import com.favorites.remote.impl.BookmarkFeignService;
+import com.favorites.remote.impl.FollowFeignService;
+import com.favorites.remote.impl.LookRecordFeignService;
 import com.favorites.remote.impl.UserFeignService;
+import io.favorites.common.api.ServiceFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import com.favorites.remote.impl.BookmarkFeignService;
-import com.favorites.remote.impl.FollowFeignService;
-
-import io.favorites.common.api.ServiceFactory;
 
 /**
  * The purpose of this class is to register remote services.
@@ -31,11 +30,17 @@ public class ServiceRegistry {
     @Autowired
     FollowFeignService followFeignService;
 
+    @Autowired
+    LookRecordFeignService lookRecordFeignService;
+
     @Value("${favorites.services.bookmarks.address}")
     private static String bookmarksServiceAddr;
     
     @Value("${favorites.services.follow.address}")
     private static String followServiceAddr;
+
+    @Value("${favorites.services.lookrecord.address}")
+    private static String lookRecordServiceAddr;
 
     /**
      * Creates a new instance of <code>ServiceRegistry</code>.
@@ -53,13 +58,16 @@ public class ServiceRegistry {
         return ServiceFactory.createService(UserService.class, userFeignService);
     }
 
+    @Bean
+    public LookRecordRemoteService lookRecordRemoteService() {
+        return ServiceFactory.createService(LookRecordRemoteService.class, lookRecordFeignService);
+    }
     /**
      * @return Returns the bookmarksServiceAddr.
      */
     public static String getBookmarksServiceAddr() {
         return bookmarksServiceAddr;
     }
-    
     
     @Bean
     public FollowService followService() {
@@ -71,5 +79,9 @@ public class ServiceRegistry {
      */
     public static String getFollowServiceAddr() {
         return followServiceAddr;
+    }
+
+    public static String getLookRecordServiceAddr() {
+        return lookRecordServiceAddr;
     }
 }

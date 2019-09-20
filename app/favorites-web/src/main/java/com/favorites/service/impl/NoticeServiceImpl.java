@@ -7,7 +7,7 @@ import com.favorites.domain.view.CollectView;
 import com.favorites.domain.view.CommentView;
 import com.favorites.remote.BookmarkService;
 import com.favorites.repository.CommentRepository;
-import com.favorites.service.NoticeRepo;
+import com.favorites.remote.NoticeFeignService;
 import com.favorites.repository.PraiseRepository;
 import com.favorites.repository.UserRepository;
 import com.favorites.service.NoticeService;
@@ -25,7 +25,7 @@ import java.util.List;
 public class NoticeServiceImpl implements NoticeService {
 
     @Autowired
-    private NoticeRepo noticeRepo;
+    private NoticeFeignService noticeFeignService;
     @Autowired
     private CommentRepository commentRepository;
     @Autowired
@@ -55,13 +55,13 @@ public class NoticeServiceImpl implements NoticeService {
         }
         notice.setUserId(userId);
         notice.setCreateTime(DateUtils.getCurrentTime());
-        Notice savedNotice = noticeRepo.saveNotice(collectId, type, userId, operId);
+        Notice savedNotice = noticeFeignService.saveNotice(collectId, type, userId, operId);
         return savedNotice;
     }
 
     @Override
     public int updateReadedByUserId(String readed, long userId, String type) {
-        return noticeRepo.updateReadedByUserId(readed, userId, type);
+        return noticeFeignService.updateReadedByUserId(readed, userId, type);
     }
 
     /**

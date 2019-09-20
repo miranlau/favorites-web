@@ -16,3 +16,7 @@ favorites:
       address: localhost:8091
     user:
       address: localhost:8092
+    notice:
+      address: localhost:8093
+    lookrecord:
+      address: localhost:8094

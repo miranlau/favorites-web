@@ -3,22 +3,16 @@
  *----------------------------------------------------------------------------*/
 package com.favorites.remote.impl;
 
-import java.util.List;
-
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import com.favorites.domain.Collect;
 import com.favorites.domain.enums.CollectType;
 import com.favorites.domain.enums.IsDelete;
 import com.favorites.domain.view.CollectViewImpl;
-
 import io.favorites.common.api.ListResult;
 import io.favorites.common.api.PageResult;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * This class is a feign client for Bookmark service.

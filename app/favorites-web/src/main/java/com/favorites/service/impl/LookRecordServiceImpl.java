@@ -4,8 +4,9 @@ import com.favorites.domain.LookRecord;
 import com.favorites.domain.Praise;
 import com.favorites.domain.view.CollectSummary;
 import com.favorites.domain.view.CollectView;
+import com.favorites.remote.LookRecordRemoteService;
+import com.favorites.remote.impl.LookRecordFeignService;
 import com.favorites.repository.CommentRepository;
-import com.favorites.repository.LookRecordRepository;
 import com.favorites.repository.PraiseRepository;
 import com.favorites.service.CollectService;
 import com.favorites.service.LookRecordService;
@@ -18,14 +19,14 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by louie on 2017/1/12.
- */
 @Service("lookRecordService")
 public class LookRecordServiceImpl implements LookRecordService {
 
     @Autowired
-    private LookRecordRepository lookRecordRepository;
+    private LookRecordRemoteService lookRecordRemoteService;
+
+    @Autowired
+    private LookRecordFeignService lookRecordFeignService;
 
     @Autowired
     private PraiseRepository praiseRepository;
@@ -36,22 +37,19 @@ public class LookRecordServiceImpl implements LookRecordService {
     @Autowired
     private CollectService collectService;
 
-
-
-
     @Override
     public void saveLookRecord(Long userId,Long collectId) {
         if(userId != null && userId > 0 && collectId != null) {
-            Integer count = lookRecordRepository.countByUserIdAndCollectId(userId, collectId);
+            Integer count = lookRecordFeignService.countByUserIdAndCollectId(userId, collectId);
             if (count > 0) {
-                lookRecordRepository.updatelastModifyTime(userId, collectId, DateUtils.getCurrentTime());
+                lookRecordFeignService.updatelastModifyTime(userId, collectId, DateUtils.getCurrentTime());
             } else {
                 LookRecord lookRecord = new LookRecord();
                 lookRecord.setUserId(userId);
                 lookRecord.setCollectId(collectId);
                 lookRecord.setCreateTime(DateUtils.getCurrentTime());
                 lookRecord.setLastModifyTime(DateUtils.getCurrentTime());
-                lookRecordRepository.save(lookRecord);
+                lookRecordFeignService.save(lookRecord);
             }
         }
 
@@ -59,19 +57,19 @@ public class LookRecordServiceImpl implements LookRecordService {
 
     @Override
     public void deleteLookRecord(Long userId, Long collectId) {
-        lookRecordRepository.deleteByUserIdAndCollectId(userId,collectId);
+        lookRecordFeignService.deleteByUserIdAndCollectId(userId,collectId);
     }
 
     @Override
     public void deleteLookRecordByUserID(Long userId) {
-        lookRecordRepository.deleteByUserId(userId);
+        lookRecordFeignService.deleteByUserId(userId);
     }
 
     @Override
     public List<CollectSummary> getLookRecords(Long userId, Pageable pageable) {
         Page<CollectView> views = null;
 
-        views = lookRecordRepository.findViewByUserId(userId, pageable);
+        views = lookRecordRemoteService.findViewByUserId(userId, pageable);
 
         return convertCollect(views,userId);
     }

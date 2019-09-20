@@ -24,11 +24,11 @@ public interface CollectViewRepository extends JpaRepository<Collect, Long> {
     public String isDeleteBaseSql = "select c from Collect c WHERE c.isDelete='YES'";
 
     //随便看看根据类别查询收藏
-    @Query(baseSql + " and c.type='public' and c.category=?1 ")
+    @Query(baseSql + " and c.type='PUBLIC' and c.category=?1 ")
     Page<Collect> findExploreViewByCategory(@Param("category") String category, Pageable pageable);
 
     //随便看看查询收藏
-    @Query(baseSql + " and c.type='public' ")
+    @Query(baseSql + " and c.type='PUBLIC' ")
     Page<Collect> findExploreViewByType(Pageable pageable);
 
     @Override
@@ -53,7 +53,7 @@ public interface CollectViewRepository extends JpaRepository<Collect, Long> {
     @Query(baseSql + " and c.favorites.id=?1 ")
     Page<Collect> findViewByFavoritesId(@Param("favoritesId") Long favoritesId, Pageable pageable);
 
-    @Query(baseSql + " and c.type='public' and c.user.id!=?1 ")
+    @Query(baseSql + " and c.type='PUBLIC' and c.user.id!=?1 ")
     Page<Collect> findExploreView(@Param("userId") Long userId, Pageable pageable);
 
     @Query(baseSql + " and (c.user.id=?1 or ( c.user.id in ?2 and c.type='PUBLIC' )) ")
@@ -63,7 +63,7 @@ public interface CollectViewRepository extends JpaRepository<Collect, Long> {
     @Query(baseSql + " and c.user.id=?1 and ( c.title like ?2 or c.description like ?2) ")
     Page<Collect> searchMyByKey(@Param("userId") Long userId, @Param("key") String key, Pageable pageable);
 
-    @Query(baseSql + " and c.type='public' and c.user.id!=?1 and ( c.title like ?2 or c.description like ?2) ")
+    @Query(baseSql + " and c.type='PUBLIC' and c.user.id!=?1 and ( c.title like ?2 or c.description like ?2) ")
     Page<Collect> searchOtherByKey(@Param("userId") Long userId, @Param("key") String key, Pageable pageable);
 
     @RestResource(exported = false)
