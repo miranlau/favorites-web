@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +25,8 @@ import io.favorites.common.api.PageResult.Page;
  * client(e.g. Feign).
  */
 public class ServiceFactory {
+
+    private static Logger LOGGER = LoggerFactory.getLogger(ServiceFactory.class);
 
     @SuppressWarnings("unchecked")
     public static <T> T createService(Class<T> serviceInterface, Object client) {
@@ -64,8 +68,15 @@ public class ServiceFactory {
                             }
                             targetArgs.add(arg);
                         }
-                        Object invokeResult = realMethod.invoke(client,
-                                targetArgs.toArray(new Object[targetArgs.size()]));
+                        Object invokeResult = null;
+                        try {
+                            invokeResult = realMethod.invoke(client, targetArgs.toArray(new Object[targetArgs.size()]));
+                        } catch (Exception e) {
+                            LOGGER.error("some exception in calling remote service, it's better to "
+                                            + "response a list other than an object from remote service "
+                                            + "because object NotFound conflict with path NotFound",
+                                    e);
+                        }
                         if (invokeResult != null) {
                             if (invokeResult instanceof PageResult) {
                                 PageResult result = (PageResult) invokeResult;
