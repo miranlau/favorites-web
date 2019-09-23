@@ -1,24 +1,16 @@
 package com.favorites.web;
 
-import com.favorites.comm.Const;
-import com.favorites.comm.aop.LoggerManage;
-import com.favorites.domain.Config;
-import com.favorites.domain.Favorites;
-import com.favorites.domain.User;
-import com.favorites.domain.result.ExceptionMsg;
-import com.favorites.domain.result.Response;
-import com.favorites.domain.result.ResponseData;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.List;
+import java.util.UUID;
 
-import com.favorites.remote.UserService;
-import com.favorites.remote.FollowService;
-import com.favorites.repository.ConfigRepository;
-import com.favorites.repository.FavoritesRepository;
-import com.favorites.service.ConfigService;
-import com.favorites.service.FavoritesService;
-import com.favorites.utils.DateUtils;
-import com.favorites.utils.FileUtil;
-import com.favorites.utils.MD5Util;
-import com.favorites.utils.MessageUtil;
+import javax.annotation.Resource;
+import javax.mail.internet.MimeMessage;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,14 +20,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
-import javax.mail.internet.MimeMessage;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
-import java.sql.Timestamp;
-import java.util.Base64;
-import java.util.List;
-import java.util.UUID;
+import com.favorites.comm.Const;
+import com.favorites.comm.aop.LoggerManage;
+import com.favorites.domain.Config;
+import com.favorites.domain.Favorites;
+import com.favorites.domain.User;
+import com.favorites.domain.result.ExceptionMsg;
+import com.favorites.domain.result.Response;
+import com.favorites.domain.result.ResponseData;
+import com.favorites.remote.FollowService;
+import com.favorites.remote.UserService;
+import com.favorites.repository.ConfigRepository;
+import com.favorites.repository.FavoritesRepository;
+import com.favorites.service.ConfigService;
+import com.favorites.service.FavoritesService;
+import com.favorites.utils.DateUtils;
+import com.favorites.utils.FileUtil;
+import com.favorites.utils.MD5Util;
+import com.favorites.utils.MessageUtil;
 
 @RestController
 @RequestMapping("/user")
@@ -188,7 +190,11 @@ public class UserController extends BaseController {
 	@RequestMapping(value="/getFollows")
 	@LoggerManage(description="获取关注列表")
 	public List<String> getFollows() {
-		List<String> followList = followRepository.findByUserId(getUserId());
+		List<User> followListUser = followRepository.findByUserId(getUserId());
+		List<String> followList = new ArrayList<String>();
+		for(User u : followListUser) {
+			followList.add(u.getUserName());
+		}
 		return followList;
 	}
 	

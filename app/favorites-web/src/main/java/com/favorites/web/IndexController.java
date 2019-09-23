@@ -1,20 +1,11 @@
 package com.favorites.web;
 
-import com.favorites.comm.Const;
-import com.favorites.comm.aop.LoggerManage;
-import com.favorites.domain.*;
-import com.favorites.domain.enums.CollectType;
-import com.favorites.domain.enums.FollowStatus;
-import com.favorites.domain.enums.IsDelete;
-import com.favorites.domain.view.CollectSummary;
-import com.favorites.domain.view.IndexCollectorView;
-import com.favorites.remote.BookmarkService;
-import com.favorites.remote.FollowService;
-import com.favorites.repository.*;
-import com.favorites.service.CollectService;
-import com.favorites.service.CollectorService;
-import com.favorites.service.LookAroundService;
-import com.favorites.remote.NoticeFeignService;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,9 +17,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
-import java.util.List;
+import com.favorites.comm.Const;
+import com.favorites.comm.aop.LoggerManage;
+import com.favorites.domain.Config;
+import com.favorites.domain.Favorites;
+import com.favorites.domain.User;
+import com.favorites.domain.UserIsFollow;
+import com.favorites.domain.enums.CollectType;
+import com.favorites.domain.enums.FollowStatus;
+import com.favorites.domain.enums.IsDelete;
+import com.favorites.domain.view.CollectSummary;
+import com.favorites.domain.view.IndexCollectorView;
+import com.favorites.remote.BookmarkService;
+import com.favorites.remote.FollowService;
+import com.favorites.remote.NoticeFeignService;
+import com.favorites.repository.ConfigRepository;
+import com.favorites.repository.FavoritesRepository;
+import com.favorites.repository.UserRepository;
+import com.favorites.service.CollectService;
+import com.favorites.service.CollectorService;
+import com.favorites.service.LookAroundService;
 
 @Controller
 @RequestMapping("/")
@@ -77,10 +85,14 @@ public class IndexController extends BaseController{
 		long size= collectRepository.countByUserIdAndIsDelete(getUserId(),IsDelete.NO);
 		Config config = configRepository.findByUserId(getUserId());
 		Favorites favorites = favoritesRepository.findById(Long.parseLong(config.getDefaultFavorties()));
-		List<String> followList = followRepository.findByUserId(getUserId());
+		List<User> followListUser = followRepository.findByUserId(getUserId());
 		model.addAttribute("config",config);
 		model.addAttribute("favorites",favorites);
 		model.addAttribute("size",size);
+		List<String> followList = new ArrayList<String>();
+		for(User u : followListUser) {
+			followList.add(u.getUserName());
+		}
 		model.addAttribute("followList",followList);
 		model.addAttribute("user",getUser());
 		model.addAttribute("newAtMeCount", noticeFeignService.countByUserIdAndTypeAndReaded(getUserId(), "at", "unread"));
@@ -201,10 +213,14 @@ public class IndexController extends BaseController{
 	public String collect(Model model) {
 		List<Favorites> favoritesList = favoritesRepository.findByUserIdOrderByLastModifyTimeDesc(getUserId());
 		Config config = configRepository.findByUserId(getUserId());
-		List<String> followList = followRepository.findByUserId(getUserId());
+		List<User> followListUser = followRepository.findByUserId(getUserId());
 		logger.info("model：" + config.getDefaultModel());
 		model.addAttribute("favoritesList",favoritesList);
 		model.addAttribute("configObj", config);
+		List<String> followList = new ArrayList<String>();
+		for(User u : followListUser) {
+			followList.add(u.getUserName());
+		}		
 		model.addAttribute("followList",followList);
 		return "collect";
 	}
@@ -293,8 +309,8 @@ public class IndexController extends BaseController{
         Integer follow = followRepository.countByUserIdAndStatus(userId, FollowStatus.FOLLOW);
         Integer followed = followRepository.countByFollowIdAndStatus(userId, FollowStatus.FOLLOW);
         List<Favorites> favoritesList = favoritesRepository.findByUserId(userId);
-        List<String> followUser = followRepository.findFollowUserByUserId(userId);
-        List<String> followedUser = followRepository.findFollowedUserByFollowId(userId);
+        List<User> followUser = followRepository.findFollowUserByUserId(userId);
+        List<User> followedUser = followRepository.findFollowedUserByFollowId(userId);
 		Config config = configRepository.findByUserId(getUserId());
         if(getUserId()==0||getUserId()==0){
 			config = configRepository.findByUserId(userId);
@@ -305,8 +321,8 @@ public class IndexController extends BaseController{
         model.addAttribute("user",user);
         model.addAttribute("collects", collects);
         model.addAttribute("favoritesList",favoritesList);
-        model.addAttribute("followUser",followUser);
-        model.addAttribute("followedUser",followedUser);
+        model.addAttribute("followUser",followUser.get(0) == null ? "" : followUser.get(0).getUserName());
+        model.addAttribute("followedUser",followedUser.get(0) == null ? "" : followedUser.get(0).getUserName());
         model.addAttribute("isFollow",isFollow);
 		model.addAttribute("loginUserInfo",getUser());
 		model.addAttribute("config",config);

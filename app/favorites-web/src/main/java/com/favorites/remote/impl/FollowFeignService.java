@@ -9,7 +9,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.favorites.domain.Follow;
+import com.favorites.domain.User;
 import com.favorites.domain.enums.FollowStatus;
+
+import io.favorites.common.api.ListResult;
 
 @FeignClient(url = "${favorites.services.follow.address}", name = "follow-service")
 public interface FollowFeignService {
@@ -18,10 +21,10 @@ public interface FollowFeignService {
 	void save(@RequestBody Follow follow);
 	
 	@RequestMapping(value = "/search/findByUserId")
-	List<String> findByUserId(@RequestParam("userId") Long userId);
+	ListResult<User> findByUserId(@RequestParam("userId") Long userId);
 	
 	@RequestMapping(value = "/search/findMyFollowIdByUserId")
-	List<Long> findMyFollowIdByUserId(@RequestParam("userId") Long userId);
+	ListResult<Follow> findMyFollowIdByUserId(@RequestParam("userId") Long userId);
 	
 	@RequestMapping(value = "/search/countByUserIdAndStatus")
 	Integer countByUserIdAndStatus(@RequestParam("userId") Long userId, @RequestParam("status") FollowStatus status);
@@ -30,10 +33,10 @@ public interface FollowFeignService {
 	Integer countByFollowIdAndStatus(@RequestParam("followId") Long followId, @RequestParam("status") FollowStatus status);
 	
 	@RequestMapping(value = "/search/findFollowUserByUserId")
-	List<String> findFollowUserByUserId(@RequestParam("userId") Long userId);
+	ListResult<User> findFollowUserByUserId(@RequestParam("userId") Long userId);
 	
 	@RequestMapping(value = "/search/findFollowedUserByFollowId")
-	List<String> findFollowedUserByFollowId(@RequestParam("followId") Long followId);
+	ListResult<User> findFollowedUserByFollowId(@RequestParam("followId") Long followId);
 	
 	@RequestMapping(value = "/search/countByUserIdAndFollowIdAndStatus")
 	Integer countByUserIdAndFollowIdAndStatus(@RequestParam("userId") Long userId, @RequestParam("followId") Long followId, @RequestParam("status") FollowStatus status);
