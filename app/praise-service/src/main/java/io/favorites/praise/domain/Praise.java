@@ -31,9 +31,15 @@ public class Praise implements Serializable {
 		super();
 	}
 	
+	public Praise(Long collectId, Long userId, Long createTime) {
+		super();
+		this.collectId = collectId;
+		this.userId = userId;
+		this.createTime = createTime;
+	}
+	
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
 	}
-
 }
