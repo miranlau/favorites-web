@@ -17,30 +17,30 @@ public interface FollowFeignService {
 	@RequestMapping(value = "/follows", method = { RequestMethod.POST })
 	void save(@RequestBody Follow follow);
 	
-	@RequestMapping(value = "/follows/search/findByUserId")
+	@RequestMapping(value = "/search/findByUserId")
 	List<String> findByUserId(@RequestParam("userId") Long userId);
 	
-	@RequestMapping(value = "/follows/search/findMyFollowIdByUserId")
+	@RequestMapping(value = "/search/findMyFollowIdByUserId")
 	List<Long> findMyFollowIdByUserId(@RequestParam("userId") Long userId);
 	
-	@RequestMapping(value = "/follows/search/countByUserIdAndStatus")
+	@RequestMapping(value = "/search/countByUserIdAndStatus")
 	Integer countByUserIdAndStatus(@RequestParam("userId") Long userId, @RequestParam("status") FollowStatus status);
 	
-	@RequestMapping(value = "/follows/search/countByFollowIdAndStatus")
+	@RequestMapping(value = "/search/countByFollowIdAndStatus")
 	Integer countByFollowIdAndStatus(@RequestParam("followId") Long followId, @RequestParam("status") FollowStatus status);
 	
-	@RequestMapping(value = "/follows/search/findFollowUserByUserId")
+	@RequestMapping(value = "/search/findFollowUserByUserId")
 	List<String> findFollowUserByUserId(@RequestParam("userId") Long userId);
 	
-	@RequestMapping(value = "/follows/search/findFollowedUserByFollowId")
+	@RequestMapping(value = "/search/findFollowedUserByFollowId")
 	List<String> findFollowedUserByFollowId(@RequestParam("followId") Long followId);
 	
-	@RequestMapping(value = "/follows/search/countByUserIdAndFollowIdAndStatus")
+	@RequestMapping(value = "/search/countByUserIdAndFollowIdAndStatus")
 	Integer countByUserIdAndFollowIdAndStatus(@RequestParam("userId") Long userId, @RequestParam("followId") Long followId, @RequestParam("status") FollowStatus status);
 	
-	@RequestMapping(value = "/follows/search/findByUserIdAndFollowId")
+	@RequestMapping(value = "/search/findByUserIdAndFollowId")
 	Follow findByUserIdAndFollowId(@RequestParam("userId") Long userId, @RequestParam("followId") Long followId);
 	
-	@RequestMapping(value = "/follows/search/updateStatusById")
+	@RequestMapping(value = "/search/updateStatusById")
 	Integer updateStatusById(@RequestParam("status") FollowStatus status, @RequestParam("lastModifyTime") Long lastModifyTime, @RequestParam("id") Long id);
 }
