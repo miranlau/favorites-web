@@ -21,5 +21,6 @@
 		<module>eureka-server</module>
 		<module>configuration-server</module>
 		<module>favorites-web</module>
+		<module>follow-service</module>
 	</modules>
 </project>
