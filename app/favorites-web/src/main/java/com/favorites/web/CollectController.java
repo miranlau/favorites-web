@@ -12,8 +12,8 @@ import com.favorites.domain.result.ExceptionMsg;
 import com.favorites.domain.result.Response;
 import com.favorites.domain.view.CollectSummary;
 import com.favorites.remote.BookmarkService;
+import com.favorites.remote.PraiseService;
 import com.favorites.repository.FavoritesRepository;
-import com.favorites.repository.PraiseRepository;
 import com.favorites.service.CollectService;
 import com.favorites.service.FavoritesService;
 import com.favorites.service.LookAroundService;
@@ -51,7 +51,7 @@ public class CollectController extends BaseController{
 	@Resource
 	private FavoritesRepository favoritesRepository;
 	@Resource
-	private PraiseRepository praiseRepository;
+	private PraiseService praiseRepository;
 
 	@Autowired
 	private CacheService cacheService;

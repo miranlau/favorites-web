@@ -5,10 +5,9 @@ import com.favorites.domain.Praise;
 import com.favorites.domain.view.CollectSummary;
 import com.favorites.domain.view.CollectView;
 import com.favorites.remote.LookRecordRemoteService;
+import com.favorites.remote.PraiseService;
 import com.favorites.remote.impl.LookRecordFeignService;
 import com.favorites.repository.CommentRepository;
-import com.favorites.repository.PraiseRepository;
-import com.favorites.service.CollectService;
 import com.favorites.service.LookRecordService;
 import com.favorites.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,13 +28,10 @@ public class LookRecordServiceImpl implements LookRecordService {
     private LookRecordFeignService lookRecordFeignService;
 
     @Autowired
-    private PraiseRepository praiseRepository;
+    private PraiseService praiseRepository;
 
     @Autowired
     private CommentRepository commentRepository;
-
-    @Autowired
-    private CollectService collectService;
 
     @Override
     public void saveLookRecord(Long userId,Long collectId) {

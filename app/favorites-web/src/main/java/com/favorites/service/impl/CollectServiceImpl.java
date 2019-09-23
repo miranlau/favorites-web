@@ -22,10 +22,10 @@ import com.favorites.domain.enums.IsDelete;
 import com.favorites.domain.view.CollectSummary;
 import com.favorites.domain.view.CollectView;
 import com.favorites.remote.BookmarkService;
+import com.favorites.remote.PraiseService;
 import com.favorites.repository.CommentRepository;
 import com.favorites.repository.FavoritesRepository;
 import com.favorites.repository.FollowRepository;
-import com.favorites.repository.PraiseRepository;
 import com.favorites.repository.UserRepository;
 import com.favorites.service.CollectService;
 import com.favorites.service.FavoritesService;
@@ -49,7 +49,7 @@ public class CollectServiceImpl extends CacheService implements CollectService {
 	@Autowired
 	private NoticeService noticeService;
 	@Autowired
-	private PraiseRepository praiseRepository;
+	private PraiseService praiseRepository;
 	@Autowired
 	private CommentRepository commentRepository;
 	@Autowired

@@ -1,5 +1,7 @@
 package io.favorites.praise.services;
 
+import javax.transaction.Transactional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,4 +22,7 @@ public interface PraiseRepository extends JpaRepository<Praise, Long> {
 	
 	@Query(findPraiseUserSql+ " and p.id=?1")
 	CommonUserView findPraiseUser(@Param("id") Long id);
+	
+	@Transactional
+	void deleteById(@Param("id") Long id);
 }

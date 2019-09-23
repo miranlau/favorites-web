@@ -8,8 +8,6 @@ import com.favorites.domain.result.Response;
 import com.favorites.domain.result.ResponseData;
 import com.favorites.domain.view.CollectSummary;
 import com.favorites.repository.CommentRepository;
-import com.favorites.repository.PraiseRepository;
-import com.favorites.repository.UserRepository;
 import com.favorites.remote.NoticeFeignService;
 import com.favorites.service.NoticeService;
 import com.favorites.utils.DateUtils;
@@ -35,12 +33,6 @@ public class NoticeController extends BaseController{
 	
 	@Autowired
 	private CommentRepository commentRepository;
-
-	@Autowired
-	private UserRepository userRepository;
-
-	@Autowired
-	private PraiseRepository praiseRepository;
 	
 	/**
 	 * 回复

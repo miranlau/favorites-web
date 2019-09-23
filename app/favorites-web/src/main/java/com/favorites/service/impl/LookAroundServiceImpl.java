@@ -5,8 +5,8 @@ import com.favorites.domain.UserIsFollow;
 import com.favorites.domain.view.CollectSummary;
 import com.favorites.domain.view.CollectView;
 import com.favorites.remote.BookmarkService;
+import com.favorites.remote.PraiseService;
 import com.favorites.repository.CommentRepository;
-import com.favorites.repository.PraiseRepository;
 import com.favorites.service.LookAroundService;
 import com.favorites.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class LookAroundServiceImpl implements LookAroundService{
     private CommentRepository commentRepository;
 
     @Autowired
-    private PraiseRepository praiseRepository;
+    private PraiseService praiseRepository;
 
     @PersistenceUnit
     private EntityManagerFactory emf;

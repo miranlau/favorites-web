@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.favorites.remote.PraiseService;
 import com.favorites.repository.CommentRepository;
 import com.favorites.repository.FollowRepository;
-import com.favorites.repository.PraiseRepository;
 
 
 @RunWith(SpringRunner.class)
@@ -18,7 +18,7 @@ import com.favorites.repository.PraiseRepository;
 public class RepositoryTest {
 
 	@Autowired
-	private PraiseRepository praiseRepository;
+	private PraiseService praiseRepository;
 	
 	@Autowired
 	private CommentRepository commentRepository;

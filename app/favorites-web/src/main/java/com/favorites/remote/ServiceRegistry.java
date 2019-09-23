@@ -25,7 +25,8 @@ public class ServiceRegistry {
     @Autowired
     UserFeignService userFeignService;
     
-    BookmarkFeignService service;
+    @Autowired
+    PraiseService praiseService;
     
     @Autowired
     FollowFeignService followFeignService;
@@ -41,6 +42,9 @@ public class ServiceRegistry {
 
     @Value("${favorites.services.lookrecord.address}")
     private static String lookRecordServiceAddr;
+    
+    @Value("${favorites.services.praise.address}")
+    private static String praiseServiceAddr;
 
     /**
      * Creates a new instance of <code>ServiceRegistry</code>.
@@ -57,11 +61,22 @@ public class ServiceRegistry {
     public UserService userService() {
         return ServiceFactory.createService(UserService.class, userFeignService);
     }
+    
+    @Bean
+    public PraiseService praiseService() {
+        return ServiceFactory.createService(PraiseService.class, praiseService);
+    }
 
     @Bean
     public LookRecordRemoteService lookRecordRemoteService() {
         return ServiceFactory.createService(LookRecordRemoteService.class, lookRecordFeignService);
     }
+    
+    @Bean
+    public FollowService followService() {
+        return ServiceFactory.createService(FollowService.class, followFeignService);
+    }
+    
     /**
      * @return Returns the bookmarksServiceAddr.
      */
@@ -69,9 +84,11 @@ public class ServiceRegistry {
         return bookmarksServiceAddr;
     }
     
-    @Bean
-    public FollowService followService() {
-        return ServiceFactory.createService(FollowService.class, followFeignService);
+    /**
+     * @return Returns the praiseServiceAddr.
+     */
+    public static String getPraiseServiceAddr() {
+        return praiseServiceAddr;
     }
 
     /**
@@ -81,6 +98,9 @@ public class ServiceRegistry {
         return followServiceAddr;
     }
 
+    /**
+     * @return Returns the lookRecordServiceAddr.
+     */
     public static String getLookRecordServiceAddr() {
         return lookRecordServiceAddr;
     }

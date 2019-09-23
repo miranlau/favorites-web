@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.favorites.domain.Comment;
-import com.favorites.domain.view.CommentView;
+import com.favorites.domain.view.CommonUserView;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
@@ -24,6 +24,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
 	
 	@Query(findReplyUserSql+ " and c.id=?1")
-	CommentView findReplyUser(Long id);
+	CommonUserView findReplyUser(Long id);
 	
 }

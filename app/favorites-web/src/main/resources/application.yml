@@ -20,5 +20,7 @@ favorites:
       address: localhost:8093
     lookrecord:
       address: localhost:8094
+    praise:
+      address: localhost:8095
     follow:
       address: localhost:8097
