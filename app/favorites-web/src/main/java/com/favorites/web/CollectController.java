@@ -12,8 +12,8 @@ import com.favorites.domain.result.ExceptionMsg;
 import com.favorites.domain.result.Response;
 import com.favorites.domain.view.CollectSummary;
 import com.favorites.remote.BookmarkService;
+import com.favorites.remote.FolderService;
 import com.favorites.remote.PraiseService;
-import com.favorites.repository.FavoritesRepository;
 import com.favorites.service.CollectService;
 import com.favorites.service.FavoritesService;
 import com.favorites.service.LookAroundService;
@@ -48,8 +48,8 @@ public class CollectController extends BaseController{
 	private FavoritesService favoritesService;
 	@Resource
 	private CollectService collectService;
-	@Resource
-	private FavoritesRepository favoritesRepository;
+    @Autowired
+    private FolderService folderService;
 	@Resource
 	private PraiseService praiseRepository;
 
@@ -125,7 +125,7 @@ public class CollectController extends BaseController{
 		Long result = null;
 		int faultPosition = 0;
 		Map<String,Object> maps = new HashMap<String,Object>();
-		List<Favorites> favoritesList = this.favoritesRepository.findByUserIdOrderByLastModifyTimeDesc(getUserId());
+        List<Favorites> favoritesList = this.folderService.findByUserIdOrderByLastModifyTimeDesc(getUserId());
 		for (int i = 0; i < favoritesList.size(); i++){
 			Favorites favorites = favoritesList.get(i);
 			if(favorites.getName().indexOf(title) > 0 || favorites.getName().indexOf(description) > 0){
@@ -268,7 +268,7 @@ public class CollectController extends BaseController{
 		if(null != collect && getUserId()==collect.getUserId()){
 		  collectRepository.deleteById(id);
 			if(null != collect.getFavoritesId() && !IsDelete.YES.equals(collect.getIsDelete())){
-				favoritesRepository.reduceCountById(collect.getFavoritesId(), DateUtils.getCurrentTime());
+                folderService.reduceCountById(collect.getFavoritesId(), DateUtils.getCurrentTime());
 			}
 		}
 		return result();
@@ -304,7 +304,7 @@ public class CollectController extends BaseController{
 				}
 				for (Entry<String, Map<String, String>> entry : map.entrySet()) {  
 					  String favoritesName = entry.getKey();
-					  Favorites favorites = favoritesRepository.findByUserIdAndName(getUserId(), favoritesName);
+                    Favorites favorites = folderService.findByUserIdAndName(getUserId(), favoritesName);
 						if(null == favorites){
 							favorites = favoritesService.saveFavorites(getUserId(), favoritesName);
 						}
@@ -317,7 +317,7 @@ public class CollectController extends BaseController{
 					return ;
 				}
 				// 全部导入到<导入自浏览器>收藏夹
-				Favorites favorites = favoritesRepository.findByUserIdAndName(getUserId(), "导入自浏览器");
+                Favorites favorites = folderService.findByUserIdAndName(getUserId(), "导入自浏览器");
 				if(null == favorites){
 					favorites = favoritesService.saveFavorites(getUserId(),"导入自浏览器");
 				}

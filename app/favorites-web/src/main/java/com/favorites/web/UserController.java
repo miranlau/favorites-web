@@ -28,10 +28,10 @@ import com.favorites.domain.User;
 import com.favorites.domain.result.ExceptionMsg;
 import com.favorites.domain.result.Response;
 import com.favorites.domain.result.ResponseData;
+import com.favorites.remote.FolderService;
 import com.favorites.remote.FollowService;
 import com.favorites.remote.UserService;
 import com.favorites.repository.ConfigRepository;
-import com.favorites.repository.FavoritesRepository;
 import com.favorites.service.ConfigService;
 import com.favorites.service.FavoritesService;
 import com.favorites.utils.DateUtils;
@@ -47,8 +47,8 @@ public class UserController extends BaseController {
 	@Resource
 	private ConfigService configService;
 	@Resource
-	private FavoritesService favoritesService;
-	@Resource
+    private FavoritesService favoritesService;
+    @Resource
     private JavaMailSender mailSender;
 	@Value("${spring.mail.username}")
 	private String mailFrom;
@@ -69,7 +69,7 @@ public class UserController extends BaseController {
 	@Autowired
 	private FollowService followRepository;
 	@Autowired
-	private FavoritesRepository favoritesRepository;
+    private FolderService folderService;
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	@LoggerManage(description="登陆")
@@ -144,7 +144,7 @@ public class UserController extends BaseController {
 	public List<Favorites> getFavorites() {
 		List<Favorites> favorites = null;
 		try {
-			favorites = favoritesRepository.findByUserIdOrderByLastModifyTimeDesc(getUserId());
+            favorites = folderService.findByUserIdOrderByLastModifyTimeDesc(getUserId());
 		} catch (Exception e) {
 			// TODO: handle exception
 			logger.error("getFavorites failed, ", e);
