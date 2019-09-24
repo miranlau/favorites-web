@@ -16,6 +16,7 @@
 		<module>favorites-parent</module>
 		<module>common-lib</module>
 	    <module>bookmark-service</module>
+        <module>folder-service</module>
 		<module>user-service</module>
         <module>notice-service</module>
 		<module>eureka-server</module>

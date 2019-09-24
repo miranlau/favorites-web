@@ -10,7 +10,7 @@ import com.favorites.domain.view.CollectSummary;
 import com.favorites.domain.view.LetterSummary;
 import com.favorites.remote.BookmarkService;
 import com.favorites.remote.FollowService;
-import com.favorites.repository.FavoritesRepository;
+import com.favorites.remote.FolderService;
 import com.favorites.repository.FollowRepository;
 import com.favorites.repository.UserRepository;
 import com.favorites.service.CollectService;
@@ -38,7 +38,7 @@ public class HomeController extends BaseController {
     @Autowired
     private CollectService collectService;
     @Autowired
-    private FavoritesRepository favoritesRepository;
+    private FolderService folderService;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -65,7 +65,7 @@ public class HomeController extends BaseController {
         Favorites favorites = new Favorites();
         if (!"my".equals(type) && !"explore".equals(type) && !"garbage".equals(type)) {
             try {
-                favorites = favoritesRepository.findById(Long.parseLong(type));
+                favorites = folderService.findById(Long.parseLong(type));
                 favorites.setPublicCount(collectRepository.countByFavoritesIdAndTypeAndIsDelete(favorites.getId(), CollectType.PUBLIC, IsDelete.NO));
             } catch (Exception e) {
                 logger.error("获取收藏夹异常：", e);
@@ -99,7 +99,7 @@ public class HomeController extends BaseController {
         Favorites favorites = new Favorites();
         if (!"my".equals(type) && !"explore".equals(type) && !"garbage".equals(type)) {
             try {
-                favorites = favoritesRepository.findById(Long.parseLong(type));
+                favorites = folderService.findById(Long.parseLong(type));
                 favorites.setPublicCount(collectRepository.countByFavoritesIdAndTypeAndIsDelete(favorites.getId(), CollectType.PUBLIC, IsDelete.NO));
             } catch (Exception e) {
                 logger.error("获取收藏夹异常：", e);
@@ -160,7 +160,7 @@ public class HomeController extends BaseController {
         }
         Integer follow = followRepository.countByUserIdAndStatus(userId, FollowStatus.FOLLOW);
         Integer followed = followRepository.countByFollowIdAndStatus(userId, FollowStatus.FOLLOW);
-        List<Favorites> favoritesList = favoritesRepository.findByUserId(userId);
+        List<Favorites> favoritesList = folderService.findByUserId(userId);
 //        List<String> followUser = followRepository.findFollowUserByUserId(userId);
 //        List<String> followedUser = followRepository.findFollowedUserByFollowId(userId);
         List<User> followUser = followRepository.findFollowUserByUserId(userId);
@@ -220,7 +220,7 @@ public class HomeController extends BaseController {
                 collects = collectService.getCollects("otherpublic", userId, pageable, favoritesId, getUserId());
             }
         }
-        List<Favorites> favoritesList = favoritesRepository.findByUserId(userId);
+        List<Favorites> favoritesList = folderService.findByUserId(userId);
         model.addAttribute("collectCount", collectCount);
         model.addAttribute("user", user);
         model.addAttribute("collects", collects);

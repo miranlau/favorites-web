@@ -22,9 +22,9 @@ import com.favorites.domain.enums.IsDelete;
 import com.favorites.domain.view.CollectSummary;
 import com.favorites.domain.view.CollectView;
 import com.favorites.remote.BookmarkService;
+import com.favorites.remote.FolderService;
 import com.favorites.remote.PraiseService;
 import com.favorites.repository.CommentRepository;
-import com.favorites.repository.FavoritesRepository;
 import com.favorites.repository.FollowRepository;
 import com.favorites.repository.UserRepository;
 import com.favorites.service.CollectService;
@@ -41,7 +41,7 @@ public class CollectServiceImpl extends CacheService implements CollectService {
 	@Autowired
     private BookmarkService collectRepository;
 	@Autowired
-	private FavoritesRepository favoritesRepository;
+    private FolderService folderService;
 	@Autowired
 	private FavoritesService favoritesService;
 	@Autowired
@@ -193,7 +193,7 @@ public class CollectServiceImpl extends CacheService implements CollectService {
 		}else if(!collect.getFavoritesId().equals(newCollect.getFavoritesId()) && !IsDelete.YES.equals(collect.getIsDelete())){
 			favoritesService.countFavorites(collect.getFavoritesId());
 			favoritesService.countFavorites(newCollect.getFavoritesId());
-			favoritesRepository.reduceCountById(collect.getFavoritesId(), DateUtils.getCurrentTime());
+            folderService.reduceCountById(collect.getFavoritesId(), DateUtils.getCurrentTime());
 			collect.setFavoritesId(newCollect.getFavoritesId());
 		}
 		if(IsDelete.YES.equals(collect.getIsDelete())){
@@ -257,7 +257,7 @@ public class CollectServiceImpl extends CacheService implements CollectService {
 	public boolean checkCollect(Collect collect){
 		if(StringUtils.isNotBlank(collect.getNewFavorites())){
 			// url+favoritesId+userId
-			Favorites favorites = favoritesRepository.findByUserIdAndName(collect.getUserId(), collect.getNewFavorites());
+            Favorites favorites = folderService.findByUserIdAndName(collect.getUserId(), collect.getNewFavorites());
 			if(null == favorites){
 				return true;
 			}else{
@@ -344,7 +344,7 @@ public class CollectServiceImpl extends CacheService implements CollectService {
 	 */
 	public StringBuilder exportToHtml(long favoritesId){
 		try {
-			Favorites favorites = favoritesRepository.findById(favoritesId);
+            Favorites favorites = folderService.findById(favoritesId);
 			StringBuilder sb = new StringBuilder();
 			List<Collect> collects = collectRepository.findByFavoritesIdAndIsDelete(favoritesId,IsDelete.NO);
 			StringBuilder sbc = new StringBuilder();
@@ -366,7 +366,7 @@ public class CollectServiceImpl extends CacheService implements CollectService {
 	 * @return
 	 */
 	private Long  createfavorites(Collect collect){
-		Favorites favorites = favoritesRepository.findByUserIdAndName(collect.getUserId(), collect.getNewFavorites());
+        Favorites favorites = folderService.findByUserIdAndName(collect.getUserId(), collect.getNewFavorites());
 		if (null == favorites) {
 			favorites =favoritesService.saveFavorites(collect);
 		}

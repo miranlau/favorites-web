@@ -12,6 +12,8 @@ eureka:
 
 favorites:
   services:
+    folder:
+      address: localhost:8090
     bookmarks:
       address: localhost:8091
     user:

@@ -29,11 +29,10 @@ import com.favorites.domain.enums.IsDelete;
 import com.favorites.domain.view.CollectSummary;
 import com.favorites.domain.view.IndexCollectorView;
 import com.favorites.remote.BookmarkService;
+import com.favorites.remote.FolderService;
 import com.favorites.remote.FollowService;
 import com.favorites.remote.NoticeFeignService;
-import com.favorites.repository.ConfigRepository;
-import com.favorites.repository.FavoritesRepository;
-import com.favorites.repository.UserRepository;
+import com.favorites.repository.*;
 import com.favorites.service.CollectService;
 import com.favorites.service.CollectorService;
 import com.favorites.service.LookAroundService;
@@ -42,7 +41,7 @@ import com.favorites.service.LookAroundService;
 @RequestMapping("/")
 public class IndexController extends BaseController{
 	@Autowired
-	private FavoritesRepository favoritesRepository;
+    private FolderService folderService;
 	@Autowired
 	private ConfigRepository configRepository;
 	@Autowired
@@ -84,7 +83,7 @@ public class IndexController extends BaseController{
 	public String home(Model model) {
 		long size= collectRepository.countByUserIdAndIsDelete(getUserId(),IsDelete.NO);
 		Config config = configRepository.findByUserId(getUserId());
-		Favorites favorites = favoritesRepository.findById(Long.parseLong(config.getDefaultFavorties()));
+        Favorites favorites = folderService.findById(Long.parseLong(config.getDefaultFavorties()));
 		List<User> followListUser = followRepository.findByUserId(getUserId());
 		model.addAttribute("config",config);
 		model.addAttribute("favorites",favorites);
@@ -211,7 +210,7 @@ public class IndexController extends BaseController{
 	@RequestMapping(value="/collect",method=RequestMethod.GET)
 	@LoggerManage(description="收藏页面")
 	public String collect(Model model) {
-		List<Favorites> favoritesList = favoritesRepository.findByUserIdOrderByLastModifyTimeDesc(getUserId());
+        List<Favorites> favoritesList = folderService.findByUserIdOrderByLastModifyTimeDesc(getUserId());
 		Config config = configRepository.findByUserId(getUserId());
 		List<User> followListUser = followRepository.findByUserId(getUserId());
 		logger.info("model：" + config.getDefaultModel());
@@ -259,7 +258,7 @@ public class IndexController extends BaseController{
 	@RequestMapping(value="/export")
 	@LoggerManage(description="收藏夹导出页面")
 	public String export(Model model){
-		List<Favorites> favoritesList = favoritesRepository.findByUserId(getUserId());
+        List<Favorites> favoritesList = folderService.findByUserId(getUserId());
 		model.addAttribute("favoritesList",favoritesList);
 		return "favorites/export";
 	}
@@ -308,7 +307,7 @@ public class IndexController extends BaseController{
         }
         Integer follow = followRepository.countByUserIdAndStatus(userId, FollowStatus.FOLLOW);
         Integer followed = followRepository.countByFollowIdAndStatus(userId, FollowStatus.FOLLOW);
-        List<Favorites> favoritesList = favoritesRepository.findByUserId(userId);
+        List<Favorites> favoritesList = folderService.findByUserId(userId);
         List<User> followUser = followRepository.findFollowUserByUserId(userId);
         List<User> followedUser = followRepository.findFollowedUserByFollowId(userId);
 		Config config = configRepository.findByUserId(getUserId());

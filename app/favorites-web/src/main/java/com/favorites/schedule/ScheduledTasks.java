@@ -8,7 +8,7 @@ import com.favorites.domain.Collect;
 import com.favorites.domain.UrlLibrary;
 import com.favorites.domain.enums.IsDelete;
 import com.favorites.remote.BookmarkService;
-import com.favorites.repository.FavoritesRepository;
+import com.favorites.remote.FolderService;
 import com.favorites.repository.UrlLibraryRepository;
 import com.favorites.utils.DateUtils;
 import com.favorites.utils.HtmlUtil;
@@ -30,7 +30,7 @@ public class ScheduledTasks {
 	@Autowired
     private BookmarkService collectRespository;
 	@Autowired
-	private FavoritesRepository favoritesRespository;
+    private FolderService folderService;
 	@Autowired
 	private UrlLibraryRepository urlLibraryRepository;
 	@Autowired
@@ -49,14 +49,17 @@ public class ScheduledTasks {
 		ca.setTime(new Date());
 		ca.add(Calendar.DAY_OF_YEAR,-30);
 		Long date = ca.getTime().getTime();
-		List<Long> favoritesId = favoritesRespository.findIdByName("未读列表");
+        List<Long> favoritesId = folderService.findIdByName("未读列表");
+        logger.info("favoritesId.size() = " + favoritesId.size());
+        logger.info("favoritesId[0] = " + favoritesId.get(0));
+        logger.info("favoritesId[1] = " + favoritesId.get(1));
         List<Collect> collectList = collectRespository.findByCreateTimeLessThanAndIsDeleteAndFavoritesIdIn(date,
                 IsDelete.NO, favoritesId.toArray(new Long[favoritesId.size()]));
 		for(Collect collect : collectList){
 			try {
 				logger.info("文章id:" + collect.getId());
 				collectRespository.modifyIsDeleteById(IsDelete.YES, DateUtils.getCurrentTime(), collect.getId());
-				favoritesRespository.reduceCountById(collect.getFavoritesId(), DateUtils.getCurrentTime());
+                folderService.reduceCountById(collect.getFavoritesId(), DateUtils.getCurrentTime());
 			} catch (Exception e) {
 				logger.error("回收站定时任务异常：",e);
 			}

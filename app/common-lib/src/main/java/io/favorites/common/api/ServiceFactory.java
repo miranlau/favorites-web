@@ -73,20 +73,19 @@ public class ServiceFactory {
                             invokeResult = realMethod.invoke(client, targetArgs.toArray(new Object[targetArgs.size()]));
                         } catch (Exception e) {
                             LOGGER.error("some exception in calling remote service, it's better to "
-                                            + "response a list other than an object from remote service "
-                                            + "because object NotFound conflict with path NotFound",
-                                    e);
+                                    + "response a list other than an object from remote service "
+                                    + "because object NotFound conflict with path NotFound", e);
                         }
                         if (invokeResult != null) {
                             if (invokeResult instanceof PageResult) {
                                 PageResult result = (PageResult) invokeResult;
                                 Page page = result.getPage();
-                                invokeResult = new PageImpl(result.getEmbedded().getData(),
+                                invokeResult = new PageImpl(getActualData(result.getEmbedded().getData(), realMethod),
                                         PageRequest.of(page.getNumber(), page.getSize(), sort),
                                         page.getTotalelements());
                             } else if (invokeResult instanceof ListResult) {
                                 ListResult result = (ListResult) invokeResult;
-                                invokeResult = result.getEmbedded().getData();
+                                invokeResult = getActualData(result.getEmbedded().getData(), realMethod);
                             }
                         }
                         return invokeResult;
@@ -109,5 +108,19 @@ public class ServiceFactory {
             });
         }
         return builder.toString();
+    }
+
+    static List<?> getActualData(List<?> originalData, Method method) {
+        List<Object> actualData = new ArrayList<Object>();
+        List<BasicType<?>> data = (List<BasicType<?>>) originalData;
+        try {
+            for (BasicType<?> item : data) {
+                actualData.addAll(item.getData().values());
+            }
+        } catch (ClassCastException e) {
+            LOGGER.info("result in response is not basic type");
+            return originalData;
+        }
+        return actualData;
     }
 }

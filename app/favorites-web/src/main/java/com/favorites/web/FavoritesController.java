@@ -18,8 +18,8 @@ import com.favorites.domain.result.ExceptionMsg;
 import com.favorites.domain.result.Response;
 import com.favorites.domain.result.ResponseData;
 import com.favorites.remote.BookmarkService;
+import com.favorites.remote.FolderService;
 import com.favorites.repository.ConfigRepository;
-import com.favorites.repository.FavoritesRepository;
 import com.favorites.service.FavoritesService;
 import com.favorites.utils.DateUtils;
 
@@ -28,7 +28,7 @@ import com.favorites.utils.DateUtils;
 public class FavoritesController extends BaseController{
 	
 	@Autowired
-	private FavoritesRepository favoritesRepository;
+    private FolderService folderService;
 	@Resource
 	private FavoritesService favoritesService;
 	@Autowired
@@ -45,7 +45,7 @@ public class FavoritesController extends BaseController{
 	@LoggerManage(description="新建收藏夹")
 	public Response addFavorites(String name){
 		if(StringUtils.isNotBlank(name)){
-			Favorites favorites = favoritesRepository.findByUserIdAndName(getUserId(), name);
+            Favorites favorites = folderService.findByUserIdAndName(getUserId(), name);
 			if(null != favorites){
 				logger.info("收藏夹名称已被创建");
 				return result(ExceptionMsg.FavoritesNameUsed);
@@ -71,7 +71,7 @@ public class FavoritesController extends BaseController{
 	@RequestMapping(value="/addImportFavorites",method=RequestMethod.POST)
 	@LoggerManage(description="创建导入收藏夹")
 	public ResponseData addImportFavorites(){
-		Favorites favorites = favoritesRepository.findByUserIdAndName(getUserId(), "导入自浏览器");
+        Favorites favorites = folderService.findByUserIdAndName(getUserId(), "导入自浏览器");
 		if(null == favorites){
 			try {
 				favorites = favoritesService.saveFavorites(getUserId(),"导入自浏览器");
@@ -92,15 +92,15 @@ public class FavoritesController extends BaseController{
 	@LoggerManage(description="修改收藏夹")
 	public Response updateFavorites(String favoritesName,long favoritesId){
 		if(StringUtils.isNotBlank(favoritesName)&& 0 != favoritesId){
-			Favorites fav = favoritesRepository.findById(favoritesId);
+            Favorites fav = folderService.findById(favoritesId);
 			if(null != fav && getUserId() == fav.getUserId().longValue()){
-				Favorites favorites = favoritesRepository.findByUserIdAndName(getUserId(), favoritesName);
+                Favorites favorites = folderService.findByUserIdAndName(getUserId(), favoritesName);
 				if(null != favorites){
 					logger.info("收藏夹名称已被创建");
 					return result(ExceptionMsg.FavoritesNameUsed);
 				}else{
 					try {
-						favoritesRepository.updateNameById(favoritesId, DateUtils.getCurrentTime(), favoritesName);
+                        folderService.updateNameById(favoritesId, DateUtils.getCurrentTime(), favoritesName);
 					} catch (Exception e) {
 						logger.error("修改收藏夹名称异常：",e);
 					}
@@ -125,15 +125,15 @@ public class FavoritesController extends BaseController{
 			return result(ExceptionMsg.FAILED);
 		}
 		try {
-			Favorites fav = favoritesRepository.findById(id);
+            Favorites fav = folderService.findById(id);
 			if(null != fav && getUserId() == fav.getUserId().longValue()){
-				favoritesRepository.deleteById(id);
+                folderService.deleteById(id);
 				// 删除该收藏夹下文章
 				collectRepository.deleteByFavoritesId(id);
 				Config config = configRespository.findByUserIdAndDefaultFavorties(getUserId(),String.valueOf(id));
 				if(null != config){
 					// 默认收藏夹被删除，设置“未读列表”为默认收藏夹
-					Favorites favorites = favoritesRepository.findByUserIdAndName(getUserId(), "未读列表");
+                    Favorites favorites = folderService.findByUserIdAndName(getUserId(), "未读列表");
 					if(null != favorites){
 						configRespository.updateFavoritesById(config.getId(), String.valueOf(favorites.getId()), DateUtils.getCurrentTime());
 					}
@@ -159,7 +159,7 @@ public class FavoritesController extends BaseController{
 			if(null != userId && 0 != userId){
 				id = userId;
 			}
-			favorites = favoritesRepository.findByUserIdOrderByLastModifyTimeAsc(id);
+            favorites = folderService.findByUserIdOrderByLastModifyTimeAsc(id);
 		} catch (Exception e) {
 			// TODO: handle exception
 			logger.error("getFavorites failed, ", e);
