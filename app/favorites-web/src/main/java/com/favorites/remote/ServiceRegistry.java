@@ -6,6 +6,7 @@ package com.favorites.remote;
 import com.favorites.remote.impl.BookmarkFeignService;
 import com.favorites.remote.impl.FollowFeignService;
 import com.favorites.remote.impl.LookRecordFeignService;
+import com.favorites.remote.impl.PraiseFeignService;
 import com.favorites.remote.impl.UserFeignService;
 import io.favorites.common.api.ServiceFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class ServiceRegistry {
     UserFeignService userFeignService;
     
     @Autowired
-    PraiseService praiseService;
+    PraiseFeignService praiseFeignService;
     
     @Autowired
     FollowFeignService followFeignService;
@@ -64,7 +65,7 @@ public class ServiceRegistry {
     
     @Bean
     public PraiseService praiseService() {
-        return ServiceFactory.createService(PraiseService.class, praiseService);
+        return ServiceFactory.createService(PraiseService.class, praiseFeignService);
     }
 
     @Bean

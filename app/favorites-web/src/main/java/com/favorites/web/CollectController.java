@@ -51,7 +51,7 @@ public class CollectController extends BaseController{
 	@Resource
 	private FavoritesRepository favoritesRepository;
 	@Resource
-	private PraiseService praiseRepository;
+	private PraiseService praiseService;
 
 	@Autowired
 	private CacheService cacheService;
@@ -387,8 +387,8 @@ public class CollectController extends BaseController{
 	@RequestMapping(value="/getPaiseStatus/{collectId}")
 	public Map<String,Object> getPraiseStatus(Model model,@PathVariable("collectId") Long collectId){
 		Map<String,Object> maps = new HashMap<String,Object>();
-		Praise praise = praiseRepository.findByUserIdAndCollectId(getUserId(), collectId);
-		Long praiseCount = praiseRepository.countByCollectId(collectId);
+		Praise praise = praiseService.findByUserIdAndCollectId(getUserId(), collectId);
+		Long praiseCount = praiseService.countByCollectId(collectId);
 		maps.put("status",praise != null ? "praise" : "unpraise");
 		maps.put("praiseCount",praiseCount);
 		return maps;

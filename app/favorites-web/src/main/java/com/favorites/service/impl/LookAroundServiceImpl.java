@@ -35,7 +35,7 @@ public class LookAroundServiceImpl implements LookAroundService{
     private CommentRepository commentRepository;
 
     @Autowired
-    private PraiseService praiseRepository;
+    private PraiseService praiseService;
 
     @PersistenceUnit
     private EntityManagerFactory emf;
@@ -126,9 +126,9 @@ public class LookAroundServiceImpl implements LookAroundService{
         List<CollectSummary> summarys = new ArrayList<CollectSummary>();
         for (CollectView view : views) {
             CollectSummary summary=new CollectSummary(view);
-            summary.setPraiseCount(praiseRepository.countByCollectId(view.getId()));
+            summary.setPraiseCount(praiseService.countByCollectId(view.getId()));
             summary.setCommentCount(commentRepository.countByCollectId(view.getId()));
-            Praise praise=praiseRepository.findByUserIdAndCollectId(userId, view.getId());
+            Praise praise=praiseService.findByUserIdAndCollectId(userId, view.getId());
             if (praise != null) {
                 summary.setPraise(true);
             } else {

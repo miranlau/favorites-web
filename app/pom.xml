@@ -22,5 +22,6 @@
 		<module>configuration-server</module>
 		<module>favorites-web</module>
 		<module>follow-service</module>
+		<module>praise-service</module>
 	</modules>
 </project>

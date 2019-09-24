@@ -29,7 +29,7 @@ public class NoticeServiceImpl implements NoticeService {
     @Autowired
     private CommentRepository commentRepository;
     @Autowired
-    private PraiseService praiseRepository;
+    private PraiseService praiseService;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -100,7 +100,7 @@ public class NoticeServiceImpl implements NoticeService {
                 }
                 summary.setCollectTime(DateUtils.getTimeFormatText(comment.getCreateTime()));
             } else if ("praise".equals(type)) {
-            	CommonUserView comment = praiseRepository.findPraiseUser(Long.valueOf(view.getOperId()));
+            	CommonUserView comment = praiseService.findPraiseUser(Long.valueOf(view.getOperId()));
                 if (comment == null) {
                     continue;
                 }

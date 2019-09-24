@@ -49,7 +49,7 @@ public class CollectServiceImpl extends CacheService implements CollectService {
 	@Autowired
 	private NoticeService noticeService;
 	@Autowired
-	private PraiseService praiseRepository;
+	private PraiseService praiseService;
 	@Autowired
 	private CommentRepository commentRepository;
 	@Autowired
@@ -137,9 +137,9 @@ public class CollectServiceImpl extends CacheService implements CollectService {
 		List<CollectSummary> summarys=new ArrayList<CollectSummary>();
 		for (CollectView view : views) {
 			CollectSummary summary=new CollectSummary(view);
-			summary.setPraiseCount(praiseRepository.countByCollectId(view.getId()));
+			summary.setPraiseCount(praiseService.countByCollectId(view.getId()));
 			summary.setCommentCount(commentRepository.countByCollectId(view.getId()));
-			Praise praise=praiseRepository.findByUserIdAndCollectId(userId, view.getId());
+			Praise praise=praiseService.findByUserIdAndCollectId(userId, view.getId());
 			if(praise!=null){
 				summary.setPraise(true);
 			}else{
@@ -401,20 +401,20 @@ public class CollectServiceImpl extends CacheService implements CollectService {
 
 	@Override
 	public void like(Long userId,long id) {
-		Praise praise=praiseRepository.findByUserIdAndCollectId(userId, id);
+		Praise praise=praiseService.findByUserIdAndCollectId(userId, id);
 		if(praise==null){
 			Praise newPraise=new Praise();
 			newPraise.setUserId(userId);
 			newPraise.setCollectId(id);
 			newPraise.setCreateTime(DateUtils.getCurrentTime());
-			praiseRepository.save(newPraise);
+			praiseService.save(newPraise);
 			// 保存消息通知
 			Collect collect = collectRepository.findById(id);
 			if(null != collect){
 				noticeService.saveNotice(String.valueOf(id), "praise", collect.getUserId(), String.valueOf(newPraise.getId()));
 			}
 		}else if(praise.getUserId().equals(userId)){
-			praiseRepository.deleteById(praise.getId());
+			praiseService.deleteById(praise.getId());
 		}
 	}
 
@@ -424,13 +424,13 @@ public class CollectServiceImpl extends CacheService implements CollectService {
 	 * @param id
 	 */
 	public void collectLike(Long userId,long id) {
-		Praise praise=praiseRepository.findByUserIdAndCollectId(userId, id);
+		Praise praise=praiseService.findByUserIdAndCollectId(userId, id);
 		if(praise==null){
 			Praise newPraise=new Praise();
 			newPraise.setUserId(userId);
 			newPraise.setCollectId(id);
 			newPraise.setCreateTime(DateUtils.getCurrentTime());
-			praiseRepository.save(newPraise);
+			praiseService.save(newPraise);
 			// 保存消息通知
 			Collect collect = collectRepository.findById(id);
 			if(null != collect){
