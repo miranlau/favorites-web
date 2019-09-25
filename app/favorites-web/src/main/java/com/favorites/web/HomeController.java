@@ -11,8 +11,7 @@ import com.favorites.domain.view.LetterSummary;
 import com.favorites.remote.BookmarkService;
 import com.favorites.remote.FollowService;
 import com.favorites.remote.FolderService;
-import com.favorites.repository.FollowRepository;
-import com.favorites.repository.UserRepository;
+import com.favorites.remote.UserService;
 import com.favorites.service.CollectService;
 import com.favorites.service.LetterService;
 import com.favorites.service.LookRecordService;
@@ -40,7 +39,7 @@ public class HomeController extends BaseController {
     @Autowired
     private FolderService folderService;
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
     @Autowired
     private BookmarkService collectRepository;
     @Autowired
@@ -73,7 +72,7 @@ public class HomeController extends BaseController {
         }
         List<CollectSummary> collects = null;
         if (0 != userId && 0 != userId && userId != getUserId()) {
-            User user = userRepository.findById(userId);
+            User user = userService.findById(userId);
             model.addAttribute("otherPeople", user);
             collects = collectService.getCollects("otherpublic", userId, pageable, favorites.getId(), null);
         } else {
@@ -107,7 +106,7 @@ public class HomeController extends BaseController {
         }
         List<CollectSummary> collects = null;
         if (0 != userId && 0 != userId && userId != getUserId()) {
-            User user = userRepository.findById(userId);
+            User user = userService.findById(userId);
             model.addAttribute("otherPeople", user);
             collects = collectService.getCollects("otherpublic", userId, pageable, favorites.getId(), null);
         } else {
@@ -134,7 +133,7 @@ public class HomeController extends BaseController {
     @LoggerManage(description = "个人首页")
     public String userPageShow(Model model, @PathVariable("userId") long userId, @PathVariable("favoritesId") Long favoritesId, @RequestParam(value = "page", defaultValue = "0") Integer page,
                                @RequestParam(value = "size", defaultValue = "15") Integer size) {
-        User user = userRepository.findById(userId);
+        User user = userService.findById(userId);
         Long collectCount = 0l;
         Sort sort = new Sort(Direction.DESC, "id");
         Pageable pageable = PageRequest.of(page, size, sort);
@@ -198,7 +197,7 @@ public class HomeController extends BaseController {
     @LoggerManage(description = "个人首页内容替换")
     public String userContentShow(Model model, @PathVariable("userId") long userId, @PathVariable("favoritesId") Long favoritesId, @RequestParam(value = "page", defaultValue = "0") Integer page,
                                   @RequestParam(value = "size", defaultValue = "15") Integer size) {
-        User user = userRepository.findById(userId);
+        User user = userService.findById(userId);
         Long collectCount = 0l;
         Sort sort = new Sort(Direction.DESC, "id");
         Pageable pageable = PageRequest.of(page, size, sort);
@@ -342,7 +341,7 @@ public class HomeController extends BaseController {
         Favorites favorites = new Favorites();
 
         List<CollectSummary> collects = null;
-        User user = userRepository.findById(userId);
+        User user = userService.findById(userId);
         model.addAttribute("otherPeople", user);
         collects = lookRecordService.getLookRecords(this.getUserId(), pageable);
 
@@ -374,7 +373,7 @@ public class HomeController extends BaseController {
         Favorites favorites = new Favorites();
 
         List<CollectSummary> collects = null;
-        User user = userRepository.findById(userId);
+        User user = userService.findById(userId);
         model.addAttribute("otherPeople", user);
         collects = lookRecordService.getLookRecords(this.getUserId(), pageable);
 

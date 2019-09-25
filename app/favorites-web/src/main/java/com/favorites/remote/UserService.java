@@ -4,7 +4,7 @@ import com.favorites.domain.User;
 
 public interface UserService {
 
-    void save(User user);
+    User save(User user);
 
     User findByUserName(String userName);
 

@@ -1,9 +1,9 @@
 server:
-  application:
-    name: comment-service
   port: 8096
 
 spring:
+  application:
+    name: comment-service
   datasource:
     url: jdbc:mysql://127.0.0.1/favorites?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC&useSSL=true
     username: root
@@ -13,9 +13,6 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-  data:
-    rest:
-      basePath: /api
 
 eureka:
   client:

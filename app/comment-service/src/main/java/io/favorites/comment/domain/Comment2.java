@@ -8,10 +8,11 @@ import java.io.Serializable;
 
 @Entity
 @Data
-public class Comment implements Serializable {
+@Table(name = "comment")
+public class Comment2 implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private Long id;
@@ -19,13 +20,13 @@ public class Comment implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "collect_id", nullable = false, updatable = false)
 	private Collect collect;
-	
+
 	@Column(nullable = false, length = 65535, columnDefinition = "Text")
 	private String content;
-	
+
 	@Column(nullable = false)
 	private Long createTime;
-	
+
 	@Transient
 	private String commentTime;
 
@@ -44,8 +45,8 @@ public class Comment implements Serializable {
 //
 //	@Transient
 //	private String profilePicture; // in User
-	
-	public Comment() {
+
+	public Comment2() {
 		super();
 	}
 
