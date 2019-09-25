@@ -2,6 +2,7 @@ package com.favorites.comm.filter;
 
 import com.favorites.comm.Const;
 import com.favorites.domain.User;
+import com.favorites.remote.UserService;
 import com.favorites.repository.UserRepository;
 import com.favorites.utils.Des3EncryptionUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -24,7 +25,7 @@ public class SecurityFilter implements Filter {
 	private static Set<String> GreenUrlSet = new HashSet<String>();
 
 	@Autowired
-	private UserRepository userRepository;
+	private UserService userService;
 
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
@@ -61,14 +62,10 @@ public class SecurityFilter implements Filter {
 						}
 						String value = getUserId(cookie.getValue());
 						Long userId = 0l;
-						if (userRepository == null) {
-							BeanFactory factory = WebApplicationContextUtils.getRequiredWebApplicationContext(request.getServletContext());
-							userRepository = (UserRepository) factory.getBean("userRepository");
-						}
 						if(StringUtils.isNotBlank(value)){
 							userId = Long.parseLong(value);
 						}
-						User user = userRepository.findById((long)userId);
+						User user = userService.findById((long)userId);
 						String html = "";
 						if(null == user){
 							html = "<script type=\"text/javascript\">window.location.href=\"_BP_login\"</script>";

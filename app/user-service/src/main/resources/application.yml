@@ -5,7 +5,7 @@ spring:
   application:
     name: user-service
   datasource:
-    url: jdbc:mysql://127.0.0.1/favorites?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC&useSSL=true
+    url: jdbc:mysql://10.80.17.195:3306/favorites?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC&useSSL=true
     username: root
     password: root
     driver-class-name: com.mysql.jdbc.Driver
@@ -17,7 +17,7 @@ spring:
 eureka: #eureka
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://10.80.17.195:8761/eureka
 
 management: #actuator
   server:

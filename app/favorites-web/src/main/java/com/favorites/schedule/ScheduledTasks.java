@@ -22,7 +22,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-@Component
+//@Component
 public class ScheduledTasks {
 
 	protected Logger logger =  LoggerFactory.getLogger(this.getClass());
@@ -42,7 +42,7 @@ public class ScheduledTasks {
 	/**
 	 * 回收站定时
 	 */
-	@Scheduled(cron="22 2 2 * * ?")
+	//@Scheduled(cron="22 2 2 * * ?")
 	@LoggerManage(description="回收站定时")
     public void autoRecovery() {
 		Calendar ca = Calendar.getInstance();
@@ -66,7 +66,7 @@ public class ScheduledTasks {
 		}
     }
 
-	@Scheduled(cron="11 1 1 * * ?")
+	//@Scheduled(cron="11 1 1 * * ?")
 	@LoggerManage(description="获取图片logoUrl定时")
     public void getImageLogoUrl(){
 		List<UrlLibrary> urlLibraryList = urlLibraryRepository.findByCountLessThanAndLogoUrl(10, Const.BASE_PATH+"img/logo.jpg");

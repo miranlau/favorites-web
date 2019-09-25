@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.favorites.remote.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +17,6 @@ import com.favorites.domain.User;
 import com.favorites.domain.result.Response;
 import com.favorites.remote.BookmarkService;
 import com.favorites.repository.CommentRepository;
-import com.favorites.repository.UserRepository;
 import com.favorites.service.NoticeService;
 import com.favorites.utils.DateUtils;
 import com.favorites.utils.StringUtil;
@@ -28,7 +28,7 @@ public class CommentController extends BaseController{
 	@Autowired
 	private  CommentRepository CommentRepository;
 	@Autowired
-	private UserRepository userRepository;
+	private UserService userService;
 	@Resource
 	private NoticeService noticeService;
 	@Autowired
@@ -47,7 +47,7 @@ public class CommentController extends BaseController{
 		if (comment.getContent().indexOf("@") > -1) {
 			List<String> atUsers = StringUtil.getAtUser(comment.getContent());
 			if(atUsers!=null && atUsers.size()>0){
-				user = userRepository.findByUserName(atUsers.get(0));
+				user = userService.findByUserName(atUsers.get(0));
 				if (null != user) {
 					comment.setReplyUserId(user.getId());
 				} else {
@@ -113,12 +113,12 @@ public class CommentController extends BaseController{
 	 */
 	private List<Comment> convertComment(List<Comment> comments) {
 		for (Comment comment : comments) {
-			User user = userRepository.findById((long)comment.getUserId());
+			User user = userService.findById((long)comment.getUserId());
 			comment.setCommentTime(DateUtils.getTimeFormatText(comment.getCreateTime()));
 			comment.setUserName(user.getUserName());
 			comment.setProfilePicture(user.getProfilePicture());
 			if(comment.getReplyUserId()!=null && comment.getReplyUserId()!=0){
-				 User replyUser = userRepository.findById((long)comment.getReplyUserId());
+				 User replyUser = userService.findById((long)comment.getReplyUserId());
 				 comment.setReplyUserName(replyUser.getUserName());
 			}
 		}

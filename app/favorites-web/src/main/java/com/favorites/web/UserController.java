@@ -125,7 +125,7 @@ public class UserController extends BaseController {
 			user.setCreateTime(DateUtils.getCurrentTime());
 			user.setLastModifyTime(DateUtils.getCurrentTime());
 			user.setProfilePicture("img/favicon.png");
-			userService.save(user);
+			user = userService.save(user);
 			// 添加默认收藏夹
 			Favorites favorites = favoritesService.saveFavorites(user.getId(), "未读列表");
 			// 添加默认属性设置
