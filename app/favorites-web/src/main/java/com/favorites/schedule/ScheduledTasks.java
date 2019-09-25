@@ -36,7 +36,7 @@ public class ScheduledTasks {
 	@Autowired
 	private CacheService cacheService;
 
-	@Autowired
+//	@Autowired
 //	private RedisService redisService;
 
 	/**
