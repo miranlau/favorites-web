@@ -18,6 +18,8 @@
 	<properties>
 		<java.version>1.8</java.version>
 		<spring-cloud.version>Finchley.RELEASE</spring-cloud.version>
+		<dockerfile-maven-version>1.4.12</dockerfile-maven-version>
+		<docker.image.prefix>favorites</docker.image.prefix>
 	</properties>
 
     <dependencyManagement>

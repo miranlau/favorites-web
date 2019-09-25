@@ -24,5 +24,6 @@
 		<module>favorites-web</module>
 		<module>follow-service</module>
 		<module>praise-service</module>
+		<module>comment-service</module>
 	</modules>
 </project>
