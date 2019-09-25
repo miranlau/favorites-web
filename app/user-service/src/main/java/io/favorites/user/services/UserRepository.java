@@ -13,9 +13,14 @@ import org.springframework.data.rest.core.annotation.RestResource;
 
 import io.favorites.user.domain.User;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RepositoryRestResource(collectionResourceRel = "user", path = "user")
 public interface UserRepository extends JpaRepository<User, Long> {
+
+    @Override
+    @Modifying(clearAutomatically=true)
+    User save(@RequestBody User user);
 
     @Query("from User u where u.userName=:userName")
     User findByUserName(@Param("userName") String userName);
