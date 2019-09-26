@@ -5,6 +5,7 @@ import com.favorites.domain.User;
 import com.favorites.remote.UserService;
 import com.favorites.repository.UserRepository;
 import com.favorites.utils.Des3EncryptionUtil;
+import com.favorites.utils.SpringContextUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +25,6 @@ public class SecurityFilter implements Filter {
 	protected Logger logger =  LoggerFactory.getLogger(this.getClass());
 	private static Set<String> GreenUrlSet = new HashSet<String>();
 
-	@Autowired
 	private UserService userService;
 
 	@Override
@@ -64,6 +64,9 @@ public class SecurityFilter implements Filter {
 						Long userId = 0l;
 						if(StringUtils.isNotBlank(value)){
 							userId = Long.parseLong(value);
+						}
+						if (userService == null) {
+							userService = (UserService) SpringContextUtil.getBean("userService");
 						}
 						User user = userService.findById((long)userId);
 						String html = "";
