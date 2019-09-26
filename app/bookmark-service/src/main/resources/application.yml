@@ -16,3 +16,8 @@ spring:
   logging:
     level:
       io.favorites: info
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://10.80.17.195:8761/eureka

@@ -5,6 +5,10 @@ spring:
 #    allow-bean-definition-overriding: true
 server:
   port: 8080
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://10.80.17.195:8761/eureka
 
 favorites:
   services:
