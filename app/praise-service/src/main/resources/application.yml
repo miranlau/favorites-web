@@ -14,11 +14,6 @@ spring:
       ddl-auto: update
     show-sql: true
 
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://10.80.17.195:8761/eureka
-
   logging:
     level:
       io.favorites: info
