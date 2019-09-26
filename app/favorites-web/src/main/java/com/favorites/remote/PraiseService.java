@@ -5,7 +5,7 @@ import com.favorites.domain.view.CommonUserView;
 
 public interface PraiseService {
 	
-	void save(Praise praise);
+	Praise save(Praise praise);
 	
 	Long countByCollectId(Long collectId);
 
