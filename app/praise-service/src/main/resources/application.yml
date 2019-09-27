@@ -5,7 +5,7 @@ spring:
   application:
     name: praise-service
   datasource:
-    url: jdbc:mysql://localhost/favorites?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC&useSSL=true
+    url: jdbc:mysql://10.80.17.195/favorites?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC&useSSL=true
     username: root
     password: root
     driver-class-name: com.mysql.jdbc.Driver
