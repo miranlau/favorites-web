@@ -1,9 +1,11 @@
 package io.favorites.comment.domain;
 
 import lombok.Data;
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.persistence.*;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import java.io.Serializable;
 
 @Entity

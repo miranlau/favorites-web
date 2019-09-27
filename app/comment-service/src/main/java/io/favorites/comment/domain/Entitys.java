@@ -1,8 +1,9 @@
 package io.favorites.comment.domain;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.io.Serializable;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class Entitys implements Serializable{
 	private static final long serialVersionUID = 1L;
