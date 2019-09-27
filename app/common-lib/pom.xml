@@ -8,9 +8,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../favorites-parent</relativePath>
 	</parent>
-	<groupId>io.favorites</groupId>
 	<artifactId>common-lib</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>common-lib</name>
 	<description>Common library to supply common functions</description>
 

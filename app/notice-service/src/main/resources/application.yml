@@ -7,7 +7,3 @@ spring:
 
 server:
   port: 8093
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://10.80.17.195:8761/eureka
