@@ -1,17 +1,17 @@
-package io.favorites.comment.config;
-
-import io.favorites.comment.domain.Comment;
-import io.favorites.comment.domain.Comment2;
+package io.favorites.bookmark.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter;
 
+import io.favorites.bookmark.domain.Collect;
+import io.favorites.bookmark.domain.Collect2;
+
 @Configuration
-public class CommentRepositoryConfig extends RepositoryRestConfigurerAdapter {
+public class BookmarkRepositoryConfig extends RepositoryRestConfigurerAdapter {
 
     @Override
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
-        config.exposeIdsFor(Comment.class).exposeIdsFor(Comment2.class);
+        config.exposeIdsFor(Collect.class).exposeIdsFor(Collect2.class);
     }
 }
