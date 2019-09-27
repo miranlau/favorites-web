@@ -3,7 +3,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.favorites.domain.Praise;
-import com.favorites.domain.view.CommonUserView;
+import com.favorites.domain.view.CommentView;
 
 import javax.transaction.Transactional;
 
@@ -18,7 +18,7 @@ public interface PraiseRepository extends JpaRepository<Praise, Long> {
 			+ "from Praise p,User u WHERE p.userId=u.id";
 	
 	@Query(findPraiseUserSql+ " and p.id=?1")
-	CommonUserView findPraiseUser(Long id);
+    CommentView findPraiseUser(Long id);
 
 	@Transactional
 	void deleteById(Long id);

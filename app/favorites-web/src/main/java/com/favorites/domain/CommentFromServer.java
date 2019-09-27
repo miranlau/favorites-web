@@ -1,4 +1,4 @@
-package io.favorites.comment.domain;
+package com.favorites.domain;
 
 import lombok.Data;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -8,8 +8,7 @@ import java.io.Serializable;
 
 @Entity
 @Data
-@Table(name = "comment")
-public class Comment2 implements Serializable {
+public class CommentFromServer implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -46,7 +45,7 @@ public class Comment2 implements Serializable {
 //	@Transient
 //	private String profilePicture; // in User
 
-	public Comment2() {
+	public CommentFromServer() {
 		super();
 	}
 

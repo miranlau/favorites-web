@@ -1,16 +1,15 @@
 package com.favorites.domain;
 
-import java.util.List;
-
+import com.favorites.remote.PraiseService;
+import com.favorites.remote.CommentService;
+import com.favorites.repository.FollowRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.favorites.remote.PraiseService;
-import com.favorites.repository.CommentRepository;
-import com.favorites.repository.FollowRepository;
+import java.util.List;
 
 
 @RunWith(SpringRunner.class)
@@ -21,7 +20,7 @@ public class RepositoryTest {
 	private PraiseService praiseRepository;
 	
 	@Autowired
-	private CommentRepository commentRepository;
+	private CommentService commentService;
 	
 	@Autowired
 	private FollowRepository followRepository;
@@ -38,7 +37,7 @@ public class RepositoryTest {
 	
 	@Test
 	public void testComment() throws Exception {
-		long count=commentRepository.countByCollectId(1l);
+		long count= commentService.countByCollectId(1l);
 		System.out.println("count===="+count);
 	    
 	}

@@ -1,18 +1,6 @@
 package com.favorites.service.impl;
 
-import java.util.*;
-
-import javax.transaction.Transactional;
-
 import com.favorites.cache.CacheService;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
 import com.favorites.domain.Collect;
 import com.favorites.domain.Favorites;
 import com.favorites.domain.Praise;
@@ -24,7 +12,7 @@ import com.favorites.domain.view.CollectView;
 import com.favorites.remote.BookmarkService;
 import com.favorites.remote.FolderService;
 import com.favorites.remote.PraiseService;
-import com.favorites.repository.CommentRepository;
+import com.favorites.remote.CommentService;
 import com.favorites.repository.FollowRepository;
 import com.favorites.repository.UserRepository;
 import com.favorites.service.CollectService;
@@ -33,6 +21,18 @@ import com.favorites.service.NoticeService;
 import com.favorites.utils.DateUtils;
 import com.favorites.utils.HtmlUtil;
 import com.favorites.utils.StringUtil;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Service("collectService")
 public class CollectServiceImpl extends CacheService implements CollectService {
@@ -51,7 +51,7 @@ public class CollectServiceImpl extends CacheService implements CollectService {
 	@Autowired
 	private PraiseService praiseService;
 	@Autowired
-	private CommentRepository commentRepository;
+	private CommentService commentService;
 	@Autowired
 	private FollowRepository followRepository;
 
@@ -138,7 +138,7 @@ public class CollectServiceImpl extends CacheService implements CollectService {
 		for (CollectView view : views) {
 			CollectSummary summary=new CollectSummary(view);
 			summary.setPraiseCount(praiseService.countByCollectId(view.getId()));
-			summary.setCommentCount(commentRepository.countByCollectId(view.getId()));
+			summary.setCommentCount(commentService.countByCollectId(view.getId()));
 			Praise praise=praiseService.findByUserIdAndCollectId(userId, view.getId());
 			if(praise!=null){
 				summary.setPraise(true);

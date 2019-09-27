@@ -1,7 +1,7 @@
 package com.favorites.remote;
 
 import com.favorites.domain.Praise;
-import com.favorites.domain.view.CommonUserView;
+import com.favorites.domain.view.CommentView;
 
 public interface PraiseService {
 	
@@ -11,7 +11,7 @@ public interface PraiseService {
 
 	Praise findByUserIdAndCollectId(Long userId, Long collectId);
 
-	CommonUserView findPraiseUser(Long id);
+	CommentView findPraiseUser(Long id);
 
 	void deleteById(Long id);
 }

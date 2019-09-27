@@ -15,14 +15,13 @@ import com.favorites.utils.HtmlUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-//@Component
+@Component
 public class ScheduledTasks {
 
 	protected Logger logger =  LoggerFactory.getLogger(this.getClass());
@@ -50,11 +49,14 @@ public class ScheduledTasks {
 		ca.add(Calendar.DAY_OF_YEAR,-30);
 		Long date = ca.getTime().getTime();
         List<Long> favoritesId = folderService.findIdByName("未读列表");
-        logger.info("favoritesId.size() = " + favoritesId.size());
-        logger.info("favoritesId[0] = " + favoritesId.get(0));
-        logger.info("favoritesId[1] = " + favoritesId.get(1));
+//        logger.info("favoritesId.size() = " + favoritesId.size());
+//        logger.info("favoritesId[0] = " + favoritesId.get(0));
+//        logger.info("favoritesId[1] = " + favoritesId.get(1));
         List<Collect> collectList = collectRespository.findByCreateTimeLessThanAndIsDeleteAndFavoritesIdIn(date,
                 IsDelete.NO, favoritesId.toArray(new Long[favoritesId.size()]));
+//        if(collectList == null){
+//        	return ;
+//		}
 		for(Collect collect : collectList){
 			try {
 				logger.info("文章id:" + collect.getId());

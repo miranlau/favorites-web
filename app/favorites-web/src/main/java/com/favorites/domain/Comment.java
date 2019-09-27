@@ -1,16 +1,12 @@
 package com.favorites.domain;
 
-import java.io.Serializable;
+import com.favorites.remote.ServiceRegistry;
+import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
-/**
- * 评论
- * 
- * @author DingYS
- * 
- */
-@Entity
+@Data
 public class Comment extends Entitys implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -35,84 +31,24 @@ public class Comment extends Entitys implements Serializable {
 	private String replyUserName;
 	@Transient
 	private String profilePicture;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Long getCollectId() {
-		return collectId;
-	}
+	@Transient
+	private String user;
+	@Transient
+	private String collect;
 
 	public void setCollectId(Long collectId) {
 		this.collectId = collectId;
-	}
-
-	public String getContent() {
-		return content;
-	}
-
-	public void setContent(String content) {
-		this.content = content;
-	}
-
-	public Long getUserId() {
-		return userId;
+		if(collectId != null){
+			collect = "http://" + ServiceRegistry.getCommentServiceAddr() + "/collects/" + collectId;
+//			user = "http://localhost:8096/collects/" + collectId;
+		}
 	}
 
 	public void setUserId(Long userId) {
 		this.userId = userId;
-	}
-
-	public Long getReplyUserId() {
-		return replyUserId;
-	}
-
-	public void setReplyUserId(Long replyUserId) {
-		this.replyUserId = replyUserId;
-	}
-
-	public Long getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Long createTime) {
-		this.createTime = createTime;
-	}
-
-	public String getCommentTime() {
-		return commentTime;
-	}
-
-	public void setCommentTime(String commentTime) {
-		this.commentTime = commentTime;
-	}
-
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	public String getReplyUserName() {
-		return replyUserName;
-	}
-
-	public void setReplyUserName(String replyUserName) {
-		this.replyUserName = replyUserName;
-	}
-
-	public String getProfilePicture() {
-		return profilePicture;
-	}
-
-	public void setProfilePicture(String profilePicture) {
-		this.profilePicture = profilePicture;
+		if (userId != null) {
+			user = "http://" + ServiceRegistry.getCommentServiceAddr() + "/users/" + userId;
+//			user = "http://localhost:8096/users/" + userId;
+		}
 	}
 }

@@ -32,8 +32,8 @@ public class FavoritesServiceImpl implements FavoritesService{
 		favorites.setPublicCount(10l);
 		favorites.setCreateTime(DateUtils.getCurrentTime());
 		favorites.setLastModifyTime(DateUtils.getCurrentTime());
-        folderService.save(favorites);
-		return  favorites;
+        Favorites saved = folderService.save(favorites);
+		return  saved;
 	}
 
 	/**

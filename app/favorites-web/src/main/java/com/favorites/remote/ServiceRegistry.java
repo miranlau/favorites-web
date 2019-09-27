@@ -3,12 +3,7 @@
  *----------------------------------------------------------------------------*/
 package com.favorites.remote;
 
-import com.favorites.remote.impl.BookmarkFeignService;
-import com.favorites.remote.impl.FolderFeignService;
-import com.favorites.remote.impl.FollowFeignService;
-import com.favorites.remote.impl.LookRecordFeignService;
-import com.favorites.remote.impl.PraiseFeignService;
-import com.favorites.remote.impl.UserFeignService;
+import com.favorites.remote.impl.*;
 
 import io.favorites.common.api.ServiceFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +35,9 @@ public class ServiceRegistry {
     @Autowired
     FolderFeignService folderFeignService;
 
+    @Autowired
+    CommentFeignService commentFeignService;
+
     @Value("${favorites.services.bookmarks.address}")
     private static String bookmarksServiceAddr;
     
@@ -51,6 +49,9 @@ public class ServiceRegistry {
     
     @Value("${favorites.services.praise.address}")
     private static String praiseServiceAddr;
+
+    @Value("${favorites.services.comment.address}")
+    private static String commentServiceAddr;
 
     /**
      * Creates a new instance of <code>ServiceRegistry</code>.
@@ -88,6 +89,12 @@ public class ServiceRegistry {
         return ServiceFactory.createService(FolderService.class, folderFeignService);
     }
 
+    @Bean
+    public CommentService commentService() {
+        return ServiceFactory.createService(CommentService.class, commentFeignService);
+    }
+
+
     /**
      * @return Returns the bookmarksServiceAddr.
      */
@@ -115,4 +122,10 @@ public class ServiceRegistry {
     public static String getLookRecordServiceAddr() {
         return lookRecordServiceAddr;
     }
+
+    public static String getCommentServiceAddr() {
+        return commentServiceAddr;
+    }
+
+
 }

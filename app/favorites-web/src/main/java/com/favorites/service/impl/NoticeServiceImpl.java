@@ -4,11 +4,11 @@ import com.favorites.domain.Notice;
 import com.favorites.domain.User;
 import com.favorites.domain.view.CollectSummary;
 import com.favorites.domain.view.CollectView;
-import com.favorites.domain.view.CommonUserView;
+import com.favorites.domain.view.CommentView;
 import com.favorites.remote.BookmarkService;
-import com.favorites.repository.CommentRepository;
-import com.favorites.remote.NoticeFeignService;
 import com.favorites.remote.PraiseService;
+import com.favorites.remote.CommentService;
+import com.favorites.remote.impl.NoticeFeignService;
 import com.favorites.repository.UserRepository;
 import com.favorites.service.NoticeService;
 import com.favorites.utils.DateUtils;
@@ -27,7 +27,7 @@ public class NoticeServiceImpl implements NoticeService {
     @Autowired
     private NoticeFeignService noticeFeignService;
     @Autowired
-    private CommentRepository commentRepository;
+    private CommentService commentService;
     @Autowired
     private PraiseService praiseService;
     @Autowired
@@ -85,7 +85,7 @@ public class NoticeServiceImpl implements NoticeService {
             if ("at".equals(type)) {
                 summary.setCollectTime(DateUtils.getTimeFormatText(view.getLastModifyTime()) + " at了你");
             } else if ("comment".equals(type)) {
-            	CommonUserView comment = commentRepository.findReplyUser(Long.valueOf(view.getOperId()));
+            	CommentView comment = commentService.findReplyUser(Long.valueOf(view.getOperId()));
                 if (comment == null) {
                     continue;
                 }
@@ -100,7 +100,7 @@ public class NoticeServiceImpl implements NoticeService {
                 }
                 summary.setCollectTime(DateUtils.getTimeFormatText(comment.getCreateTime()));
             } else if ("praise".equals(type)) {
-            	CommonUserView comment = praiseService.findPraiseUser(Long.valueOf(view.getOperId()));
+            	CommentView comment = praiseService.findPraiseUser(Long.valueOf(view.getOperId()));
                 if (comment == null) {
                     continue;
                 }

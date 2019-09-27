@@ -1,22 +1,5 @@
 package com.favorites.web;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import com.favorites.comm.Const;
 import com.favorites.comm.aop.LoggerManage;
 import com.favorites.domain.Config;
@@ -31,11 +14,27 @@ import com.favorites.domain.view.IndexCollectorView;
 import com.favorites.remote.BookmarkService;
 import com.favorites.remote.FolderService;
 import com.favorites.remote.FollowService;
-import com.favorites.remote.NoticeFeignService;
-import com.favorites.repository.*;
+import com.favorites.remote.impl.NoticeFeignService;
+import com.favorites.repository.ConfigRepository;
+import com.favorites.repository.UserRepository;
 import com.favorites.service.CollectService;
 import com.favorites.service.CollectorService;
 import com.favorites.service.LookAroundService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/")
@@ -83,14 +82,19 @@ public class IndexController extends BaseController{
 	public String home(Model model) {
 		long size= collectRepository.countByUserIdAndIsDelete(getUserId(),IsDelete.NO);
 		Config config = configRepository.findByUserId(getUserId());
-        Favorites favorites = folderService.findById(Long.parseLong(config.getDefaultFavorties()));
+		String favId = config.getDefaultFavorties();
+		if(favId != null && !favId.equals("null")) {
+			Favorites favorites = folderService.findById(Long.parseLong(favId));
+			model.addAttribute("favorites", favorites);
+		}
 		List<User> followListUser = followRepository.findByUserId(getUserId());
 		model.addAttribute("config",config);
-		model.addAttribute("favorites",favorites);
 		model.addAttribute("size",size);
 		List<String> followList = new ArrayList<String>();
-		for(User u : followListUser) {
-			followList.add(u.getUserName());
+		if(followListUser != null) {
+			for (User u : followListUser) {
+				followList.add(u.getUserName());
+			}
 		}
 		model.addAttribute("followList",followList);
 		model.addAttribute("user",getUser());

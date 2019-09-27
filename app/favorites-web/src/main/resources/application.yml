@@ -20,5 +20,7 @@ favorites:
       address: localhost:8094
     praise:
       address: localhost:8095
+    comment:
+      address: localhost:8096
     follow:
       address: localhost:8097

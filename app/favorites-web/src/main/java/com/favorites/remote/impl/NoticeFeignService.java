@@ -1,4 +1,4 @@
-package com.favorites.remote;
+package com.favorites.remote.impl;
 
 import com.favorites.domain.Notice;
 import org.springframework.cloud.openfeign.FeignClient;

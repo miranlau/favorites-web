@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.favorites.domain.Praise;
-import com.favorites.domain.view.CommonUserView;
+import com.favorites.domain.view.CommentView;
 
 @FeignClient(url = "${favorites.services.praise.address}", name = "praise-service")
 public interface PraiseFeignService {
@@ -23,7 +23,7 @@ public interface PraiseFeignService {
 	Praise findByUserIdAndCollectId(@RequestParam("userId") Long userId, @RequestParam("collectId") Long collectId);
 
 	@RequestMapping(value = "/praise/search/findPraiseUser")
-	CommonUserView findPraiseUser(@RequestParam("id") Long id);
+    CommentView findPraiseUser(@RequestParam("id") Long id);
 
 	@RequestMapping(value = "/praise/{id}", method = { RequestMethod.DELETE })
 	void deleteById(@PathVariable("id") Long id);

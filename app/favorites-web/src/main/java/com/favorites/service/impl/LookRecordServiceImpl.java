@@ -6,8 +6,8 @@ import com.favorites.domain.view.CollectSummary;
 import com.favorites.domain.view.CollectView;
 import com.favorites.remote.LookRecordRemoteService;
 import com.favorites.remote.PraiseService;
+import com.favorites.remote.CommentService;
 import com.favorites.remote.impl.LookRecordFeignService;
-import com.favorites.repository.CommentRepository;
 import com.favorites.service.LookRecordService;
 import com.favorites.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class LookRecordServiceImpl implements LookRecordService {
     private PraiseService praiseService;
 
     @Autowired
-    private CommentRepository commentRepository;
+    private CommentService commentService;
 
     @Override
     public void saveLookRecord(Long userId,Long collectId) {
@@ -80,7 +80,7 @@ public class LookRecordServiceImpl implements LookRecordService {
         for (CollectView view : views) {
             CollectSummary summary=new CollectSummary(view);
             summary.setPraiseCount(praiseService.countByCollectId(view.getId()));
-            summary.setCommentCount(commentRepository.countByCollectId(view.getId()));
+            summary.setCommentCount(commentService.countByCollectId(view.getId()));
             Praise praise=praiseService.findByUserIdAndCollectId(userId, view.getId());
             if(praise!=null){
                 summary.setPraise(true);

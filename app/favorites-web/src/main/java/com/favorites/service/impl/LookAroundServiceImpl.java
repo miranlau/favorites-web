@@ -6,7 +6,7 @@ import com.favorites.domain.view.CollectSummary;
 import com.favorites.domain.view.CollectView;
 import com.favorites.remote.BookmarkService;
 import com.favorites.remote.PraiseService;
-import com.favorites.repository.CommentRepository;
+import com.favorites.remote.CommentService;
 import com.favorites.service.LookAroundService;
 import com.favorites.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class LookAroundServiceImpl implements LookAroundService{
     private BookmarkService collectRepository;
 
     @Autowired
-    private CommentRepository commentRepository;
+    private CommentService commentService;
 
     @Autowired
     private PraiseService praiseService;
@@ -127,7 +127,7 @@ public class LookAroundServiceImpl implements LookAroundService{
         for (CollectView view : views) {
             CollectSummary summary=new CollectSummary(view);
             summary.setPraiseCount(praiseService.countByCollectId(view.getId()));
-            summary.setCommentCount(commentRepository.countByCollectId(view.getId()));
+            summary.setCommentCount(commentService.countByCollectId(view.getId()));
             Praise praise=praiseService.findByUserIdAndCollectId(userId, view.getId());
             if (praise != null) {
                 summary.setPraise(true);

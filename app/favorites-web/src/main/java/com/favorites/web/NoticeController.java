@@ -7,8 +7,8 @@ import com.favorites.domain.result.ExceptionMsg;
 import com.favorites.domain.result.Response;
 import com.favorites.domain.result.ResponseData;
 import com.favorites.domain.view.CollectSummary;
-import com.favorites.repository.CommentRepository;
-import com.favorites.remote.NoticeFeignService;
+import com.favorites.remote.CommentService;
+import com.favorites.remote.impl.NoticeFeignService;
 import com.favorites.service.NoticeService;
 import com.favorites.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class NoticeController extends BaseController{
 	private NoticeService noticeService;
 	
 	@Autowired
-	private CommentRepository commentRepository;
+	private CommentService commentService;
 	
 	/**
 	 * 回复
@@ -45,9 +45,9 @@ public class NoticeController extends BaseController{
 		try {
 			comment.setUserId(getUserId());
 			comment.setCreateTime(DateUtils.getCurrentTime());
-			Comment saveCommon = commentRepository.save(comment);
+			Comment saveCommon = commentService.save(comment);
 			Notice notice = new Notice();
-			notice.setCollectId(comment.getCollectId()+"");
+			notice.setCollectId(comment.getCollectId() + "");
 			notice.setUserId(comment.getReplyUserId());
 			notice.setType("comment");
 			notice.setReaded("unread");

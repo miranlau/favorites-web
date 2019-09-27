@@ -1,32 +1,30 @@
 package com.favorites.web;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
+import com.favorites.domain.Collect;
+import com.favorites.domain.Comment;
+import com.favorites.domain.User;
+import com.favorites.domain.result.Response;
+import com.favorites.remote.BookmarkService;
+import com.favorites.remote.CommentService;
 import com.favorites.remote.UserService;
+import com.favorites.service.NoticeService;
+import com.favorites.utils.DateUtils;
+import com.favorites.utils.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.favorites.domain.Collect;
-import com.favorites.domain.Comment;
-import com.favorites.domain.User;
-import com.favorites.domain.result.Response;
-import com.favorites.remote.BookmarkService;
-import com.favorites.repository.CommentRepository;
-import com.favorites.service.NoticeService;
-import com.favorites.utils.DateUtils;
-import com.favorites.utils.StringUtil;
+import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 @RequestMapping("/comment")
 public class CommentController extends BaseController{
 	
 	@Autowired
-	private  CommentRepository CommentRepository;
+	private CommentService commentService;
 	@Autowired
 	private UserService userService;
 	@Resource
@@ -62,15 +60,15 @@ public class CommentController extends BaseController{
 		}
 		comment.setUserId(getUserId());
 		comment.setCreateTime(DateUtils.getCurrentTime());
-		CommentRepository.save(comment);
+		Comment savedComment = commentService.save(comment);
 		if(null != user){
 			// 保存消息通知(回复)
-			noticeService.saveNotice(String.valueOf(comment.getCollectId()), "comment", user.getId(), String.valueOf(comment.getId()));
+			noticeService.saveNotice(String.valueOf(comment.getCollectId()), "comment", user.getId(), String.valueOf(savedComment.getId()));
 		}else{
 			// 保存消息通知（直接评论）
-			Collect collect = colloectRepository.findById((long)comment.getCollectId());
+			Collect collect = colloectRepository.findById(comment.getCollectId());
 			if(null != collect){
-				noticeService.saveNotice(String.valueOf(comment.getCollectId()), "comment", collect.getUserId(), String.valueOf(comment.getId()));
+				noticeService.saveNotice(String.valueOf(comment.getCollectId()), "comment", collect.getUserId(), String.valueOf(savedComment.getId()));
 			}
 		}
 		
@@ -86,7 +84,7 @@ public class CommentController extends BaseController{
 	 */
 	@RequestMapping(value="/list/{collectId}")
 	public List<Comment> list(@PathVariable("collectId") long collectId) {
-		List<Comment> comments= CommentRepository.findByCollectIdOrderByIdDesc(collectId);
+		List<Comment> comments= commentService.findByCollectIdOrderByIdDesc(collectId);
 		return convertComment(comments);
 	}
 	
@@ -99,7 +97,7 @@ public class CommentController extends BaseController{
 	 */
 	@RequestMapping(value="/delete/{id}")
 	public Response delete(@PathVariable("id") long id) {
-		CommentRepository.deleteById(id);
+		commentService.deleteById(id);
 		return result();
 	}
 

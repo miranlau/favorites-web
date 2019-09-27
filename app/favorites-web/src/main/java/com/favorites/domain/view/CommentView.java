@@ -1,6 +1,7 @@
 package com.favorites.domain.view;
 
-public interface CommonUserView {
+public interface CommentView {
+	Long getId();
 	Long getUserId();
 	String getUserName();
 	String getProfilePicture();
