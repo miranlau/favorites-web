@@ -25,5 +25,6 @@
 		<module>follow-service</module>
 		<module>praise-service</module>
 		<module>comment-service</module>
+		<module>look-record-service</module>
 	</modules>
 </project>
