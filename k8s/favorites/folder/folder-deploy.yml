@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: folder-deploy
+  namespace: favorites
+  labels:
+    app: folder-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web-folder
+  template:
+    metadata:
+      labels:
+        app: web-folder
+    spec:
+      containers:
+      - name: folder
+        image: favorites/folder-service:0.0.1-SNAPSHOT
+        volumeMounts:
+        - name: folder-conf
+          mountPath: /config/
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8090
+      volumes:
+      - name: folder-conf
+        configMap:
+          name: folder-conf
+          items:
+            - key: application.yml
+              path: application.yml

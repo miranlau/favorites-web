@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: bookmark-service
+  namespace: favorites
+spec:
+  ports:
+  - port: 8091
+    name: bookmark
+  selector:
+    app: web-bookmark

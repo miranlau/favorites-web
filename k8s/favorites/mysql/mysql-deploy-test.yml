@@ -1,0 +1,56 @@
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: mysql-service
+#  namespace: favorites
+#spec:
+#  ports:
+#  - port: 3306 
+#    name: mysql 
+#  clusterIP: None
+#  selector:
+#    app: mysql-pod-favorites
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-test
+  labels:
+    app: mysql-test
+spec:
+#  serviceName: mysql-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql-pod-test
+  template:
+    metadata:
+      labels:
+        app: mysql-pod-test
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:5.7
+        ports:
+        - containerPort: 3306
+          hostPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "root"
+        - name: MYSQL_DATABASE
+          value: "favorites"
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: mysql-volume
+#        - mountPath: /etc/mysql/
+#          name: mysql-conf
+      volumes:
+      - name: mysql-volume
+        hostPath:
+          path: /mysql_volume
+#      - name: mysql-conf
+#        configMap:
+#          name: mysql-conf
+#          items:
+#            - key: "mysqld.cnf"
+#              path: "mysqld.cnf"

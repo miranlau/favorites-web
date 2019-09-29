@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: favorites-web-deploy
+  namespace: favorites
+  labels:
+    app: favorites-web-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web-favorites
+  template:
+    metadata:
+      labels:
+        app: web-favorites
+    spec:
+      containers:
+      - name: favorites-web
+        image: favorites/favorites-web:0.0.1-SNAPSHOT
+        volumeMounts:
+        - name: favorites-web-conf
+          mountPath: /config/
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
+      volumes:
+      - name: favorites-web-conf
+        configMap:
+          name: favorites-web-conf
+          items:
+            - key: application.yml
+              path: application.yml
+            - key: application.properties
+              path: application.properties
+            - key: application-docker.properties
+              path: application-docker.properties
+            - key: application-dev.properties
+              path: application-dev.properties

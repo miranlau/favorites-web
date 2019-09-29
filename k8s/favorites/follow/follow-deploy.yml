@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: follow-deploy
+  namespace: favorites
+  labels:
+    app: follow-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web-follow
+  template:
+    metadata:
+      labels:
+        app: web-follow
+    spec:
+      containers:
+      - name: follow
+        image: favorites/follow-service:0.0.1-SNAPSHOT
+        volumeMounts:
+        - name: follow-conf
+          mountPath: /config/
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8097
+      volumes:
+      - name: follow-conf
+        configMap:
+          name: follow-conf
+          items:
+            - key: application.yml
+              path: application.yml

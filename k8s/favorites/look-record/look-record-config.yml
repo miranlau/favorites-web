@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: ConfigMap
+metadata: 
+  name: look-record-conf
+  namespace: favorites
+data: 
+  application.yml: |-
+    server:
+      application:
+        name: look-record-service
+      port: 8094
+    
+    spring:
+      datasource:
+        url: jdbc:mysql://mysql-service.favorites.svc.cluster.local:3306/favorites?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
+        username: root
+        password: root
+        driver-class-name: com.mysql.jdbc.Driver
+      jpa:
+        hibernate:
+          ddl-auto: update
+        show-sql: true
+
+      logging:
+        level:
+          io.favorites: info
+   # favorites:
+   #   base:
+   #     path: http://localhost:{server.port}/
+#  application.properties: |-
+    ######  data config start ###### 
+    #spring.jpa.properties.hibernate.hbm2ddl.auto=create
+    #spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect
+    #spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL57Dialect
+    #spring.jpa.show-sql= true
+    #spring.datasource.hikari.connectionInitSql=SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci;
+    ######   data config end ###### 
+
+    #static.url = /usr/local/static
+    #file.profilepictures.url = file/profilepictures/
+    #file.backgroundpictures.url = file/backgroundpictures/
+
+    #spring.profiles.active=dev 

@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notice-deploy
+  namespace: favorites
+  labels:
+    app: notice-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web-notice
+  template:
+    metadata:
+      labels:
+        app: web-notice
+    spec:
+      containers:
+      - name: notice
+        image: favorites/notice-service:0.0.1-SNAPSHOT
+        volumeMounts:
+        - name: notice-conf
+          mountPath: /config/
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8093
+      volumes:
+      - name: notice-conf
+        configMap:
+          name: notice-conf
+          items:
+            - key: application.yml
+              path: application.yml
+

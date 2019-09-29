@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bookmark-deploy
+  namespace: favorites
+  labels:
+    app: bookmark-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web-bookmark
+  template:
+    metadata:
+      labels:
+        app: web-bookmark
+    spec:
+      containers:
+      - name: bookmark
+        image: favorites/bookmark-service:0.0.1-SNAPSHOT
+        volumeMounts:
+        - name: bookmark-conf
+          mountPath: /config/
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8091
+      volumes:
+      - name: bookmark-conf
+        configMap:
+          name: bookmark-conf
+          items:
+            - key: application.yml
+              path: application.yml
