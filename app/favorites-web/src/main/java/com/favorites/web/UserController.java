@@ -192,9 +192,12 @@ public class UserController extends BaseController {
 	public List<String> getFollows() {
 		List<User> followListUser = followRepository.findByUserId(getUserId());
 		List<String> followList = new ArrayList<String>();
-		for(User u : followListUser) {
-			followList.add(u.getUserName());
+		if(null != followListUser) {
+			for(User u : followListUser) {
+				followList.add(u.getUserName());
+			}
 		}
+		
 		return followList;
 	}
 	
