@@ -3,6 +3,7 @@ package com.favorites.service.impl;
 import com.favorites.cache.CacheService;
 import com.favorites.domain.Collect;
 import com.favorites.domain.Favorites;
+import com.favorites.domain.Follow;
 import com.favorites.domain.Praise;
 import com.favorites.domain.User;
 import com.favorites.domain.enums.CollectType;
@@ -11,6 +12,7 @@ import com.favorites.domain.view.CollectSummary;
 import com.favorites.domain.view.CollectView;
 import com.favorites.remote.BookmarkService;
 import com.favorites.remote.FolderService;
+import com.favorites.remote.FollowService;
 import com.favorites.remote.PraiseService;
 import com.favorites.remote.CommentService;
 import com.favorites.repository.FollowRepository;
@@ -53,7 +55,7 @@ public class CollectServiceImpl extends CacheService implements CollectService {
 	@Autowired
 	private CommentService commentService;
 	@Autowired
-	private FollowRepository followRepository;
+	private FollowService followService;
 
 	/**
 	 * 展示收藏列表
@@ -69,10 +71,15 @@ public class CollectServiceImpl extends CacheService implements CollectService {
 		// TODO Auto-generated method stub
 		Page<CollectView> views = null;
 		if ("my".equals(type)) {
-			List<Long> userIds=followRepository.findMyFollowIdByUserId(userId);
-			if(userIds==null || userIds.size()==0){
+//			List<Long> userIds=followService.findMyFollowIdByUserId(userId);
+			List<Follow> followUsers=followService.findMyFollowIdByUserId(userId);
+			if(followUsers==null || followUsers.size()==0){
 				views = collectRepository.findViewByUserId(userId, pageable);
 			}else{
+				List<Long> userIds = new ArrayList<Long>();
+				for(Follow follow : followUsers) {
+					userIds.add(follow.getId());
+				}
 				views = collectRepository.findViewByUserIdAndFollows(userId, userIds, pageable);
 			}
 		}else if("myself".equals(type)){
