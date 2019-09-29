@@ -91,7 +91,7 @@ public class IndexController extends BaseController{
 		model.addAttribute("config",config);
 		model.addAttribute("size",size);
 		List<String> followList = new ArrayList<String>();
-		if(followListUser != null) {
+		if(null != followListUser) {
 			for (User u : followListUser) {
 				followList.add(u.getUserName());
 			}
@@ -221,9 +221,12 @@ public class IndexController extends BaseController{
 		model.addAttribute("favoritesList",favoritesList);
 		model.addAttribute("configObj", config);
 		List<String> followList = new ArrayList<String>();
-		for(User u : followListUser) {
-			followList.add(u.getUserName());
-		}		
+		if(null != followListUser) {
+			for(User u : followListUser) {
+				followList.add(u.getUserName());
+			}	
+		}
+			
 		model.addAttribute("followList",followList);
 		return "collect";
 	}
