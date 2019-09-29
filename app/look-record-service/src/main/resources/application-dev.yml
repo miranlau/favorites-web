@@ -12,9 +12,9 @@ spring:
   application:
     name: look-record-service
 
-  logging:
-    level:
-      io.favorites: info
+logging:
+  level:
+    io.favorites: info
 
 favorites:
   base:
