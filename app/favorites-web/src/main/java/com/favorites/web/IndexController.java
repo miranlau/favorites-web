@@ -327,8 +327,14 @@ public class IndexController extends BaseController{
         model.addAttribute("user",user);
         model.addAttribute("collects", collects);
         model.addAttribute("favoritesList",favoritesList);
-        model.addAttribute("followUser",followUser.get(0) == null ? "" : followUser.get(0).getUserName());
-        model.addAttribute("followedUser",followedUser.get(0) == null ? "" : followedUser.get(0).getUserName());
+        if(null == followUser)
+        	model.addAttribute("followUser","");
+        else
+        	model.addAttribute("followUser",followUser.get(0) == null ? "" : followUser.get(0).getUserName());
+        if(null == followedUser)
+        	model.addAttribute("followedUser","");
+        else
+        	model.addAttribute("followedUser",followedUser.get(0) == null ? "" : followedUser.get(0).getUserName());
         model.addAttribute("isFollow",isFollow);
 		model.addAttribute("loginUserInfo",getUser());
 		model.addAttribute("config",config);
