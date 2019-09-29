@@ -5,7 +5,7 @@ spring:
   application:
     name: user-service
   datasource:
-    url: jdbc:mysql://10.80.17.195/favorites?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC&useSSL=true
+    url: jdbc:mysql://mysql-service.favorites.svc.cluster.local:3306/favorites?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
     username: root
     password: root
     driver-class-name: com.mysql.jdbc.Driver
@@ -15,6 +15,10 @@ spring:
     show-sql: true
 
 logging:
+  file: logs/user-service.log
+    pattern:
+      console: "%d %-5level %logger : %msg%n"
+      file: "%d %-5level [%thread] %logger : %msg%n"
   level:
-    io.favorites: info
+    io.favorites: debug
 

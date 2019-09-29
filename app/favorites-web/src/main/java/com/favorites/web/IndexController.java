@@ -14,6 +14,7 @@ import com.favorites.domain.view.IndexCollectorView;
 import com.favorites.remote.BookmarkService;
 import com.favorites.remote.FolderService;
 import com.favorites.remote.FollowService;
+import com.favorites.remote.UserService;
 import com.favorites.remote.impl.NoticeFeignService;
 import com.favorites.repository.ConfigRepository;
 import com.favorites.repository.UserRepository;
@@ -53,8 +54,8 @@ public class IndexController extends BaseController{
 	private CollectorService collectorService;
     @Autowired
     private CollectService collectService;
-    @Autowired
-    private UserRepository userRepository;
+	@Autowired
+	private UserService userService;
 /*    @Autowired
 	private RedisService redisService;*/
 
@@ -206,7 +207,7 @@ public class IndexController extends BaseController{
 	@LoggerManage(description="意见反馈页面")
 	public String feedback(Model model){
 		User user = null;
-		user = userRepository.findById(getUserId());
+		user = userService.findById(getUserId());
 		model.addAttribute("user", user);
 		return "favorites/feedback";
 	}
@@ -288,7 +289,7 @@ public class IndexController extends BaseController{
     @LoggerManage(description="首页收藏家个人首页")
     public String collectorPageShow(Model model, @PathVariable("userId") long userId, @PathVariable("favoritesId") Long favoritesId, @RequestParam(value = "page", defaultValue = "0") Integer page,
                                  @RequestParam(value = "size", defaultValue = "15") Integer size){
-        User user = userRepository.findById(userId);
+        User user = userService.findById(userId);
         Long collectCount = 0l;
         Sort sort = new Sort(Sort.Direction.DESC, "id");
         Pageable pageable = PageRequest.of(page, size,sort);
