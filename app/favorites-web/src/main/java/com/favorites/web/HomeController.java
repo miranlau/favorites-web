@@ -1,22 +1,8 @@
 package com.favorites.web;
 
-import com.favorites.comm.aop.LoggerManage;
-import com.favorites.domain.Favorites;
-import com.favorites.domain.User;
-import com.favorites.domain.enums.CollectType;
-import com.favorites.domain.enums.FollowStatus;
-import com.favorites.domain.enums.IsDelete;
-import com.favorites.domain.view.CollectSummary;
-import com.favorites.domain.view.LetterSummary;
-import com.favorites.remote.BookmarkService;
-import com.favorites.remote.FollowService;
-import com.favorites.remote.FolderService;
-import com.favorites.remote.UserService;
-import com.favorites.service.CollectService;
-import com.favorites.service.LetterService;
-import com.favorites.service.LookRecordService;
-import com.favorites.service.NoticeService;
-import com.favorites.service.impl.NoticeServiceImpl;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,7 +14,23 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
+import com.favorites.comm.aop.LoggerManage;
+import com.favorites.domain.Favorites;
+import com.favorites.domain.User;
+import com.favorites.domain.enums.CollectType;
+import com.favorites.domain.enums.FollowStatus;
+import com.favorites.domain.enums.IsDelete;
+import com.favorites.domain.view.CollectSummary;
+import com.favorites.domain.view.LetterSummary;
+import com.favorites.remote.BookmarkService;
+import com.favorites.remote.FolderService;
+import com.favorites.remote.FollowService;
+import com.favorites.remote.UserService;
+import com.favorites.service.CollectService;
+import com.favorites.service.LetterService;
+import com.favorites.service.LookRecordService;
+import com.favorites.service.NoticeService;
+import com.favorites.service.impl.NoticeServiceImpl;
 
 @Controller
 @RequestMapping("/")
@@ -170,14 +172,29 @@ public class HomeController extends BaseController {
         model.addAttribute("user", user);
         model.addAttribute("collects", collects);
         model.addAttribute("favoritesList", favoritesList);
-        if(null == followUser)
+        
+        if(null == followUser || followUser.size() == 0) {
         	model.addAttribute("followUser", "");
-        else
-        	model.addAttribute("followUser", followUser.get(0) == null ? "" : followUser.get(0).getUserName());
-        if(null == followedUser)
+        }
+        else {
+        	List<String> followUserString = new ArrayList<String>();
+        	for(User u : followUser) {
+        		followUserString.add(u.getUserName());
+        	}
+        	model.addAttribute("followUser", followUserString);
+        }
+        	
+        if(null == followedUser || followedUser.size() == 0) {
         	model.addAttribute("followedUser", "");
-        else
-        	model.addAttribute("followedUser", followedUser.get(0) == null ? "" : followedUser.get(0).getUserName());
+        }
+        else {
+        	List<String> followedUserString = new ArrayList<String>();
+        	for(User u : followedUser) {
+        		followedUserString.add(u.getUserName());
+        	}
+        	model.addAttribute("followedUser", followedUserString);
+        }
+        	
         model.addAttribute("isFollow", isFollow);
         User userTemp = null;
         User currentUser = getUser();

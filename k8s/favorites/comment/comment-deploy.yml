@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: comment-deploy
+  namespace: favorites
+  labels:
+    app: comment-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web-comment
+  template:
+    metadata:
+      labels:
+        app: web-comment
+    spec:
+      containers:
+      - name: comment
+        image: favorites/comment-service:0.0.1-SNAPSHOT
+        volumeMounts:
+        - name: comment-conf
+          mountPath: /config/
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8096
+      volumes:
+      - name: comment-conf
+        configMap:
+          name: comment-conf
+          items:
+            - key: application.yml
+              path: application.yml

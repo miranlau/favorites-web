@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: praise-deploy
+  namespace: favorites
+  labels:
+    app: praise-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web-praise
+  template:
+    metadata:
+      labels:
+        app: web-praise
+    spec:
+      containers:
+      - name: praise
+        image: favorites/praise-service:0.0.1-SNAPSHOT
+        volumeMounts:
+        - name: praise-conf
+          mountPath: /config/
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8095
+      volumes:
+      - name: praise-conf
+        configMap:
+          name: praise-conf
+          items:
+            - key: application.yml
+              path: application.yml

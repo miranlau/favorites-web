@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-deploy
+  namespace: favorites
+  labels:
+    app: user-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web-user
+  template:
+    metadata:
+      labels:
+        app: web-user
+    spec:
+      containers:
+      - name: user
+        image: favorites/user-service:0.0.1-SNAPSHOT
+        volumeMounts:
+        - name: user-conf
+          mountPath: /config/
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8092
+      volumes:
+      - name: user-conf
+        configMap:
+          name: user-conf
+          items:
+            - key: application.yml
+              path: application.yml
