@@ -9,6 +9,7 @@ import java.io.Serializable;
  *  浏览记录entity
  */
 @Entity
+@Table(name = "look_record")
 @Data
 public class LookRecord implements Serializable{
 

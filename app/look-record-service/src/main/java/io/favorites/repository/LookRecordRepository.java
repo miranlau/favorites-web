@@ -29,7 +29,7 @@ public interface LookRecordRepository extends CrudRepository<LookRecord2, Long> 
 
     @Modifying(clearAutomatically=true)
     @Transactional
-    @Query("update LookRecord l set l.lastModifyTime=:lastModifyTime where l.user.id=:userId and l.collect.id=:collectId")
+    @Query("update LookRecord2 l set l.lastModifyTime=:lastModifyTime where l.user.id=:userId and l.collect.id=:collectId")
     void updatelastModifyTime(@Param("userId") Long userId, @Param("collectId") Long collectId, @Param("lastModifyTime") Long lastModifyTime);
 
     @Transactional
@@ -39,7 +39,7 @@ public interface LookRecordRepository extends CrudRepository<LookRecord2, Long> 
 
     @Modifying
     @Transactional
-    @Query("DELETE FROM LookRecord l WHERE l.user.id=?1")
+    @Query("DELETE FROM LookRecord2 l WHERE l.user.id=?1")
     int deleteByUserId(@Param(value = "userId")Long userId);
 
 }
