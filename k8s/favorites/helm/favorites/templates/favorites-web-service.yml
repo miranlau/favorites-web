@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: favorites-web-service
+  namespace: {{ .Values.global.namespace }}
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+    nodePort: 30088
+  selector:
+    app: favorites
+    component: web-favorites
+

@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: user-conf
+  namespace: {{ .Values.global.namespace }}
+data:
+  application.yml: |-
+    server:
+      port: 8092
+
+    spring:
+      application:
+        name: user-service
+      datasource:
+        url: "jdbc:mysql://{{ .Values.global.mysql.serviceName }}.{{ .Values.global.namespace }}.{{ .Values.global.postfixServiceName }}:{{ .Values.global.mysql.servicePort }}/favorites?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC"
+        username: root
+        password: root
+        driver-class-name: com.mysql.jdbc.Driver
+      jpa:
+        hibernate:
+          ddl-auto: update
+        show-sql: true
+    
+    logging:
+      level:
+        io.favorites: debug

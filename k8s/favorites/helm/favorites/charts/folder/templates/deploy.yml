@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: folder-deploy
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: favorites
+    component: folder-deploy
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: favorites
+      component: web-folder
+  template:
+    metadata:
+      labels:
+        app: favorites
+        component: web-folder
+    spec:
+      containers:
+      - name: folder
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        volumeMounts:
+        - name: folder-conf
+          mountPath: /config/
+        ports:
+        - containerPort: 8090
+    {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+      {{- range $pullSecret := .Values.imagePullSecrets }}
+        - name: {{ $pullSecret }}
+      {{- end }}
+    {{- end }}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 10
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - favorites
+              topologyKey: "kubernetes.io/hostname"
+      volumes:
+      - name: folder-conf
+        configMap:
+          name: folder-conf
+          items:
+            - key: application.yml
+              path: application.yml
+

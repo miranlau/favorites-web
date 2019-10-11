@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: favorites-web-deploy
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: favorites
+    component: favorites-web-deploy
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: favorites
+      component: web-favorites
+  template:
+    metadata:
+      labels:
+        app: favorites
+        component: web-favorites
+    spec:
+      containers:
+      - name: favorites-web
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        volumeMounts:
+        - name: favorites-web-conf
+          mountPath: /config/
+        ports:
+        - containerPort: 8080
+    {{- if .Values.imagePullSecrets }}
+      imagePullSecrets: 
+      {{- range $pullSecret := .Values.imagePullSecrets }}
+        - name: {{ $pullSecret }}
+      {{- end }}
+    {{- end }}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 10
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - favorites
+              topologyKey: "kubernetes.io/hostname"
+      volumes:
+      - name: favorites-web-conf
+        configMap:
+          name: favorites-web-conf
+          items:
+            - key: application.yml
+              path: application.yml
+            - key: application.properties
+              path: application.properties
+            - key: application-docker.properties
+              path: application-docker.properties
+            - key: application-dev.properties
+              path: application-dev.properties
+

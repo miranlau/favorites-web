@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notice-deploy
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: favorites
+    component: notice-deploy
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: favorites
+      component: web-notice
+  template:
+    metadata:
+      labels:
+        app: favorites
+        component: web-notice
+    spec:
+      containers:
+      - name: notice
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        volumeMounts:
+        - name: notice-conf
+          mountPath: /config/
+        ports:
+        - containerPort: 8093
+    {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+      {{- range $pullSecret := .Values.imagePullSecrets }}
+        - name: {{ $pullSecret }}
+      {{- end }}
+    {{- end }}
+      affinity:
+        podAntiAffinity:
+           preferredDuringSchedulingIgnoredDuringExecution:
+           - weight: 10
+             podAffinityTerm:
+               labelSelector:
+                 matchExpressions:
+                 - key: app
+                   operator: In
+                   values:
+                   - favorites
+               topologyKey: "kubernetes.io/hostname"
+      volumes:
+      - name: notice-conf
+        configMap:
+          name: notice-conf
+          items:
+            - key: application.properties
+              path: application.properties
+            - key: application-dev.properties
+              path: application-dev.properties
+

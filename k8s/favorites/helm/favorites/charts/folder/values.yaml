@@ -1,0 +1,9 @@
+replicaCount: 1
+
+image:
+  repository: 10.80.17.195/favorites/folder-service
+  tag: 0.0.1-SNAPSHOT
+  pullPolicy: IfNotPresent
+
+imagePullSecrets:
+  - favorites-docker-registry

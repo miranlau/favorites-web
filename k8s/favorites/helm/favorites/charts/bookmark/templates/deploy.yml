@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bookmark-deploy
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: favorites
+    component: bookmark-deploy
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: favorites
+      component: web-bookmark
+  template:
+    metadata:
+      labels:
+        app: favorites
+        component: web-bookmark
+    spec:
+      containers:
+      - name: bookmark
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        volumeMounts:
+        - name: bookmark-conf
+          mountPath: /config/
+        ports:
+        - containerPort: 8091
+    {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+      {{- range $pullSecret := .Values.imagePullSecrets }}
+        - name: {{ $pullSecret }}
+      {{- end }}
+    {{- end }}
+      affinity:
+        podAntiAffinity:
+           preferredDuringSchedulingIgnoredDuringExecution:
+           - weight: 10
+             podAffinityTerm:
+               labelSelector:
+                 matchExpressions:
+                 - key: app
+                   operator: In
+                   values:
+                   - favorites
+               topologyKey: "kubernetes.io/hostname"
+      volumes:
+      - name: bookmark-conf
+        configMap:
+          name: bookmark-conf
+          items:
+            - key: application.yml
+              path: application.yml
+

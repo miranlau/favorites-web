@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: follow-deploy
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: favorites
+    component: follow-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: favorites
+      component: web-follow
+  template:
+    metadata:
+      labels:
+        app: favorites
+        component: web-follow
+    spec:
+      containers:
+      - name: follow
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        volumeMounts:
+        - name: follow-conf
+          mountPath: /config/
+        ports:
+        - containerPort: 8097
+    {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+      {{- range $pullSecret := .Values.imagePullSecrets }}
+        - name: {{ $pullSecret }}
+      {{- end }}
+    {{- end }}
+      affinity:
+        podAntiAffinity:
+           preferredDuringSchedulingIgnoredDuringExecution:
+           - weight: 10
+             podAffinityTerm:
+               labelSelector:
+                 matchExpressions:
+                 - key: app
+                   operator: In
+                   values:
+                   - favorites
+               topologyKey: "kubernetes.io/hostname"
+      volumes:
+      - name: follow-conf
+        configMap:
+          name: follow-conf
+          items:
+            - key: application.yml
+              path: application.yml
+
