@@ -2,10 +2,11 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mysql-service
-  namespace: {{ .Values.global.namespace }}
+  namespace: {{ .Release.Namespace }}
 spec:
   ports:
   - port: 3306
     name: mysql
   selector:
-    app: mysql-pod-favorites
+    app: {{ .Release.Name }}
+    component: "mysql-{{ .Release.Name }}"

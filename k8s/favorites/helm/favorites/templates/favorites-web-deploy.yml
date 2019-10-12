@@ -1,29 +1,29 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: favorites-web-deploy
-  namespace: {{ .Values.global.namespace }}
+  name: "{{ .Release.Name }}-web-deploy"
+  namespace: {{ .Release.Namespace }}
   labels:
-    app: favorites
-    component: favorites-web-deploy
+    app: {{ .Release.Name }}
+    component: "{{ .Release.Name }}-web-deploy"
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: favorites
-      component: web-favorites
+      app: {{ .Release.Name }}
+      component: "web-{{ .Release.Name }}"
   template:
     metadata:
       labels:
-        app: favorites
-        component: web-favorites
+        app: {{ .Release.Name }}
+        component: "web-{{ .Release.Name }}"
     spec:
       containers:
       - name: favorites-web
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         volumeMounts:
-        - name: favorites-web-conf
+        - name: "{{ .Release.Name }}-web-conf"
           mountPath: /config/
         ports:
         - containerPort: 8080
@@ -34,6 +34,13 @@ spec:
       {{- end }}
     {{- end }}
       affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: "node-role.kubernetes.io/master"
+                operator: DoesNotExist
+                values: []
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
           - weight: 10
@@ -43,12 +50,12 @@ spec:
                 - key: app
                   operator: In
                   values:
-                  - favorites
+                  - {{ .Release.Name }}
               topologyKey: "kubernetes.io/hostname"
       volumes:
-      - name: favorites-web-conf
+      - name: "{{ .Release.Name }}-web-conf"
         configMap:
-          name: favorites-web-conf
+          name: "{{ .Release.Name }}-web-conf"
           items:
             - key: application.yml
               path: application.yml

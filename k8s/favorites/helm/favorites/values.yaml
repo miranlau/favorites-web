@@ -1,7 +1,6 @@
 replicaCount: 1
 
 global:
-  namespace: favorites2
   mysql:
     serviceName: mysql-service
     servicePort: 3306
@@ -61,14 +60,27 @@ ingress:
 
 resources: 
   limits:
-    cpu: 100m
-    memory: 128Mi
+    cpu: "100m"
+    memory: "1024Mi"
   requests:
-    cpu: 100m
-    memory: 128Mi
+    cpu: "100m"
+    memory: "128Mi"
 
 nodeSelector: {}
 
 tolerations: []
 
-affinity: {}
+affinity: 
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 10
+    podAffinityTerm:
+      labelSelector:
+        matchExpressions:
+        - key: app
+          operator: In
+          values:
+          - "{{ .Release.Name }}"
+      topologyKey: "kubernetes.io/hostname"
+
+

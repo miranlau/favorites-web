@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: follow-deploy
-  namespace: {{ .Values.global.namespace }}
+  name: "{{ .Release.Name }}-follow-deploy"
+  namespace: {{ .Release.Namespace }}
   labels:
-    app: favorites
-    component: follow-deploy
+    app: {{ .Release.Name }}
+    component: "{{ .Release.Name }}-follow-deploy"
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: favorites
+      app: {{ .Release.Name }}
       component: web-follow
   template:
     metadata:
       labels:
-        app: favorites
+        app: {{ .Release.Name }}
         component: web-follow
     spec:
       containers:
@@ -23,7 +23,7 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         volumeMounts:
-        - name: follow-conf
+        - name: "{{ .Release.Name }}-follow-conf"
           mountPath: /config/
         ports:
         - containerPort: 8097
@@ -34,21 +34,28 @@ spec:
       {{- end }}
     {{- end }}
       affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: "node-role.kubernetes.io/master"
+                operator: DoesNotExist
+                values: []
         podAntiAffinity:
-           preferredDuringSchedulingIgnoredDuringExecution:
-           - weight: 10
-             podAffinityTerm:
-               labelSelector:
-                 matchExpressions:
-                 - key: app
-                   operator: In
-                   values:
-                   - favorites
-               topologyKey: "kubernetes.io/hostname"
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 10
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - {{ .Release.Name }}
+              topologyKey: "kubernetes.io/hostname"
       volumes:
-      - name: follow-conf
+      - name: "{{ .Release.Name }}-follow-conf"
         configMap:
-          name: follow-conf
+          name: "{{ .Release.Name }}-follow-conf"
           items:
             - key: application.yml
               path: application.yml

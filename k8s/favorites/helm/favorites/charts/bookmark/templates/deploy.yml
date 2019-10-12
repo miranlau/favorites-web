@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bookmark-deploy
-  namespace: {{ .Values.global.namespace }}
+  name: "{{ .Release.Name }}-bookmark-deploy"
+  namespace: {{ .Release.Namespace }}
   labels:
-    app: favorites
-    component: bookmark-deploy
+    app: {{ .Release.Name }}
+    component: "{{ .Release.Name }}-bookmark-deploy"
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: favorites
+      app: {{ .Release.Name }}
       component: web-bookmark
   template:
     metadata:
       labels:
-        app: favorites
+        app: {{ .Release.Name }}
         component: web-bookmark
     spec:
       containers:
@@ -23,7 +23,7 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         volumeMounts:
-        - name: bookmark-conf
+        - name: "{{ .Release.Name }}-bookmark-conf"
           mountPath: /config/
         ports:
         - containerPort: 8091
@@ -34,21 +34,28 @@ spec:
       {{- end }}
     {{- end }}
       affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: "node-role.kubernetes.io/master"
+                operator: DoesNotExist
+                values: []
         podAntiAffinity:
-           preferredDuringSchedulingIgnoredDuringExecution:
-           - weight: 10
-             podAffinityTerm:
-               labelSelector:
-                 matchExpressions:
-                 - key: app
-                   operator: In
-                   values:
-                   - favorites
-               topologyKey: "kubernetes.io/hostname"
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 10
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - {{ .Release.Name }}
+              topologyKey: "kubernetes.io/hostname"
       volumes:
-      - name: bookmark-conf
+      - name: "{{ .Release.Name }}-bookmark-conf"
         configMap:
-          name: bookmark-conf
+          name: "{{ .Release.Name }}-bookmark-conf"
           items:
             - key: application.yml
               path: application.yml

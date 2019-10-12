@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: folder-deploy
-  namespace: {{ .Values.global.namespace }}
+  name: "{{ .Release.Name }}-folder-deploy"
+  namespace: {{ .Release.Namespace }}
   labels:
-    app: favorites
-    component: folder-deploy
+    app: {{ .Release.Name }}
+    component: "{{ .Release.Name }}-folder-deploy"
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: favorites
+      app: {{ .Release.Name }}
       component: web-folder
   template:
     metadata:
       labels:
-        app: favorites
+        app: {{ .Release.Name }}
         component: web-folder
     spec:
       containers:
@@ -23,7 +23,7 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         volumeMounts:
-        - name: folder-conf
+        - name: "{{ .Release.Name }}-folder-conf"
           mountPath: /config/
         ports:
         - containerPort: 8090
@@ -34,6 +34,13 @@ spec:
       {{- end }}
     {{- end }}
       affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: "node-role.kubernetes.io/master"
+                operator: DoesNotExist
+                values: []
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
           - weight: 10
@@ -43,12 +50,12 @@ spec:
                 - key: app
                   operator: In
                   values:
-                  - favorites
+                  - {{ .Release.Name }}
               topologyKey: "kubernetes.io/hostname"
       volumes:
-      - name: folder-conf
+      - name: "{{ .Release.Name }}-folder-conf"
         configMap:
-          name: folder-conf
+          name: "{{ .Release.Name }}-folder-conf"
           items:
             - key: application.yml
               path: application.yml

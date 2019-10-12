@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: user-deploy
-  namespace: {{ .Values.global.namespace }}
+  name: "{{ .Release.Name }}-user-deploy"
+  namespace: {{ .Release.Namespace }}
   labels:
-    app: favorites
-    component: user-deploy
+    app: {{ .Release.Name }}
+    component: "{{ .Release.Name }}-user-deploy"
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: favorites
+      app: {{ .Release.Name }}
       component: web-user
   template:
     metadata:
       labels:
-        app: favorites
+        app: {{ .Release.Name }}
         component: web-user
     spec:
       containers:
@@ -23,7 +23,7 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         volumeMounts:
-        - name: user-conf
+        - name: "{{ .Release.Name }}-user-conf"
           mountPath: /config/
         ports:
         - containerPort: 8092
@@ -34,6 +34,13 @@ spec:
       {{- end }}
     {{- end }}
       affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: "node-role.kubernetes.io/master"
+                operator: DoesNotExist
+                values: []
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
           - weight: 10
@@ -43,12 +50,12 @@ spec:
                 - key: app
                   operator: In
                   values:
-                  - favorites
+                  - {{ .Release.Name }}
               topologyKey: "kubernetes.io/hostname"
       volumes:
-      - name: user-conf
+      - name: "{{ .Release.Name }}-user-conf"
         configMap:
-          name: user-conf
+          name: "{{ .Release.Name }}-user-conf"
           items:
             - key: application.yml
               path: application.yml

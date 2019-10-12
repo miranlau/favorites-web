@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: notice-deploy
-  namespace: {{ .Values.global.namespace }}
+  name: "{{ .Release.Name }}-notice-deploy"
+  namespace: {{ .Release.Namespace }}
   labels:
-    app: favorites
-    component: notice-deploy
+    app: {{ .Release.Name }}
+    component: "{{ .Release.Name }}-notice-deploy"
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: favorites
+      app: {{ .Release.Name }}
       component: web-notice
   template:
     metadata:
       labels:
-        app: favorites
+        app: {{ .Release.Name }}
         component: web-notice
     spec:
       containers:
@@ -23,7 +23,7 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         volumeMounts:
-        - name: notice-conf
+        - name: "{{ .Release.Name }}-notice-conf"
           mountPath: /config/
         ports:
         - containerPort: 8093
@@ -34,21 +34,28 @@ spec:
       {{- end }}
     {{- end }}
       affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: "node-role.kubernetes.io/master"
+                operator: DoesNotExist
+                values: []
         podAntiAffinity:
-           preferredDuringSchedulingIgnoredDuringExecution:
-           - weight: 10
-             podAffinityTerm:
-               labelSelector:
-                 matchExpressions:
-                 - key: app
-                   operator: In
-                   values:
-                   - favorites
-               topologyKey: "kubernetes.io/hostname"
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 10
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - {{ .Release.Name }}
+              topologyKey: "kubernetes.io/hostname"
       volumes:
-      - name: notice-conf
+      - name: "{{ .Release.Name }}-notice-conf"
         configMap:
-          name: notice-conf
+          name: "{{ .Release.Name }}-notice-conf"
           items:
             - key: application.properties
               path: application.properties

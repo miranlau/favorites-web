@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: praise-deploy
-  namespace: {{ .Values.global.namespace }}
+  name: "{{ .Release.Name }}-praise-deploy"
+  namespace: {{ .Release.Namespace }}
   labels:
-    app: favorites
-    component: praise-deploy
+    app: {{ .Release.Name }}
+    component: "{{ .Release.Name }}-praise-deploy"
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: favorites
+      app: {{ .Release.Name }}
       component: web-praise
   template:
     metadata:
       labels:
-        app: favorites
+        app: {{ .Release.Name }}
         component: web-praise
     spec:
       containers:
@@ -23,7 +23,7 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         volumeMounts:
-        - name: praise-conf
+        - name: "{{ .Release.Name }}-praise-conf"
           mountPath: /config/
         ports:
         - containerPort: 8095
@@ -34,21 +34,28 @@ spec:
       {{- end }}
     {{- end }}
       affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: "node-role.kubernetes.io/master"
+                operator: DoesNotExist
+                values: []
         podAntiAffinity:
-           preferredDuringSchedulingIgnoredDuringExecution:
-           - weight: 10
-             podAffinityTerm:
-               labelSelector:
-                 matchExpressions:
-                 - key: app
-                   operator: In
-                   values:
-                   - favorites
-               topologyKey: "kubernetes.io/hostname"
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 10
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - {{ .Release.Name }}
+              topologyKey: "kubernetes.io/hostname"
       volumes:
-      - name: praise-conf
+      - name: "{{ .Release.Name }}-praise-conf"
         configMap:
-          name: praise-conf
+          name: "{{ .Release.Name }}-praise-conf"
           items:
             - key: application.yml
               path: application.yml

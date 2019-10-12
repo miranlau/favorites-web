@@ -7,3 +7,29 @@ image:
 
 imagePullSecrets:
   - favorites-docker-registry
+
+resources:
+  limits:
+    cpu: "100m"
+    memory: "1024Mi"
+  requests:
+    cpu: "100m"
+    memory: "128Mi"
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 10
+    podAffinityTerm:
+      labelSelector:
+        matchExpressions:
+        - key: app
+          operator: In
+          values:
+          - "{{ .Release.Name }}"
+      topologyKey: "kubernetes.io/hostname"
+

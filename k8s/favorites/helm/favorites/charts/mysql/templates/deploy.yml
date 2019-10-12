@@ -1,19 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mysql-favorites
-  namespace: {{ .Values.global.namespace }}
+  name: "{{ .Release.Name }}-mysql-deploy"
+  namespace: {{ .Release.Namespace }}
   labels:
-    app: mysql-favorites
+    app: {{ .Release.Name }}
+    component: "{{ .Release.Name }}-mysql-deploy"
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: mysql-pod-favorites
+      app: {{ .Release.Name }}
+      component: "mysql-{{ .Release.Name }}"
   template:
     metadata:
       labels:
-        app: mysql-pod-favorites
+        app: {{ .Release.Name }}
+        component: "mysql-{{ .Release.Name }}"
     spec:
       containers:
       - name: mysql
@@ -31,13 +34,15 @@ spec:
         - mountPath: /var/lib/mysql
           name: mysql-volume
         - mountPath: /etc/mysql/
-          name: mysql-conf
+          name: "{{ .Release.Name }}-mysql-conf"
       volumes:
       - name: mysql-volume
         hostPath:
-          path: /mysql_volume
-      - name: mysql-conf
+          path: {{ .Values.storage.hostPath }}
+      - name: "{{ .Release.Name }}-mysql-conf"
         configMap:
-          name: mysql-conf
+          name: "{{ .Release.Name }}-mysql-conf"
+{{- if .Values.nodeSelector }}
       nodeSelector:
-        app: db
+{{ toYaml .Values.nodeSelector | indent 9 }}
+{{- end }}
