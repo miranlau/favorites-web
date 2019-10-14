@@ -172,28 +172,9 @@ public class HomeController extends BaseController {
         model.addAttribute("user", user);
         model.addAttribute("collects", collects);
         model.addAttribute("favoritesList", favoritesList);
-        
-        if(null == followUser || followUser.size() == 0) {
-        	model.addAttribute("followUser", "");
-        }
-        else {
-        	List<String> followUserString = new ArrayList<String>();
-        	for(User u : followUser) {
-        		followUserString.add(u.getUserName());
-        	}
-        	model.addAttribute("followUser", followUserString);
-        }
-        	
-        if(null == followedUser || followedUser.size() == 0) {
-        	model.addAttribute("followedUser", "");
-        }
-        else {
-        	List<String> followedUserString = new ArrayList<String>();
-        	for(User u : followedUser) {
-        		followedUserString.add(u.getUserName());
-        	}
-        	model.addAttribute("followedUser", followedUserString);
-        }
+
+        model.addAttribute("followUser", followUser);
+        model.addAttribute("followedUser", followedUser);
         	
         model.addAttribute("isFollow", isFollow);
         User userTemp = null;

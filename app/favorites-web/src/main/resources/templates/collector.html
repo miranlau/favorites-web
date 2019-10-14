@@ -106,12 +106,12 @@
                                     <div class="list-group ng-scope" th:each=" follow : ${followUser}">
                                         <a class="media p mt0 list-group-item">
 				                  <span class="pull-left">
-				                     <img  alt="Image" class="media-object img-circle thumb32" src="img/dummy.png" th:src="${follow[2] !=null? '/'+follow[2]:'img/dummy.png'}" />
+				                     <img  alt="Image" class="media-object img-circle thumb32" src="img/dummy.png" th:src="${follow.profilePicture !=null? '/'+follow.profilePicture:'img/dummy.png'}" />
 				                  </span>
                                             <span class="media-body">
 				                     <span class="media-heading">
-				                        <strong class="ng-binding" th:text="${follow[0]}">粉丝1</strong>
-				                        <small class="text-muted ng-binding" th:text="${follow[1] == null ? '暂无简介' : follow[1].length() gt 10 ? follow[1].substring(0,10)+'...' : follow[1]}">暂无简介</small>
+				                        <strong class="ng-binding" th:text="${follow.userName}">粉丝1</strong>
+				                        <small class="text-muted ng-binding" th:text="${follow.introduction == null ? '暂无简介' : follow.introduction.length() gt 10 ? follow.introduction.substring(0,10)+'...' : follow.introduction}">暂无简介</small>
 				                     </span>
 				                  </span>
                                         </a>
@@ -122,12 +122,12 @@
                                     <div class="list-group ng-scope" th:each=" followed : ${followedUser}">
                                         <a class="media p mt0 list-group-item">
 				                  <span class="pull-left">
-				                     <img  alt="Image" class="media-object img-circle thumb32" src="img/dummy.png" th:src="${followed[2] !=null? '/'+followed[2]:'img/dummy.png'}" />
+				                     <img  alt="Image" class="media-object img-circle thumb32" src="img/dummy.png" th:src="${followed.profilePicture !=null? '/'+followed.profilePicture:'img/dummy.png'}" />
 				                  </span>
                                             <span class="media-body">
 				                     <span class="media-heading">
-				                        <strong class="ng-binding" th:text="${followed[0]}">粉丝1</strong>
-				                        <small class="text-muted ng-binding" th:text="${followed[1] == null ? '暂无简介' : followed[1].length() gt 10 ? followed[1].substring(0,10)+'...' : followed[1]}">暂无简介</small>
+				                        <strong class="ng-binding" th:text="${followed.userName}">粉丝1</strong>
+				                        <small class="text-muted ng-binding" th:text="${followed.introduction == null ? '暂无简介' : followed.introduction.length() gt 10 ? followed.introduction.substring(0,10)+'...' : followed.introduction}">暂无简介</small>
 				                     </span>
 				                  </span>
                                         </a>
