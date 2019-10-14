@@ -72,9 +72,13 @@ public class ServiceFactory {
                         try {
                             invokeResult = realMethod.invoke(client, targetArgs.toArray(new Object[targetArgs.size()]));
                         } catch (Exception e) {
-                            LOGGER.error("some exception in calling remote service, it's better to "
-                                    + "response a list other than an object from remote service "
-                                    + "because object NotFound conflict with path NotFound", e);
+                            if (e.getCause().getClass().getName().endsWith("FeignException")) {
+                                LOGGER.debug("some exception in calling remote service, it's better to "
+                                        + "response a list other than an object from remote service "
+                                        + "because object NotFound conflict with path NotFound", e);
+                            } else {
+                                LOGGER.error("some exception in calling remote service", e);
+                            }
                         }
                         if (invokeResult != null) {
                             if (invokeResult instanceof PageResult) {
