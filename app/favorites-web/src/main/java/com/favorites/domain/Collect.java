@@ -64,7 +64,7 @@ public class Collect  implements Serializable {
 		this.id = id;
 	}
 
-	public long getUserId() {
+    public Long getUserId() {
 		return userId;
 	}
 
