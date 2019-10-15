@@ -15,6 +15,10 @@ public class Collect2  implements Serializable {
 	@Id
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private Long id;
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
+    @Column(name = "favorites_id", nullable = false)
+    private Long favoritesId;
 	@Column(nullable = false, columnDefinition = "varchar(600)")
 	private String url;
 	@Column(nullable = false)
@@ -43,14 +47,6 @@ public class Collect2  implements Serializable {
 	private String collectTime;
 	@Transient
 	private String newFavorites;
-
-    @ManyToOne()
-    @JoinColumn(name = "user_id", nullable = false, updatable = false)
-    private User user;
-
-    @ManyToOne()
-    @JoinColumn(name = "favorites_id", nullable = false, updatable = false)
-    private Favorites favorites;
 
 	public Collect2() {
 		super();
@@ -169,30 +165,30 @@ public class Collect2  implements Serializable {
 	}
 
     /**
-     * @return Returns the user.
+     * @return Returns the userId.
      */
-    public User getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
     /**
-     * @param user The user to set.
+     * @param userId The userId to set.
      */
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     /**
-     * @return Returns the favorites.
+     * @return Returns the favoritesId.
      */
-    public Favorites getFavorites() {
-        return favorites;
+    public Long getFavoritesId() {
+        return favoritesId;
     }
 
     /**
-     * @param favorites The favorites to set.
+     * @param favoritesId The favoritesId to set.
      */
-    public void setFavorites(Favorites favorites) {
-        this.favorites = favorites;
+    public void setFavoritesId(Long favoritesId) {
+        this.favoritesId = favoritesId;
     }
 }

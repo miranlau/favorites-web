@@ -38,7 +38,7 @@ public interface CollectRepository extends JpaRepository<Collect2, Long> {
 
     @Transactional
     @Modifying
-    @Query("update Collect2 c set c.type = ?1 where c.id = ?2 and c.user.id=?3 ")
+    @Query("update Collect2 c set c.type = ?1 where c.id = ?2 and c.userId=?3 ")
     int modifyByIdAndUserId(@Param("type") CollectType type, @Param("id") Long id, @Param("userId") Long userId);
 
     @Transactional
