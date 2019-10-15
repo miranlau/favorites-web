@@ -91,6 +91,9 @@ public class ServiceFactory {
                                 ListResult result = (ListResult) invokeResult;
                                 invokeResult = getActualData(result.getEmbedded().getData(), realMethod);
                             }
+                        } else {
+                            LOGGER.info("remote service " + serviceInterface.getSimpleName() + "." + method.getName()
+                                    + " return null");
                         }
                         return invokeResult;
                     }
