@@ -414,7 +414,7 @@ public class CollectServiceImpl extends CacheService implements CollectService {
 			newPraise.setUserId(userId);
 			newPraise.setCollectId(id);
 			newPraise.setCreateTime(DateUtils.getCurrentTime());
-			praiseService.save(newPraise);
+			newPraise = praiseService.save(newPraise);
 			// 保存消息通知
 			Collect collect = collectRepository.findById(id);
 			if(null != collect){
@@ -437,7 +437,7 @@ public class CollectServiceImpl extends CacheService implements CollectService {
 			newPraise.setUserId(userId);
 			newPraise.setCollectId(id);
 			newPraise.setCreateTime(DateUtils.getCurrentTime());
-			praiseService.save(newPraise);
+			newPraise = praiseService.save(newPraise);
 			// 保存消息通知
 			Collect collect = collectRepository.findById(id);
 			if(null != collect){
