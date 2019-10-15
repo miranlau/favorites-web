@@ -14,7 +14,7 @@ import com.favorites.domain.view.CommentView;
 public interface PraiseFeignService {
 	
 	@RequestMapping(value = "/praise", method = { RequestMethod.POST })
-    void save(@RequestBody Praise praise);
+    Praise save(@RequestBody Praise praise);
 	
 	@RequestMapping(value = "/praise/search/countByCollectId")
 	Long countByCollectId(@RequestParam("collectId") Long collectId);
