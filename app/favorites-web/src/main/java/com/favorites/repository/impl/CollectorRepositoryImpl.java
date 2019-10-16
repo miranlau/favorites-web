@@ -25,6 +25,9 @@ public class CollectorRepositoryImpl extends BaseNativeSqlRepository implements 
     public Long getMostCollectUser() {
         String querySql = "SELECT c.user_id ,COUNT(1) AS counts FROM collect c WHERE type='PUBLIC' AND is_delete='NO' GROUP BY c.user_id ORDER BY counts DESC LIMIT 1";
         List<Object[]> objecArraytList = sqlArrayList(querySql);
+        if (objecArraytList.size() < 1) {
+            return null;
+        }
         Object[] obj =  objecArraytList.get(0);
         return Long.valueOf(obj[0].toString());
     }
@@ -41,6 +44,9 @@ public class CollectorRepositoryImpl extends BaseNativeSqlRepository implements 
                 " GROUP BY follow_id ORDER BY counts DESC LIMIT 1";
         CollectorView cv = new CollectorView();
         List<CollectorView> list = sqlObjectList(querySql,cv);
+        if (list.size() < 1) {
+            return null;
+        }
         Long userId = list.get(0).getUserId();
         return  userId;
     }
@@ -57,6 +63,9 @@ public class CollectorRepositoryImpl extends BaseNativeSqlRepository implements 
                 "ON c.id=p.collect_id WHERE c.type='PUBLIC' AND c.is_delete='NO' AND c.user_id NOT IN (" + notUserIds +") \n" +
                 "GROUP BY c.user_id ORDER BY counts DESC LIMIT 1";
         List<Object[]> objecArraytList = sqlArrayList(querySql);
+        if (objecArraytList.size() < 1) {
+            return null;
+        }
         Object[] obj =  objecArraytList.get(0);
         return Long.valueOf(obj[0].toString());
     }
@@ -73,6 +82,9 @@ public class CollectorRepositoryImpl extends BaseNativeSqlRepository implements 
                 "ON c.id=p.collect_id WHERE c.type='PUBLIC' AND c.is_delete='NO' AND c.user_id NOT IN (" + notUserIds +") \n" +
                 "GROUP BY c.user_id ORDER BY counts DESC LIMIT 1";
         List<Object[]> objecArraytList = sqlArrayList(querySql);
+        if (objecArraytList.size() < 1) {
+            return null;
+        }
         Object[] obj =  objecArraytList.get(0);
         return Long.valueOf(obj[0].toString());
     }
@@ -91,6 +103,9 @@ public class CollectorRepositoryImpl extends BaseNativeSqlRepository implements 
                 "WHERE u.user_id NOT IN (" + notUserIds + ")\n" +
                 "GROUP BY u.user_id ORDER BY counts DESC LIMIT 1";
         List<Object[]> objecArraytList = sqlArrayList(querySql);
+        if (objecArraytList.size() < 1) {
+            return null;
+        }
         Object[] obj =  objecArraytList.get(0);
         return Long.valueOf(obj[0].toString());
     }
@@ -115,6 +130,9 @@ public class CollectorRepositoryImpl extends BaseNativeSqlRepository implements 
                 "WHERE u.user_id NOT IN (" + notUserIds + ")\n" +
                 "GROUP BY u.user_id ORDER BY counts DESC LIMIT 1";
         List<Object[]> objecArraytList = sqlArrayList(querySql);
+        if (objecArraytList.size() < 1) {
+            return null;
+        }
         Object[] obj =  objecArraytList.get(0);
         return Long.valueOf(obj[0].toString());
     }

@@ -1,5 +1,6 @@
 package com.favorites.service.impl;
 
+import com.favorites.domain.User;
 import com.favorites.domain.view.IndexCollectorView;
 import com.favorites.repository.CollectorRepository;
 import com.favorites.repository.UserRepository;
@@ -32,22 +33,36 @@ public class CollectorServiceImpl implements CollectorService {
     public IndexCollectorView getCollectors() {
         IndexCollectorView indexCollectorView = new IndexCollectorView();
         try {
-            long mostCollectUser = collectorRepository.getMostCollectUser();
-            indexCollectorView.setMostCollectUser(userRepository.findById(mostCollectUser));
-            long mostFollowedUser = collectorRepository.getMostFollowedUser(mostCollectUser);
-            indexCollectorView.setMostFollowedUser(userRepository.findById(mostFollowedUser));
-            String notUserIds = mostCollectUser+","+mostFollowedUser;
-            long mostPraisedUser = collectorRepository.getMostPraisedUser(notUserIds);
-            indexCollectorView.setMostPraisedUser(userRepository.findById(mostPraisedUser));
-            notUserIds += ","+mostPraisedUser;
-            long mostCommentedUser = collectorRepository.getMostCommentedUser(notUserIds);
-            indexCollectorView.setMostCommentedUser(userRepository.findById(mostCommentedUser));
-            notUserIds += ","+ mostCommentedUser;
-            long mostPopularUser = collectorRepository.getMostPopularUser(notUserIds);
-            indexCollectorView.setMostPopularUser(userRepository.findById(mostPopularUser));
-            notUserIds += ","+ mostPopularUser;
-            long mostActiveUser = collectorRepository.getMostActiveUser(notUserIds);
-            indexCollectorView.setMostActiveUser(userRepository.findById(mostActiveUser));
+            String notUserIds = "";
+            Long mostCollectUser = collectorRepository.getMostCollectUser();
+            if (mostCollectUser != null) {
+                indexCollectorView.setMostCollectUser(userRepository.findById(mostCollectUser).orElse(null));
+                notUserIds += mostCollectUser;
+            }
+            Long mostFollowedUser = collectorRepository.getMostFollowedUser(mostCollectUser);
+            if (mostFollowedUser != null) {
+                indexCollectorView.setMostFollowedUser(userRepository.findById(mostFollowedUser).orElse(null));
+                notUserIds += "," + mostFollowedUser;
+            }
+            Long mostPraisedUser = collectorRepository.getMostPraisedUser(notUserIds);
+            if (mostPraisedUser != null) {
+                indexCollectorView.setMostPraisedUser(userRepository.findById(mostPraisedUser).orElse(null));
+                notUserIds += "," + mostPraisedUser;
+            }
+            Long mostCommentedUser = collectorRepository.getMostCommentedUser(notUserIds);
+            if (mostCommentedUser != null) {
+                indexCollectorView.setMostCommentedUser(userRepository.findById(mostCommentedUser).orElse(null));
+                notUserIds += "," + mostCommentedUser;
+            }
+            Long mostPopularUser = collectorRepository.getMostPopularUser(notUserIds);
+            if (mostPopularUser != null) {
+                indexCollectorView.setMostPopularUser(userRepository.findById(mostPopularUser).orElse(null));
+                notUserIds += "," + mostPopularUser;
+            }
+            Long mostActiveUser = collectorRepository.getMostActiveUser(notUserIds);
+            if (mostActiveUser != null) {
+                indexCollectorView.setMostActiveUser(userRepository.findById(mostActiveUser).orElse(null));
+            }
         }catch (Exception e){
             logger.info("错误",e);
         }
