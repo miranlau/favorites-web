@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>io.favorites</groupId>
 		<artifactId>favorites-parent</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>0.1.0</version>
 		<relativePath>../favorites-parent</relativePath> <!-- lookup parent from repository -->
 	</parent>
 	<artifactId>eureka-server</artifactId>

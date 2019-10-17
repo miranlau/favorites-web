@@ -3,7 +3,7 @@
   <parent>
     <groupId>io.favorites</groupId>
     <artifactId>favorites-app</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1.0</version>
   </parent>
   <artifactId>follow-service</artifactId>
   <description>follow service for favorites-web</description>
