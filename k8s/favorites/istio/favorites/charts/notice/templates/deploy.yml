@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ .Release.Name }}-notice-deploy"
+  namespace: {{ .Release.Namespace }}
+  labels:
+    release: {{ .Release.Name }}
+    app: "{{ .Release.Name }}-notice-deploy"
+spec:
+  replicas: {{ .Values.global.replicaCount.notice.product }}
+  selector:
+    matchLabels:
+      release: {{ .Release.Name }}
+      app: web-notice
+      canary: "false"
+  template:
+    metadata:
+      labels:
+        release: {{ .Release.Name }}
+        app: web-notice
+        canary: "false"
+    spec:
+      containers:
+      - name: notice
+        image: "{{ .Values.global.image.notice.repository.product }}:{{ .Values.global.image.notice.tag.product }}"
+        imagePullPolicy: {{ .Values.global.image.notice.pullPolicy }}
+        volumeMounts:
+        - name: "{{ .Release.Name }}-notice-conf"
+          mountPath: /config/
+        ports:
+        - containerPort: 8093
+    {{- if .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+      {{- range $pullSecret := .Values.global.imagePullSecrets }}
+        - name: {{ $pullSecret }}
+      {{- end }}
+    {{- end }}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: "node-role.kubernetes.io/master"
+                operator: DoesNotExist
+                values: []
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 10
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: release
+                  operator: In
+                  values:
+                  - {{ .Release.Name }}
+              topologyKey: "kubernetes.io/hostname"
+      volumes:
+      - name: "{{ .Release.Name }}-notice-conf"
+        configMap:
+          name: "{{ .Release.Name }}-notice-conf"
+          items:
+            - key: application.properties
+              path: application.properties
+            - key: application-dev.properties
+              path: application-dev.properties
+

@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ .Release.Name }}-user-deploy"
+  namespace: {{ .Release.Namespace }}
+  labels:
+    release: {{ .Release.Name }}
+    app: "{{ .Release.Name }}-user-deploy"
+spec:
+  replicas: {{ .Values.global.replicaCount.user.product }}
+  selector:
+    matchLabels:
+      release: {{ .Release.Name }}
+      app: "web-user"
+      canary: "false"
+  template:
+    metadata:
+      labels:
+        release: {{ .Release.Name }}
+        app: "web-user"
+        canary: "false"
+    spec:
+      containers:
+      - name: user
+        image: "{{ .Values.global.image.user.repository.product }}:{{ .Values.global.image.user.tag.product }}"
+        imagePullPolicy: {{ .Values.global.image.user.pullPolicy }}
+        volumeMounts:
+        - name: "{{ .Release.Name }}-user-conf"
+          mountPath: /config/
+        ports:
+        - containerPort: 8092
+    {{- if .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+      {{- range $pullSecret := .Values.global.imagePullSecrets }}
+        - name: {{ $pullSecret }}
+      {{- end }}
+    {{- end }}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: "node-role.kubernetes.io/master"
+                operator: DoesNotExist
+                values: []
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 10
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: release
+                  operator: In
+                  values:
+                  - {{ .Release.Name }}
+              topologyKey: "kubernetes.io/hostname"
+      volumes:
+      - name: "{{ .Release.Name }}-user-conf"
+        configMap:
+          name: "{{ .Release.Name }}-user-conf"
+          items:
+            - key: application.yml
+              path: application.yml
+

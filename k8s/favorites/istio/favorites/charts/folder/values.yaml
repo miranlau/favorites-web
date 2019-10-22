@@ -1,0 +1,40 @@
+#replicaCount: 1
+
+#image:
+#  repository: 10.80.17.195/favorites/folder-service
+#  tag: 0.0.1-SNAPSHOT
+#  pullPolicy: IfNotPresent
+
+#imagePullSecrets:
+#  - favorites-docker-registry
+
+resources:
+  limits:
+    cpu: "100m"
+    memory: "1024Mi"
+  requests:
+    cpu: "100m"
+    memory: "128Mi"
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 10
+    podAffinityTerm:
+      labelSelector:
+        matchExpressions:
+        - key: app
+          operator: In
+          values:
+          - "{{ .Release.Name }}"
+      topologyKey: "kubernetes.io/hostname"
+
+
+product:
+  weight: 50
+canary:
+  weight: 50

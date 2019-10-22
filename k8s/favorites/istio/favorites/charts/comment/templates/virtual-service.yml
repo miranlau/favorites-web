@@ -1,0 +1,28 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: comment-service
+  namespace: {{ .Release.Namespace }}
+spec:
+  hosts:
+    - comment-service
+  http:
+  - route:
+    - destination:
+        host: comment-service
+        subset: product
+      weight: {{ .Values.global.product.weight }}
+    - destination:
+        host: comment-service
+        subset: canary
+      weight: {{ .Values.global.canary.weight }}
+  tcp:
+  - route:
+    - destination:
+        host: comment-service
+        subset: product
+      weight: {{ .Values.global.product.weight }}
+    - destination:
+        host: comment-service
+        subset: canary
+      weight: {{ .Values.global.canary.weight }}

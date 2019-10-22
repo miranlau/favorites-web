@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service
+  namespace: {{ .Release.Namespace }}
+spec:
+  ports:
+  - port: 3306
+    name: mysql
+  selector:
+    release: {{ .Release.Name }}
+    app: "mysql-{{ .Release.Name }}"

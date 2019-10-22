@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ .Release.Name }}-comment-deploy-canary"
+  namespace: {{ .Release.Namespace }}
+  labels:
+    release: {{ .Release.Name }}
+    app: "{{ .Release.Name }}-comment-deploy-canary"
+spec:
+  replicas: {{ .Values.global.replicaCount.comment.canary }}
+  selector:
+    matchLabels:
+      release: {{ .Release.Name }}
+      app: web-comment
+      canary: "true"
+  template:
+    metadata:
+      labels:
+        release: {{ .Release.Name }}
+        app: web-comment
+        canary: "true"
+    spec:
+      containers:
+      - name: comment
+        image: "{{ .Values.global.image.comment.repository.canary }}:{{ .Values.global.image.comment.tag.canary }}"
+        imagePullPolicy: {{ .Values.global.image.comment.pullPolicy }}
+        volumeMounts:
+        - name: "{{ .Release.Name }}-comment-conf"
+          mountPath: /config/
+        ports:
+        - containerPort: 8096
+    {{- if .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+      {{- range $pullSecret := .Values.global.imagePullSecrets }}
+        - name: {{ $pullSecret }}
+      {{- end }}
+    {{- end }}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: "node-role.kubernetes.io/master"
+                operator: DoesNotExist
+                values: []
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 10
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: release
+                  operator: In
+                  values:
+                  - {{ .Release.Name }}
+              topologyKey: "kubernetes.io/hostname"
+      volumes:
+      - name: "{{ .Release.Name }}-comment-conf"
+        configMap:
+          name: "{{ .Release.Name }}-comment-conf"
+          items:
+            - key: application.yml
+              path: application.yml
+

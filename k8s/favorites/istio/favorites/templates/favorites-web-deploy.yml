@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ .Release.Name }}-web-deploy"
+  namespace: {{ .Release.Namespace }}
+  labels:
+    release: {{ .Release.Name }}
+    app: "{{ .Release.Name }}-web-deploy"
+spec:
+  replicas: {{ .Values.global.replicaCount.favoritesWeb.product }}
+  selector:
+    matchLabels:
+      release: {{ .Release.Name }}
+      app: "web-{{ .Release.Name }}"
+      canary: "false"
+  template:
+    metadata:
+      labels:
+        release: {{ .Release.Name }}
+        app: "web-{{ .Release.Name }}"
+        canary: "false"
+    spec:
+      containers:
+      - name: favorites-web
+        image: "{{ .Values.global.image.favoritesWeb.repository.product }}:{{ .Values.global.image.favoritesWeb.tag.product }}"
+        imagePullPolicy: {{ .Values.global.image.favoritesWeb.pullPolicy }}
+        volumeMounts:
+        - name: "{{ .Release.Name }}-web-conf"
+          mountPath: /config/
+        ports:
+        - containerPort: 8080
+    {{- if .Values.global.imagePullSecrets }}
+      imagePullSecrets: 
+      {{- range $pullSecret := .Values.global.imagePullSecrets }}
+        - name: {{ $pullSecret }}
+      {{- end }}
+    {{- end }}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: "node-role.kubernetes.io/master"
+                operator: DoesNotExist
+                values: []
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 10
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - {{ .Release.Name }}
+              topologyKey: "kubernetes.io/hostname"
+      volumes:
+      - name: "{{ .Release.Name }}-web-conf"
+        configMap:
+          name: "{{ .Release.Name }}-web-conf"
+          items:
+            - key: application.yml
+              path: application.yml
+            - key: application.properties
+              path: application.properties
+            - key: application-docker.properties
+              path: application-docker.properties
+            - key: application-dev.properties
+              path: application-dev.properties
+

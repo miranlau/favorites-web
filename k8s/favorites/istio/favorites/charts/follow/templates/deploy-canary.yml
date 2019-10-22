@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ .Release.Name }}-follow-deploy-canary"
+  namespace: {{ .Release.Namespace }}
+  labels:
+    release: {{ .Release.Name }}
+    app: "{{ .Release.Name }}-follow-deploy-canary"
+spec:
+  replicas: {{ .Values.global.replicaCount.follow.canary }}
+  selector:
+    matchLabels:
+      release: {{ .Release.Name }}
+      app: web-follow
+      canary: "true"
+  template:
+    metadata:
+      labels:
+        release: {{ .Release.Name }}
+        app: web-follow
+        canary: "true"
+    spec:
+      containers:
+      - name: follow
+        image: "{{ .Values.global.image.follow.repository.product }}:{{ .Values.global.image.follow.tag.product }}"
+        imagePullPolicy: {{ .Values.global.image.follow.pullPolicy }}
+        volumeMounts:
+        - name: "{{ .Release.Name }}-follow-conf"
+          mountPath: /config/
+        ports:
+        - containerPort: 8097
+    {{- if .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+      {{- range $pullSecret := .Values.global.imagePullSecrets }}
+        - name: {{ $pullSecret }}
+      {{- end }}
+    {{- end }}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: "node-role.kubernetes.io/master"
+                operator: DoesNotExist
+                values: []
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 10
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: release
+                  operator: In
+                  values:
+                  - {{ .Release.Name }}
+              topologyKey: "kubernetes.io/hostname"
+      volumes:
+      - name: "{{ .Release.Name }}-follow-conf"
+        configMap:
+          name: "{{ .Release.Name }}-follow-conf"
+          items:
+            - key: application.yml
+              path: application.yml
+

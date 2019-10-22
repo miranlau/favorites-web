@@ -1,0 +1,20 @@
+#replicaCount: 1
+
+#image:
+#  repository: mysql
+#  tag: 5.7
+#  pullPolicy: IfNotPresent
+
+resources:
+  limits:
+    cpu: "100m"
+    memory: "512Mi"
+  requests:
+    cpu: "100m"
+    memory: "128Mi"
+
+nodeSelector: 
+  app: db
+
+storage:
+  hostPath: "/mysql_volume"

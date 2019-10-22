@@ -1,0 +1,28 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: notice-service
+  namespace: {{ .Release.Namespace }}
+spec:
+  hosts:
+    - notice-service
+  http:
+  - route:
+    - destination:
+        host: notice-service
+        subset: product
+      weight: {{ .Values.global.product.weight }}
+    - destination:
+        host: notice-service
+        subset: canary
+      weight: {{ .Values.global.canary.weight }}
+  tcp:
+  - route:
+    - destination:
+        host: notice-service
+        subset: product
+      weight: {{ .Values.global.product.weight }}
+    - destination:
+        host: notice-service
+        subset: canary
+      weight: {{ .Values.global.canary.weight }}

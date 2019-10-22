@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ .Release.Name }}-praise-deploy-canary"
+  namespace: {{ .Release.Namespace }}
+  labels:
+    release: {{ .Release.Name }}
+    app: "{{ .Release.Name }}-praise-deploy-canary"
+spec:
+  replicas: {{ .Values.global.replicaCount.praise.canary }}
+  selector:
+    matchLabels:
+      release: {{ .Release.Name }}
+      app: web-praise
+      canary: "true"
+  template:
+    metadata:
+      labels:
+        release: {{ .Release.Name }}
+        app: web-praise
+        canary: "true"
+    spec:
+      containers:
+      - name: praise
+        image: "{{ .Values.global.image.praise.repository.canary }}:{{ .Values.global.image.praise.tag.canary }}"
+        imagePullPolicy: {{ .Values.global.image.praise.pullPolicy }}
+        volumeMounts:
+        - name: "{{ .Release.Name }}-praise-conf"
+          mountPath: /config/
+        ports:
+        - containerPort: 8095
+    {{- if .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+      {{- range $pullSecret := .Values.global.imagePullSecrets }}
+        - name: {{ $pullSecret }}
+      {{- end }}
+    {{- end }}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: "node-role.kubernetes.io/master"
+                operator: DoesNotExist
+                values: []
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 10
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: release
+                  operator: In
+                  values:
+                  - {{ .Release.Name }}
+              topologyKey: "kubernetes.io/hostname"
+      volumes:
+      - name: "{{ .Release.Name }}-praise-conf"
+        configMap:
+          name: "{{ .Release.Name }}-praise-conf"
+          items:
+            - key: application.yml
+              path: application.yml
+

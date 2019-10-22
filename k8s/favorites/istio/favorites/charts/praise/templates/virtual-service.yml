@@ -1,0 +1,28 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: praise-service
+  namespace: {{ .Release.Namespace }}
+spec:
+  hosts:
+    - praise-service
+  http:
+  - route:
+    - destination:
+        host: praise-service
+        subset: product
+      weight: {{ .Values.global.product.weight }}
+    - destination:
+        host: praise-service
+        subset: canary
+      weight: {{ .Values.global.canary.weight }}
+  tcp:
+  - route:
+    - destination:
+        host: praise-service
+        subset: product
+      weight: {{ .Values.global.product.weight }}
+    - destination:
+        host: praise-service
+        subset: canary
+      weight: {{ .Values.global.canary.weight }}

@@ -1,0 +1,28 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: follow-service
+  namespace: {{ .Release.Namespace }}
+spec:
+  hosts:
+    - follow-service
+  http:
+  - route:
+    - destination:
+        host: follow-service
+        subset: product
+      weight: {{ .Values.global.product.weight }}
+    - destination:
+        host: follow-service
+        subset: canary
+      weight: {{ .Values.global.canary.weight }}
+  tcp:
+  - route:
+    - destination:
+        host: follow-service
+        subset: product
+      weight: {{ .Values.global.product.weight }}
+    - destination:
+        host: follow-service
+        subset: canary
+      weight: {{ .Values.global.canary.weight }}

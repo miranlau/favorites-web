@@ -1,0 +1,14 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: folder-service
+  namespace: {{ .Release.Namespace }}
+spec:
+  host: folder-service
+  subsets:
+  - name: product
+    labels:
+      canary: "false"
+  - name: canary
+    labels:
+      canary: "true"

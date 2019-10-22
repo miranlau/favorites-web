@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ .Release.Name }}-folder-deploy"
+  namespace: {{ .Release.Namespace }}
+  labels:
+    release: {{ .Release.Name }}
+    app: "{{ .Release.Name }}-folder-deploy"
+spec:
+  replicas: {{ .Values.global.replicaCount.folder.product }}
+  selector:
+    matchLabels:
+      release: {{ .Release.Name }}
+      app: "web-folder"
+      canary: "false"
+  template:
+    metadata:
+      labels:
+        release: {{ .Release.Name }}
+        app: "web-folder"
+        canary: "false"
+    spec:
+      containers:
+      - name: folder
+        image: "{{ .Values.global.image.folder.repository.product }}:{{ .Values.global.image.folder.tag.product }}"
+        imagePullPolicy: {{ .Values.global.image.folder.pullPolicy }}
+        volumeMounts:
+        - name: "{{ .Release.Name }}-folder-conf"
+          mountPath: /config/
+        ports:
+        - containerPort: 8090
+    {{- if .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+      {{- range $pullSecret := .Values.global.imagePullSecrets }}
+        - name: {{ $pullSecret }}
+      {{- end }}
+    {{- end }}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: "node-role.kubernetes.io/master"
+                operator: DoesNotExist
+                values: []
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 10
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: release
+                  operator: In
+                  values:
+                  - {{ .Release.Name }}
+              topologyKey: "kubernetes.io/hostname"
+      volumes:
+      - name: "{{ .Release.Name }}-folder-conf"
+        configMap:
+          name: "{{ .Release.Name }}-folder-conf"
+          items:
+            - key: application.yml
+              path: application.yml
+

@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ .Release.Name }}-mysql-deploy"
+  namespace: {{ .Release.Namespace }}
+  labels:
+    release: {{ .Release.Name }}
+    app: "{{ .Release.Name }}-mysql-deploy"
+spec:
+  replicas: {{ .Values.global.replicaCount.mysql }}
+  selector:
+    matchLabels:
+      release: {{ .Release.Name }}
+      app: "mysql-{{ .Release.Name }}"
+  template:
+    metadata:
+      labels:
+        release: {{ .Release.Name }}
+        app: "mysql-{{ .Release.Name }}"
+    spec:
+      containers:
+      - name: mysql
+        image: "{{ .Values.global.image.mysql.repository }}:{{ .Values.global.image.mysql.tag }}"
+        imagePullPolicy: {{ .Values.global.image.mysql.pullPolicy }}
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "root"
+        - name: MYSQL_DATABASE
+          value: "favorites"
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: mysql-volume
+        - mountPath: /etc/mysql/
+          name: "{{ .Release.Name }}-mysql-conf"
+      volumes:
+      - name: mysql-volume
+        hostPath:
+          path: {{ .Values.storage.hostPath }}
+      - name: "{{ .Release.Name }}-mysql-conf"
+        configMap:
+          name: "{{ .Release.Name }}-mysql-conf"
+{{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 9 }}
+{{- end }}
