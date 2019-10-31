@@ -1,6 +1,10 @@
 spring:
   application:
     name: favorites-web-main
+  redis:
+    host: localhost
+    port: 6379
+    password: 
 #  main:
 #    allow-bean-definition-overriding: true
 server:
