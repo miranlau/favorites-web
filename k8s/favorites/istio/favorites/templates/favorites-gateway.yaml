@@ -32,8 +32,8 @@ spec:
     - destination:
         host: favorites-web-service
         subset: product
-      weight: 50
+      weight: {{ if .Values.global.product.weight }} {{ .Values.global.product.weight }} {{ else }} {{ .Values.product.weight }} {{ end }}
     - destination:
         host: favorites-web-service
         subset: canary
-      weight: 50
+      weight: {{ if .Values.global.canary.weight }} {{ .Values.global.canary.weight }} {{ else }} {{ .Values.canary.weight }} {{ end }}

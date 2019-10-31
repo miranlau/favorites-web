@@ -9,6 +9,8 @@ spec:
   - name: product
     labels:
       canary: "false"
+      version: product
   - name: canary
     labels:
       canary: "true"
+      version: canary

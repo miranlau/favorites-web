@@ -59,6 +59,7 @@ affinity:
       topologyKey: "kubernetes.io/hostname"
 
 product:
-  weight: 50
+  weight: 0
 canary:
-  weight: 50
+  weight: 0
+

@@ -4,6 +4,7 @@ metadata:
   name: favorites-web-service
   namespace: {{ .Release.Namespace }}
 spec:
+  sessionAffinity: ClientIP
   ports:
   - port: 8080
     name: favorites-web-service

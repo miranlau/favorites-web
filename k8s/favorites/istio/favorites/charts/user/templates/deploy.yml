@@ -6,6 +6,7 @@ metadata:
   labels:
     release: {{ .Release.Name }}
     app: "{{ .Release.Name }}-user-deploy"
+    version: product
 spec:
   replicas: {{ .Values.global.replicaCount.user.product }}
   selector:
@@ -13,12 +14,14 @@ spec:
       release: {{ .Release.Name }}
       app: "web-user"
       canary: "false"
+      version: product
   template:
     metadata:
       labels:
         release: {{ .Release.Name }}
         app: "web-user"
         canary: "false"
+        version: product
     spec:
       containers:
       - name: user

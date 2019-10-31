@@ -6,6 +6,7 @@ metadata:
   labels:
     release: {{ .Release.Name }}
     app: "{{ .Release.Name }}-follow-deploy-canary"
+    version: canary
 spec:
   replicas: {{ .Values.global.replicaCount.follow.canary }}
   selector:
@@ -13,12 +14,14 @@ spec:
       release: {{ .Release.Name }}
       app: web-follow
       canary: "true"
+      version: canary
   template:
     metadata:
       labels:
         release: {{ .Release.Name }}
         app: web-follow
         canary: "true"
+        version: canary
     spec:
       containers:
       - name: follow

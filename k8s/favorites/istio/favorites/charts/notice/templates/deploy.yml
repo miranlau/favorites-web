@@ -6,6 +6,7 @@ metadata:
   labels:
     release: {{ .Release.Name }}
     app: "{{ .Release.Name }}-notice-deploy"
+    version: product
 spec:
   replicas: {{ .Values.global.replicaCount.notice.product }}
   selector:
@@ -13,12 +14,14 @@ spec:
       release: {{ .Release.Name }}
       app: web-notice
       canary: "false"
+      version: product
   template:
     metadata:
       labels:
         release: {{ .Release.Name }}
         app: web-notice
         canary: "false"
+        version: product
     spec:
       containers:
       - name: notice

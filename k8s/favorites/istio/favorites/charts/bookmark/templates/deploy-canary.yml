@@ -6,6 +6,7 @@ metadata:
   labels:
     release: {{ .Release.Name }}
     app: "{{ .Release.Name }}-bookmark-deploy-canary"
+    version: canary
 spec:
   replicas: {{ .Values.global.replicaCount.bookmark.canary }}
   selector:
@@ -13,12 +14,14 @@ spec:
       release: {{ .Release.Name }}
       app: web-bookmark
       canary: "true"
+      version: canary
   template:
     metadata:
       labels:
         release: {{ .Release.Name }}
         app: web-bookmark
         canary: "true"
+        version: canary
     spec:
       containers:
       - name: bookmark

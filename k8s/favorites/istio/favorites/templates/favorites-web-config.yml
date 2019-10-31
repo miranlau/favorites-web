@@ -8,6 +8,15 @@ data:
     spring:
       application:
         name: "{{ .Release.Name }}-web-main"
+      session:
+        store-type: redis
+        redis:
+          flush-mode: on-save
+          namespace: spring:session
+      redis:
+        host: redis-master
+        port: 6379
+        password: 
     server:
       port: 8080
     eureka:

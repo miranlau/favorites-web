@@ -49,11 +49,11 @@ global:
       tag: 
         product: 0.0.1-SNAPSHOT
         canary: 0.1.0
-      pullPolicy: Always
+      pullPolicy: IfNotPresent
     mysql:
       repository: mysql
       tag: 5.7
-      pullPolicy: Always
+      pullPolicy: IfNotPresent
     bookmark:
       repository: 
         product: 10.80.17.195/favorites/bookmark-service
@@ -61,7 +61,7 @@ global:
       tag: 
         product: 0.0.1-SNAPSHOT
         canary: 0.1.0
-      pullPolicy: Always
+      pullPolicy: IfNotPresent
     comment:
       repository: 
         product: 10.80.17.195/favorites/comment-service
@@ -69,7 +69,7 @@ global:
       tag: 
         product: 0.0.1-SNAPSHOT
         canary: 0.1.0
-      pullPolicy: Always
+      pullPolicy: IfNotPresent
     folder:
       repository: 
         product: 10.80.17.195/favorites/folder-service
@@ -77,7 +77,7 @@ global:
       tag: 
         product: 0.0.1-SNAPSHOT
         canary: 0.1.0
-      pullPolicy: Always
+      pullPolicy: IfNotPresent
     follow:
       repository: 
         product: 10.80.17.195/favorites/follow-service
@@ -85,7 +85,7 @@ global:
       tag: 
         product: 0.0.1-SNAPSHOT
         canary: 0.1.0
-      pullPolicy: Always
+      pullPolicy: IfNotPresent
     lookRecord:
       repository: 
         product: 10.80.17.195/favorites/look-record-service
@@ -93,7 +93,7 @@ global:
       tag: 
         product: 0.0.1-SNAPSHOT
         canary: 0.1.0
-      pullPolicy: Always
+      pullPolicy: IfNotPresent
     notice:
       repository: 
         product: 10.80.17.195/favorites/notice-service
@@ -101,7 +101,7 @@ global:
       tag: 
         product: 0.0.1-SNAPSHOT
         canary: 0.1.0
-      pullPolicy: Always
+      pullPolicy: IfNotPresent
     praise:
       repository: 
         product: 10.80.17.195/favorites/praise-service
@@ -109,7 +109,7 @@ global:
       tag: 
         product: 0.0.1-SNAPSHOT
         canary: 0.1.0
-      pullPolicy: Always
+      pullPolicy: IfNotPresent
     user:
       repository: 
         product: 10.80.17.195/favorites/user-service
@@ -117,7 +117,7 @@ global:
       tag: 
         product: 0.0.1-SNAPSHOT
         canary: 0.1.0
-      pullPolicy: Always
+      pullPolicy: IfNotPresent
 
 services: 
   folder: 

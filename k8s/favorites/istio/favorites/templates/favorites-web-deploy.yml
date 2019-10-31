@@ -6,6 +6,7 @@ metadata:
   labels:
     release: {{ .Release.Name }}
     app: "{{ .Release.Name }}-web-deploy"
+    version: product
 spec:
   replicas: {{ .Values.global.replicaCount.favoritesWeb.product }}
   selector:
@@ -13,12 +14,14 @@ spec:
       release: {{ .Release.Name }}
       app: "web-{{ .Release.Name }}"
       canary: "false"
+      version: product
   template:
     metadata:
       labels:
         release: {{ .Release.Name }}
         app: "web-{{ .Release.Name }}"
         canary: "false"
+        version: product
     spec:
       containers:
       - name: favorites-web

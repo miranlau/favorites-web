@@ -11,18 +11,18 @@ spec:
     - destination:
         host: praise-service
         subset: product
-      weight: {{ .Values.global.product.weight }}
+      weight: {{ if .Values.global.product.weight }} {{ .Values.global.product.weight }} {{ else }} {{ .Values.product.weight }} {{ end }}
     - destination:
         host: praise-service
         subset: canary
-      weight: {{ .Values.global.canary.weight }}
+      weight: {{ if .Values.global.canary.weight }} {{ .Values.global.canary.weight }} {{ else }} {{ .Values.canary.weight }} {{ end }}
   tcp:
   - route:
     - destination:
         host: praise-service
         subset: product
-      weight: {{ .Values.global.product.weight }}
+      weight: {{ if .Values.global.product.weight }} {{ .Values.global.product.weight }} {{ else }} {{ .Values.product.weight }} {{ end }}
     - destination:
         host: praise-service
         subset: canary
-      weight: {{ .Values.global.canary.weight }}
+      weight: {{ if .Values.global.canary.weight }} {{ .Values.global.canary.weight }} {{ else }} {{ .Values.canary.weight }} {{ end }}
