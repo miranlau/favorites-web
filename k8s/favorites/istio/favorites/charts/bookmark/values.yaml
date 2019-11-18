@@ -57,6 +57,8 @@ affinity:
 
 product:
   weight: 0
+  version: product
 canary:
   weight: 0
+  version: canary
 

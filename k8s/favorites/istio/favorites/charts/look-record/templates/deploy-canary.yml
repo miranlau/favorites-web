@@ -6,7 +6,7 @@ metadata:
   labels:
     release: {{ .Release.Name }}
     app: "{{ .Release.Name }}-look-record-deploy-canary"
-    version: canary
+    version: {{ if .Values.global.canary.version }} {{ .Values.global.canary.version }} {{ else }} {{ .Values.canary.version }} {{ end }}
 spec:
   replicas: {{ .Values.global.replicaCount.lookRecord.canary }}
   selector:
@@ -14,14 +14,14 @@ spec:
       release: {{ .Release.Name }}
       app: web-look-record
       canary: "true"
-      version: canary
+      version: {{ if .Values.global.canary.version }} {{ .Values.global.canary.version }} {{ else }} {{ .Values.canary.version }} {{ end }}
   template:
     metadata:
       labels:
         release: {{ .Release.Name }}
         app: web-look-record
         canary: "true"
-        version: canary
+        version: {{ if .Values.global.canary.version }} {{ .Values.global.canary.version }} {{ else }} {{ .Values.canary.version }} {{ end }}
     spec:
       containers:
       - name: look-record

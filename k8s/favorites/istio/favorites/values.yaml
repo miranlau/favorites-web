@@ -38,8 +38,10 @@ global:
 
   product:
     weight: 50
+    version: product
   canary:
     weight: 50
+    version: canary
 
   image:
     favoritesWeb:
@@ -189,7 +191,9 @@ affinity:
       topologyKey: "kubernetes.io/hostname"
 
 product:
-  weight: 50
+  weight: 0
+  version: product
 canary:
-  weight: 50
+  weight: 0
+  version: canary
 
