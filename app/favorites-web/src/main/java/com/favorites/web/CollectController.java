@@ -155,7 +155,7 @@ public class CollectController extends BaseController{
 	        @RequestParam(value = "size", defaultValue = "15") Integer size,@PathVariable("type") String type,
 	        @PathVariable("favoritesId") Long favoritesId,@PathVariable("userId") Long userId,
 			@PathVariable("category") String category) {
-		  Sort sort = new Sort(Direction.DESC, "id");
+		  Sort sort = Sort.by(Direction.DESC, "id");
 	    Pageable pageable = PageRequest.of(page, size,sort);
 	    List<CollectSummary> collects = null;
 	    if("otherpublic".equalsIgnoreCase(type)){
@@ -182,7 +182,7 @@ public class CollectController extends BaseController{
 	@LoggerManage(description="查看更多lookAround")
 	public List<CollectSummary> lookAround(@RequestParam(value = "page", defaultValue = "0") Integer page,
 										 @RequestParam(value = "size", defaultValue = "15") Integer size) {
-		Sort sort = new Sort(Direction.DESC, "id");
+		Sort sort = Sort.by(Direction.DESC, "id");
 		Pageable pageable = PageRequest.of(page, size, sort);
 		List<CollectSummary> collects =lookAroundService.queryCollectExplore(pageable, getUserId(),null);
 		return collects;
@@ -202,7 +202,7 @@ public class CollectController extends BaseController{
 	        @RequestParam(value = "size", defaultValue = "15") Integer size,@PathVariable("type") String type,
 	        @PathVariable("favoritesId") Long favoritesId,@PathVariable("userId") Long userId
 			,@PathVariable("category") String category) {
-		Sort sort = new Sort(Direction.DESC, "id");
+		Sort sort = Sort.by(Direction.DESC, "id");
 	    Pageable pageable = PageRequest.of(page, size,sort);
 	    List<CollectSummary> collects = null;
 	    if("otherpublic".equalsIgnoreCase(type)){
@@ -363,7 +363,7 @@ public class CollectController extends BaseController{
 	@RequestMapping(value="/searchMy/{key}")
 	public List<CollectSummary> searchMy(Model model,@RequestParam(value = "page", defaultValue = "0") Integer page,
 	        @RequestParam(value = "size", defaultValue = "20") Integer size, @PathVariable("key") String key) {
-		Sort sort = new Sort(Direction.DESC, "id");
+		Sort sort = Sort.by(Direction.DESC, "id");
 	    Pageable pageable = PageRequest.of(page, size,sort);
 	    List<CollectSummary> myCollects=collectService.searchMy(getUserId(),key ,pageable);
 		model.addAttribute("myCollects", myCollects);
@@ -374,7 +374,7 @@ public class CollectController extends BaseController{
 	@RequestMapping(value="/searchOther/{key}")
 	public List<CollectSummary> searchOther(Model model,@RequestParam(value = "page", defaultValue = "0") Integer page,
 	        @RequestParam(value = "size", defaultValue = "20") Integer size, @PathVariable("key") String key) {
-		Sort sort = new Sort(Direction.DESC, "id");
+		Sort sort = Sort.by(Direction.DESC, "id");
 	    Pageable pageable = PageRequest.of(page, size,sort);
 	    List<CollectSummary> otherCollects=collectService.searchOther(getUserId(), key, pageable);
 		logger.info("searchOther end :");

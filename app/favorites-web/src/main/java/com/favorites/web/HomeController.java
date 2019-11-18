@@ -60,7 +60,7 @@ public class HomeController extends BaseController {
     @LoggerManage(description = "文章列表standard")
     public String standard(Model model, @RequestParam(value = "page", defaultValue = "0") Integer page,
                            @RequestParam(value = "size", defaultValue = "15") Integer size, @PathVariable("type") String type, @PathVariable("userId") long userId) {
-        Sort sort = new Sort(Direction.DESC, "id");
+        Sort sort = Sort.by(Direction.DESC, "id");
         Pageable pageable = PageRequest.of(page, size, sort);
         model.addAttribute("type", type);
         Favorites favorites = new Favorites();
@@ -94,7 +94,7 @@ public class HomeController extends BaseController {
     public String simple(Model model, @RequestParam(value = "page", defaultValue = "0") Integer page,
                          @RequestParam(value = "size", defaultValue = "20") Integer size, @PathVariable("type") String type,
                          @PathVariable("userId") long userId) {
-        Sort sort = new Sort(Direction.DESC, "id");
+        Sort sort = Sort.by(Direction.DESC, "id");
         Pageable pageable = PageRequest.of(page, size, sort);
         model.addAttribute("type", type);
         Favorites favorites = new Favorites();
@@ -137,7 +137,7 @@ public class HomeController extends BaseController {
                                @RequestParam(value = "size", defaultValue = "15") Integer size) {
         User user = userService.findById(userId);
         Long collectCount = 0l;
-        Sort sort = new Sort(Direction.DESC, "id");
+        Sort sort = Sort.by(Direction.DESC, "id");
         Pageable pageable = PageRequest.of(page, size, sort);
         List<CollectSummary> collects = null;
         Integer isFollow = 0;
@@ -203,7 +203,7 @@ public class HomeController extends BaseController {
                                   @RequestParam(value = "size", defaultValue = "15") Integer size) {
         User user = userService.findById(userId);
         Long collectCount = 0l;
-        Sort sort = new Sort(Direction.DESC, "id");
+        Sort sort = Sort.by(Direction.DESC, "id");
         Pageable pageable = PageRequest.of(page, size, sort);
         List<CollectSummary> collects = null;
         if (getUserId() == userId) {
@@ -249,7 +249,7 @@ public class HomeController extends BaseController {
     @LoggerManage(description = "搜索")
     public String search(Model model, @RequestParam(value = "page", defaultValue = "0") Integer page,
                          @RequestParam(value = "size", defaultValue = "20") Integer size, @PathVariable("key") String key) {
-        Sort sort = new Sort(Direction.DESC, "id");
+        Sort sort = Sort.by(Direction.DESC, "id");
         Pageable pageable = PageRequest.of(page, size, sort);
         List<CollectSummary> myCollects = collectService.searchMy(getUserId(), key, pageable);
         List<CollectSummary> otherCollects = collectService.searchOther(getUserId(), key, pageable);
@@ -276,7 +276,7 @@ public class HomeController extends BaseController {
 	@RequestMapping(value="/notice/atMe")
     public String atMe(Model model, @RequestParam(value = "page", defaultValue = "0") Integer page,
                        @RequestParam(value = "size", defaultValue = "15") Integer size) {
-        Sort sort = new Sort(Direction.DESC, "id");
+        Sort sort = Sort.by(Direction.DESC, "id");
         Pageable pageable = PageRequest.of(page, size, sort);
         List<CollectSummary> collects = noticeServiceImpl.getNoticeCollects("at", getUserId(), pageable);
         model.addAttribute("collects", collects);
@@ -296,7 +296,7 @@ public class HomeController extends BaseController {
 	@RequestMapping(value="/notice/commentMe")
     public String commentMe(Model model, @RequestParam(value = "page", defaultValue = "0") Integer page,
                             @RequestParam(value = "size", defaultValue = "15") Integer size) {
-        Sort sort = new Sort(Direction.DESC, "id");
+        Sort sort = Sort.by(Direction.DESC, "id");
         Pageable pageable = PageRequest.of(page, size, sort);
         List<CollectSummary> collects = noticeServiceImpl.getNoticeCollects("comment", getUserId(), pageable);
         model.addAttribute("collects", collects);
@@ -316,7 +316,7 @@ public class HomeController extends BaseController {
 	@RequestMapping(value="/notice/praiseMe")
     public String praiseMe(Model model, @RequestParam(value = "page", defaultValue = "0") Integer page,
                            @RequestParam(value = "size", defaultValue = "15") Integer size) {
-        Sort sort = new Sort(Direction.DESC, "id");
+        Sort sort = Sort.by(Direction.DESC, "id");
         Pageable pageable = PageRequest.of(page, size, sort);
         List<CollectSummary> collects = noticeServiceImpl.getNoticeCollects("praise", getUserId(), pageable);
         model.addAttribute("collects", collects);
@@ -339,7 +339,7 @@ public class HomeController extends BaseController {
                                         @RequestParam(value = "size", defaultValue = "15") Integer size,
                                         @PathVariable("type") String type, @PathVariable("userId") long userId) {
 
-        Sort sort = new Sort(Direction.DESC, "lastModifyTime");
+        Sort sort = Sort.by(Direction.DESC, "lastModifyTime");
         Pageable pageable = PageRequest.of(page, size, sort);
         model.addAttribute("type", "lookRecord");
         Favorites favorites = new Favorites();
@@ -371,7 +371,7 @@ public class HomeController extends BaseController {
                                       @RequestParam(value = "size", defaultValue = "20") Integer size,
                                       @PathVariable("type") String type, @PathVariable("userId") long userId) {
 
-        Sort sort = new Sort(Direction.DESC, "lastModifyTime");
+        Sort sort = Sort.by(Direction.DESC, "lastModifyTime");
         Pageable pageable = PageRequest.of(page, size, sort);
         model.addAttribute("type", "lookRecord");
         Favorites favorites = new Favorites();
@@ -393,7 +393,7 @@ public class HomeController extends BaseController {
     @LoggerManage(description = "私信我的页面展示")
     public String letterMe(Model model, @RequestParam(value = "page", defaultValue = "0") Integer page,
                            @RequestParam(value = "size", defaultValue = "15") Integer size) {
-        Sort sort = new Sort(Sort.Direction.DESC, "id");
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
         Pageable pageable = PageRequest.of(page, size, sort);
         List<LetterSummary> letterList = letterService.findLetter(getUserId(), pageable);
         model.addAttribute("letterList", letterList);

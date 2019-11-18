@@ -5,6 +5,8 @@ spring:
     host: localhost
     port: 6379
     password: 
+  session:
+    store-type: none
 #  main:
 #    allow-bean-definition-overriding: true
 server:

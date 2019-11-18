@@ -115,7 +115,7 @@ public class IndexController extends BaseController{
 	public String lookAroundStandard(Model model,@RequestParam(value = "page", defaultValue = "0") Integer page,
 							 @RequestParam(value = "size", defaultValue = "15") Integer size) {
 
-		Sort sort = new Sort(Sort.Direction.DESC, "id");
+		Sort sort = Sort.by(Sort.Direction.DESC, "id");
 		Pageable pageable = PageRequest.of(page, size,sort);
 		model.addAttribute("type", "lookAround");
 		List<CollectSummary> collects =lookAroundService.queryCollectExplore(pageable,getUserId(),null);
@@ -139,7 +139,7 @@ public class IndexController extends BaseController{
 									 @RequestParam(value = "size", defaultValue = "20") Integer size,
 									 @PathVariable("category") String category) {
 
-		Sort sort = new Sort(Sort.Direction.DESC, "id");
+		Sort sort = Sort.by(Sort.Direction.DESC, "id");
 		Pageable pageable = PageRequest.of(page, size,sort);
 		model.addAttribute("category", category);
 		model.addAttribute("type", "lookAround");
@@ -291,7 +291,7 @@ public class IndexController extends BaseController{
                                  @RequestParam(value = "size", defaultValue = "15") Integer size){
         User user = userService.findById(userId);
         Long collectCount = 0l;
-        Sort sort = new Sort(Sort.Direction.DESC, "id");
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
         Pageable pageable = PageRequest.of(page, size,sort);
         List<CollectSummary> collects = null;
         Integer isFollow = 0;
